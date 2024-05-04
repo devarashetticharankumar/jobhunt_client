@@ -214,6 +214,7 @@ const CreateJob = () => {
               placeholder="Your email"
               {...register("postedBy")}
               className="create-job-input"
+              required="true"
             />
           </div>
           {/*  nine row*/}
