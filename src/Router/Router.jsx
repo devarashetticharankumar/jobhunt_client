@@ -8,6 +8,7 @@ import UpdateJob from "../Pages/UpdateJob";
 import LoginPage from "../components/LoginPage";
 import JobDetails from "../Pages/JobDetails";
 import { API_URL } from "../data/apiPath";
+import RegisterUser from "../components/RegisterUser";
 // =============================
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterUser />,
   },
 ]);
 
