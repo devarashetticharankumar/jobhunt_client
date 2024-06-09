@@ -57,11 +57,12 @@ const LoginPage = () => {
       });
       if (response.status === 200) {
         navigate("/");
-      } else {
-        setError("Invalid email or password");
       }
+      // else {
+      //   setError("Invalid email or password");
+      // }
     } catch (error) {
-      setError("Failed to login");
+      setError("invalid email or password");
     }
   };
 
