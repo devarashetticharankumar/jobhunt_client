@@ -105,7 +105,7 @@ const LoginPage = () => {
           </div>
           {error && (
             <div className="text-red-500 text-sm">
-              <strong className="font-bold">{error}</strong>
+              <strong className="font-sm">{error}</strong>
             </div>
           )}
           <button
