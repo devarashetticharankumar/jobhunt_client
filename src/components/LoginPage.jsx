@@ -70,7 +70,7 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center h-screen items-center m-auto">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl text-center mb-4 flex items-center justify-center">
+        <h2 className="text-2xl text-center mb-4 flex items-center justify-center text-blue">
           Login
         </h2>
         <form onSubmit={handleLogin}>
