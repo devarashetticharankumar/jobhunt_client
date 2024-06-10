@@ -119,7 +119,7 @@ const LoginPage = () => {
           <small>
             Don't have an Account?
             <Link to={"/sign-up"}>
-              <span className="text-blue">Register</span>
+              <span className="text-blue underline">Register</span>
             </Link>
           </small>
         </form>
