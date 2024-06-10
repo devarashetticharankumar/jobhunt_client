@@ -117,7 +117,7 @@ const RegisterUser = () => {
         </button>
         <br></br>
         <small>
-          Don't have an Account?
+          Already have an Account?
           <Link to={"/login"}>
             <span className="text-blue">Login</span>
           </Link>
