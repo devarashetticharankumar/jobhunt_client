@@ -116,9 +116,11 @@ const LoginPage = () => {
             Login
           </button>
           <br></br>
-          <br></br>
           <small>
-            Don't have an Account? <Link to={"/sign-up"}>Sign up</Link>
+            Don't have an Account?
+            <Link to={"/sign-up"}>
+              <span className="text-blue">Register</span>
+            </Link>
           </small>
         </form>
       </div>

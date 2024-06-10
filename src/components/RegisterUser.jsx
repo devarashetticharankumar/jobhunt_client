@@ -116,9 +116,11 @@ const RegisterUser = () => {
           Register
         </button>
         <br></br>
-        <br></br>
         <small>
-          Don't have an Account? <Link to={"/login"}>Sign up</Link>
+          Don't have an Account?
+          <Link to={"/login"}>
+            <span className="text-blue">Login</span>
+          </Link>
         </small>
       </form>
     </div>
