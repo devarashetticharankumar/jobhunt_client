@@ -41,6 +41,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../data/apiPath";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -114,6 +115,11 @@ const LoginPage = () => {
           >
             Login
           </button>
+          <br></br>
+          <br></br>
+          <small>
+            Don't have an Account? <Link to={"/register"}>Sign up</Link>
+          </small>
         </form>
       </div>
     </div>
