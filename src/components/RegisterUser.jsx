@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_URL } from "../data/apiPath";
+import { Link } from "react-router-dom";
 
 const RegisterUser = () => {
   const [name, setName] = useState("");
