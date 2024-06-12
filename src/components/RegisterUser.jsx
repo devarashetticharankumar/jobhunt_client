@@ -36,7 +36,7 @@ const RegisterUser = () => {
         } else {
           // Handle successful registration
           // You can redirect the user to the login page or show a success message
-          console.log(response.data);
+          console.log("user registered successfully!!");
         }
       } catch (error) {
         setError("Error registering user. Please try again later.");
