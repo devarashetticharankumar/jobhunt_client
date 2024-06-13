@@ -54,7 +54,7 @@ const RegisterUser = () => {
           Register
         </h1>
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mt-2"
           htmlFor="name"
         >
           Name
@@ -68,7 +68,7 @@ const RegisterUser = () => {
           required
         />
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mt-2"
           htmlFor="email"
         >
           Email
@@ -82,7 +82,7 @@ const RegisterUser = () => {
           required
         />
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mt-2"
           htmlFor="password"
         >
           Password
@@ -96,7 +96,7 @@ const RegisterUser = () => {
           required
         />
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="block text-gray-700 text-sm font-bold mt-2"
           htmlFor="confirmPassword"
         >
           Confirm Password
