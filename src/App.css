@@ -144,6 +144,19 @@ li {
   display: none;
 }
 
+.bg-img {
+  background-image: url("https://cdn.pixabay.com/photo/2022/11/18/00/16/waves-7599181_1280.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.bg-img-login {
+  background-image: url("https://cdn.pixabay.com/photo/2016/03/17/23/07/abstract-1264071_1280.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* create a job page */
 
 .create-job-flex {

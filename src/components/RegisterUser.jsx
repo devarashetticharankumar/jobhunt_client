@@ -45,7 +45,7 @@ const RegisterUser = () => {
   };
 
   return (
-    <div className="flex h-screen justify-center items-center">
+    <div className="flex h-screen justify-center items-center bg-img">
       <form
         onSubmit={handleSubmit}
         className="bg-[#FAFAFA] shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -57,13 +57,14 @@ const RegisterUser = () => {
           className="block text-gray-700 text-sm font-bold mt-2"
           htmlFor="name"
         >
-          Name
+          User name
         </label>
         <input
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="name"
           type="text"
           value={name}
+          placeholder="Enter your name"
           onChange={(event) => setName(event.target.value)}
           required
         />
@@ -78,6 +79,7 @@ const RegisterUser = () => {
           id="email"
           type="email"
           value={email}
+          placeholder="example@gamil.com"
           onChange={(event) => setEmail(event.target.value)}
           required
         />
@@ -92,7 +94,9 @@ const RegisterUser = () => {
           id="password"
           type="password"
           value={password}
+          placeholder="min 6 Chatacters"
           onChange={(event) => setPassword(event.target.value)}
+          minLength={6}
           required
         />
         <label
@@ -105,6 +109,7 @@ const RegisterUser = () => {
           type="password"
           id="confirmPassword"
           value={confirmPassword}
+          placeholder="Confirm the above password"
           onChange={(event) => setConfirmPassword(event.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />

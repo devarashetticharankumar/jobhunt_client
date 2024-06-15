@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { API_URL } from "../data/apiPath";
+import axios from "axios";
 
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState("");
 
   // set current page
   const [currentPage, setCurrentPage] = useState(1);

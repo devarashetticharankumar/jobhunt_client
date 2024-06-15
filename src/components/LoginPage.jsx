@@ -57,18 +57,18 @@ const LoginPage = () => {
         password,
       });
       if (response.status === 200) {
+        console.log(response.data);
         navigate("/");
+      } else {
+        setError("Invalid email or password");
       }
-      // else {
-      //   setError("Invalid email or password");
-      // }
     } catch (error) {
       setError("invalid email or password");
     }
   };
 
   return (
-    <div className="flex justify-center h-screen items-center m-auto">
+    <div className="flex justify-center h-screen items-center m-auto bg-img-login">
       <div className="bg-[#FAFAFA] shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-2xl text-center mb-4 flex items-center justify-center text-blue">
           Login
@@ -85,6 +85,7 @@ const LoginPage = () => {
               type="email"
               id="email"
               value={email}
+              placeholder="example@gmail.com"
               onChange={(event) => setEmail(event.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
@@ -100,6 +101,7 @@ const LoginPage = () => {
               type="password"
               id="password"
               value={password}
+              placeholder="min 6 Chatacters"
               onChange={(event) => setPassword(event.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />

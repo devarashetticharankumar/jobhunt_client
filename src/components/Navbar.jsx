@@ -29,8 +29,8 @@ const Navbar = () => {
     },
   ];
   return (
-    <header className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
-      <nav className="flex justify-between items-center py-6">
+    <header className="max-w-screen-2xl container mx-auto xl:px-24 px-3 sticky top-0 left-0 z-10 bg-white">
+      <nav className="flex justify-between items-center py-6 ">
         <a href="/" className="flex items-center gap-1 text-2xl text-black-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
