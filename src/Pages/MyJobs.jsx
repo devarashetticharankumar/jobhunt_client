@@ -104,7 +104,7 @@ const MyJobs = () => {
         <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-5">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
-              <div className="flex flex-wrap items-center">
+              <div className="flex flex-wrap items-center w-full">
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                   <h3 className="font-semibold text-base text-blueGray-700">
                     All Jobs
@@ -113,7 +113,7 @@ const MyJobs = () => {
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                   <Link to="/post-job">
                     <button
-                      className="bg-blue text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className="bg-blue text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-2 rounded-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
                     >
                       POST A NEW JOB
@@ -160,7 +160,7 @@ const MyJobs = () => {
                           <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
                             {index + 1}
                           </th>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4  ">
                             {job.jobTitle}
                           </td>
                           <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
