@@ -93,7 +93,7 @@ const Navbar = () => {
 
       {/* navItems for mobile */}
       <div
-        className={`px-4 bg-black py-5 rounded-sm ${
+        className={`px-4 bg-gray-900 py-5 rounded-sm ${
           isMenuOpen ? "" : "hidden"
         } `}
       >

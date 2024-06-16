@@ -96,7 +96,7 @@ const Footer = () => {
                   <IoLogoLinkedin size={24} />
                 </Link>
               </li>
-              <li>
+              <li className="py-2">
                 <Link
                   to="https://www.instagram.com/jobhunt.pro/"
                   className="text-sm text-gray-400 hover:text-white"

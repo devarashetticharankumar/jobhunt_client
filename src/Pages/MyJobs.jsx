@@ -9,8 +9,7 @@ const MyJobs = () => {
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  const email =
-    location.state?.email || "devarashetticharankumar2580@gmail.com";
+  const email = location.state?.email || " ";
 
   // set current page
   const [currentPage, setCurrentPage] = useState(1);
