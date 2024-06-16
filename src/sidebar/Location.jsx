@@ -39,8 +39,26 @@ const Location = ({ handleChange, setJobs }) => {
         />
         <InputField
           handleChange={handleChange}
-          value="india"
-          title="India"
+          value="pune"
+          title="Pune"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
+          value="mumbai"
+          title="Mumbai"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
+          value="delhi"
+          title="Delhi"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
+          value="kochi"
+          title="Kochi"
           name="test"
         />
       </div>

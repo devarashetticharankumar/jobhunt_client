@@ -1,42 +1,3 @@
-// import React from "react";
-// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-// import app from "../firebase/firebase.config";
-
-// import { getAuth } from "firebase/auth";
-
-// const LoginPage = () => {
-//   const auth = getAuth();
-//   const googleProvider = new GoogleAuthProvider();
-
-//   const handleLogin = () => {
-//     signInWithPopup(auth, googleProvider)
-//       .then((result) => {
-//         const user = result.user;
-//         console.log(user);
-//       })
-//       .catch((error) => {
-//         const errorMessage = error.message;
-//         // The email of the user's account used.
-//         const email = error.customData.email;
-//         // The AuthCredential type that was used.
-//         const credential = GoogleAuthProvider.credentialFromError(error);
-//         // ...
-//       });
-//   };
-//   return (
-//     <div className="h-screen w-full items-center justify-center flex">
-//       <button
-//         className="px-8 py-2 bg-blue text-white text-semibold rounded-sm"
-//         onClick={handleLogin}
-//       >
-//         Login
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -57,13 +18,16 @@ const LoginPage = () => {
         password,
       });
       if (response.status === 200) {
-        console.log(response.data);
-        navigate("/");
+        navigate("/my-job", {
+          state: {
+            email: email,
+          },
+        });
       } else {
         setError("Invalid email or password");
       }
     } catch (error) {
-      setError("invalid email or password");
+      setError("Invalid email or password");
     }
   };
 
@@ -119,7 +83,7 @@ const LoginPage = () => {
           </button>
           <br></br>
           <small>
-            Don't have an Account?
+            {`Don't have an Account?`}
             <Link to={"/sign-up"}>
               <span className="text-blue underline">Register</span>
             </Link>

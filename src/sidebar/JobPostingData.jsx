@@ -9,6 +9,7 @@ const JobPostingData = ({ handleChange }) => {
   const ThirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   // =======convert date to string===========
+  const today = now.toISOString().slice(0, 10);
   const twentyFourHoursAgoDate = twentyFourHoursAgo.toISOString().slice(0, 10);
   const SevenDaysAgoDate = SevenDaysAgo.toISOString().slice(0, 10);
   const ThirtyDaysAgoDate = ThirtyDaysAgo.toISOString().slice(0, 10);
@@ -28,6 +29,12 @@ const JobPostingData = ({ handleChange }) => {
           />
           <span className="checkmark"></span>All Time
         </label>
+        <InputField
+          handleChange={handleChange}
+          value={today}
+          title="Today"
+          name="test"
+        />
         <InputField
           handleChange={handleChange}
           value={twentyFourHoursAgoDate}

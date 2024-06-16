@@ -48,7 +48,7 @@ const Navbar = () => {
               fill="#2D42FF"
             />
           </svg>
-          <span className="logo">Jobhunt</span>
+          <span className="logo">JobHunt</span>
         </a>
 
         {/* nav items for large devices */}

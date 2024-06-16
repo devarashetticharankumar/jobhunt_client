@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { API_URL } from "../data/apiPath";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [userEmail, setUserEmail] = useState("");
+  const location = useLocation();
+  const email =
+    location.state?.email || "devarashetticharankumar2580@gmail.com";
 
   // set current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,13 +18,16 @@ const MyJobs = () => {
   const itemsPerPage = 4;
 
   useEffect(() => {
-    fetch(`${API_URL}/myJobs/devarashetticharankumar2580@gmail.com`)
-      .then((res) => res.json())
-      .then((data) => {
-        setJobs(data);
-        setIsLoading(false);
-      });
-  }, [searchText]);
+    if (email) {
+      fetch(`${API_URL}/myJobs/${email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setJobs(data);
+          console.log(data);
+          setIsLoading(false);
+        });
+    }
+  }, [searchText, email]);
 
   // pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -205,6 +210,44 @@ const MyJobs = () => {
             </button>
           )}
         </div>
+
+        {/* <div>
+          <form onSubmit={fetchUserEmail}>
+            <label>
+              Email:
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </label>
+            <br />
+            <label>
+              Password:
+              <input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </label>
+            <br />
+            <button type="submit">Login</button>
+          </form>
+          {user && (
+            <div>
+              <h2>Login Successful</h2>
+              <p>Username: {user.name}</p>
+              <p>Email: {user.email}</p>
+              <p>Token: {token}</p>
+            </div>
+          )}
+          {error && (
+            <div>
+              <h2>Error</h2>
+              <p>{error}</p>
+            </div>
+          )}
+        </div> */}
       </section>
     </div>
   );

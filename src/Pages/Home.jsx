@@ -5,6 +5,7 @@ import Jobs from "./Jobs";
 import Sidebar from "../sidebar/Sidebar";
 import NewsLetter from "../components/NewsLetter";
 import { API_URL } from "../data/apiPath";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -115,7 +116,7 @@ const Home = () => {
           employmentType.toLowerCase() === selected.toLowerCase()
       );
 
-      console.log(filteredJobs);
+      // console.log(filteredJobs);
     }
 
     // ========slice the data based on current page===========

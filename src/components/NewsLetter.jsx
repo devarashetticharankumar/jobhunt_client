@@ -14,8 +14,9 @@ const NewsLetter = () => {
           Email me for jobs
         </h3>
         <p className="text-primary/75 text-base mb-4">
-          Ut esse eiusmod aute. Sit enim labore dolore. Aute ea fugiat commodo
-          ea foes.
+          Subscribe with your email and be the first to hear about new job
+          opportunities, along with helpful tips and resources for your career
+          journey!
         </p>
         <div className="w-full space-y-4">
           <input
@@ -40,8 +41,8 @@ const NewsLetter = () => {
           Get noticed faster
         </h3>
         <p className="text-primary/75 text-base mb-4">
-          Ut esse eiusmod aute. Sit enim labore dolore. Aute ea fugiat commodo
-          ea foes.
+          To increase your chances of getting noticed faster when uploading a
+          resume.
         </p>
         <div className="w-full space-y-4">
           <input
