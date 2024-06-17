@@ -77,12 +77,12 @@ const LoginPage = () => {
           )}
           <button
             type="submit"
-            className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
           >
             Login
           </button>
           <br></br>
-          <small>
+          <small className="mx-5 my-2 flex items-center justify-center">
             {`Don't have an Account?`}
             <Link to={"/sign-up"}>
               <span className="text-blue underline">Register</span>

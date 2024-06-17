@@ -115,13 +115,13 @@ const RegisterUser = () => {
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
-          className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+          className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-4"
           type="submit"
         >
           Register
         </button>
         <br></br>
-        <small>
+        <small className="mx-5 my-2 flex items-center justify-center">
           Already have an Account?
           <Link to={"/login"}>
             <span className="text-blue underline">Login</span>

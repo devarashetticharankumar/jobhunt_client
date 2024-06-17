@@ -18,12 +18,6 @@ const JobDetails = () => {
 
   return (
     <div className="max-w-screen-2xl container max-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
-      <button
-        className="bg-blue text-white  px-5 py-2 rounded-sm "
-        onClick={applyLink}
-      >
-        Apply Now
-      </button>
       <div className="flex flex-wrap justify-center mb-4 items-center">
         <img
           src={job.companyLogo}
@@ -71,6 +65,12 @@ const JobDetails = () => {
           </ul>
         )}
       </ul>
+      <button
+        className="bg-blue text-white  px-5 py-2 rounded-sm mt-5 mr-8"
+        onClick={applyLink}
+      >
+        Apply Now
+      </button>
     </div>
   );
 };
