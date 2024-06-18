@@ -51,7 +51,12 @@ const JobDetails = () => {
         </div>
       </div>
       <p className="mb-4">
-        <span className="font-semibold">Description: </span> {job.description}
+        <span className="font-semibold">Description: </span>
+        <ul>
+          {job?.description?.split(".").map((desc, index) => (
+            <li key={index}>{desc}.</li>
+          ))}
+        </ul>
       </p>
       <p className="mb-4">
         <span className="font-semibold">Required Skills: </span>
@@ -66,7 +71,7 @@ const JobDetails = () => {
         )}
       </ul>
       <button
-        className="bg-blue text-white  px-5 py-2 rounded-sm mt-5 mr-8"
+        className="bg-blue hover:bg-indigo-700 text-white  px-5 py-2 rounded-sm mt-5 mr-8"
         onClick={applyLink}
       >
         Apply Now

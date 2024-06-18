@@ -95,7 +95,7 @@ const MyJobs = () => {
             className="py-2 pl-3 border focus:outline-none lg:w-6/12 mb-4 w-full"
           />
           <button
-            className="bg-blue text-white font-semibold px-8 py-2 rounded-sm mb-4"
+            className="bg-blue hover:bg-indigo-700 text-white font-semibold px-8 py-2 rounded-sm mb-4"
             onClick={handleSearch}
           >
             Search
@@ -117,7 +117,7 @@ const MyJobs = () => {
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                   <Link to="/post-job">
                     <button
-                      className="bg-blue text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-2 rounded-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      className="bg-blue hover:bg-indigo-700 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-2 rounded-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
                     >
                       POST A NEW JOB

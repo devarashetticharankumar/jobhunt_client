@@ -77,7 +77,7 @@ const LoginPage = () => {
           )}
           <button
             type="submit"
-            className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+            className="bg-blue hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded w-full"
           >
             Login
           </button>

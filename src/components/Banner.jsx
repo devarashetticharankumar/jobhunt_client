@@ -56,7 +56,7 @@ const Banner = ({
           </div>
           <button
             type="submit"
-            className="bg-blue py-2 px-8 text-white md:rounded-s-none rounded"
+            className="bg-blue hover:bg-indigo-700 py-2 px-8 text-white md:rounded-s-none rounded"
             onClick={handleSearch}
           >
             Search

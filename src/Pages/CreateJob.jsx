@@ -148,9 +148,12 @@ const CreateJob = () => {
               >
                 <option value="">Choose your experience</option>
                 <option value="Any Experience">Any Experience</option>
+                <option value="1-2 years">1-2 years</option>
+                <option value="3-4 years">3-4 years</option>
+                <option value="4-5 years">4-5 years</option>
+                <option value="above 5 years">more than 5</option>
                 <option value="Internship">Internship</option>
                 <option value="Work remotely">Work Remotely</option>
-                <option value="Experienced">Experienced</option>
               </select>
             </div>
           </div>
@@ -230,7 +233,7 @@ const CreateJob = () => {
 
           <input
             type="submit"
-            className="bg-blue text-white font-semibold px-8 py-2 rounded-sm cursor-pointer "
+            className="bg-blue hover:bg-indigo-700 text-white font-semibold px-8 py-2 rounded-sm cursor-pointer "
           />
         </form>
       </div>

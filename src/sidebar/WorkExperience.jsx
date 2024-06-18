@@ -17,6 +17,31 @@ const WorkExperience = ({ handleChange }) => {
           />
           <span className="checkmark"></span>Any Experience
         </label>
+
+        <InputField
+          handleChange={handleChange}
+          value="1-2 years"
+          title="1-2 years"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
+          value="3-4 years"
+          title="3-4 years"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
+          value="4-5 years"
+          title="4-5 years"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
+          value="above 5 years"
+          title="more than 5 years"
+          name="test"
+        />
         <InputField
           handleChange={handleChange}
           value="Internship"
@@ -27,12 +52,6 @@ const WorkExperience = ({ handleChange }) => {
           handleChange={handleChange}
           value="Work remotely"
           title="Work remotely"
-          name="test"
-        />
-        <InputField
-          handleChange={handleChange}
-          value="Experienced"
-          title="Experienced"
           name="test"
         />
       </div>
