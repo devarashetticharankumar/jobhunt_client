@@ -25,14 +25,14 @@ const JobDetails = () => {
           className="w-24 h-24 mr-4"
         />
         <div>
-          <h1 className="text-2xl text-semibold font-bold">{job.jobTitle}</h1>
+          <h1 className="text-2xl text-semibold font-bold ">{job.jobTitle}</h1>
           <h4 className="text-xl font-semibold">{job.companyName}</h4>
         </div>
       </div>
       <div className="flex flex-wrap justify-between mb-4">
         <div>
           <p>
-            <span className="font-semibold">Salary:</span> {job.minPrice}k -
+            <span className="font-semibold ">Salary:</span> {job.minPrice}k -
             {job.maxPrice}k {job.salaryType}
           </p>
           <p>
@@ -54,7 +54,9 @@ const JobDetails = () => {
         <span className="font-semibold">Description: </span>
         <ul>
           {job?.description?.split(".").map((desc, index) => (
-            <li key={index}>{desc}.</li>
+            <li className=" font-medium text-gray-600" key={index}>
+              {desc}.
+            </li>
           ))}
         </ul>
       </p>
@@ -65,7 +67,9 @@ const JobDetails = () => {
         {job.skills && (
           <ul>
             {job.skills?.map((skill, index) => (
-              <li key={index}>{skill.label}</li>
+              <li className="text-gray-600 font-medium" key={index}>
+                {skill.label}
+              </li>
             ))}
           </ul>
         )}
