@@ -9,8 +9,8 @@ import { FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 py-6">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between gap-6 ">
+    <footer className="bg-gray-900 py-6 ">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row  justify-between gap-6 ">
         <div className="mb-8 md:mb-0">
           <a
             href="/"

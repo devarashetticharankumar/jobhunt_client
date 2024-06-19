@@ -2,7 +2,7 @@ import React from "react";
 
 const Terms = () => {
   return (
-    <article className="bg-[#FAFAFA] px-4 py-5 mx-auto max-w-screen-2xl ">
+    <article className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5 ">
       <h1 className="mb-3 text-2xl font-bold leading-tight text-gray-900 md:text-4xl ">
         Terms of Use
       </h1>

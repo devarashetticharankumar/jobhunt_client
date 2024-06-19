@@ -17,7 +17,7 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl container max-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
+    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       <div className="flex flex-wrap justify-center mb-4 items-center">
         <img
           src={job.companyLogo}
