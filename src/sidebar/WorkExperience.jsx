@@ -30,12 +30,7 @@ const WorkExperience = ({ handleChange }) => {
           title="3-4 years"
           name="test"
         />
-        <InputField
-          handleChange={handleChange}
-          value="4-5 years"
-          title="4-5 years"
-          name="test"
-        />
+
         <InputField
           handleChange={handleChange}
           value="above 5 years"

@@ -150,7 +150,6 @@ const CreateJob = () => {
                 <option value="Any Experience">Any Experience</option>
                 <option value="1-2 years">1-2 years</option>
                 <option value="3-4 years">3-4 years</option>
-                <option value="4-5 years">4-5 years</option>
                 <option value="above 5 years">more than 5</option>
                 <option value="Internship">Internship</option>
                 <option value="Work remotely">Work Remotely</option>
