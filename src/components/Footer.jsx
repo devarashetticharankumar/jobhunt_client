@@ -10,7 +10,7 @@ import { FaYoutube } from "react-icons/fa";
 const Footer = () => {
   return (
     <footer className="bg-gray-900 py-6 ">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row  justify-between gap-6 ">
+      <div className="container mx-auto  flex flex-col md:flex-row  justify-between gap-4 ">
         <div className="mb-8 md:mb-0">
           <a
             href="/"
@@ -34,7 +34,7 @@ const Footer = () => {
             </svg>
             <span className="logo text-white">JobHunt</span>
           </a>
-          <p className="mt-2 text-gray-400 text-sm  ">
+          <p className="mt-2 text-gray-400 text-sm flex flex-wrap lg:w-96 ">
             {
               "JobHunt is more than just a job board - it's a community of job seekers, employers, and career experts dedicated to helping you succeed. Join the movement today!"
             }
@@ -45,7 +45,7 @@ const Footer = () => {
           <p className="mt-2 text-gray-400 text-sm">
             <span>9-63B Balaji Nagar, Hyderabad Telangana 514872</span>
             <br />
-            <a href="#" className="text-gray-200 text-sm">
+            <a href="#" className="text-gray-400 text-sm ">
               jobhunt@gmail.com
             </a>
           </p>
@@ -77,7 +77,7 @@ const Footer = () => {
         </div>
         <div className="mb-8 md:mb-0 ">
           <h3 className="text-xl font-semibold text-white">Social Share</h3>
-          <div className="mt-2 flex   space-x-4 text-gray-400">
+          <div className="mt-2 flex flex-wrap lg:flex-nowrap md:flex-nowrap space-x-4 text-gray-400">
             <Link href="#" className="hover:text-blue">
               <FiInstagram size={22} />
             </Link>

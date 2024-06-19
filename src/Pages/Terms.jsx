@@ -3,7 +3,7 @@ import React from "react";
 const Terms = () => {
   return (
     <article className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5 ">
-      <h1 className="mb-3 text-2xl font-bold leading-tight text-gray-900 md:text-4xl ">
+      <h1 className="text-gray-900 md:text-4xl text-4xl font-bold leading-tight text-center mb-4 ">
         Terms of Use
       </h1>
       <div className="w-full m-auto mt-5">
@@ -16,7 +16,7 @@ const Terms = () => {
           entitled to access and use the content which is identified in the
           course and which is on the JobHunt website, at www.jobhunt.com
           (“Website”). In order to access and use this content, you must
-          register with JObHunt and create a password to use in accessing the
+          register with JobHunt and create a password to use in accessing the
           content on the Website.
         </p>
         <p className="text-gray-600 leading-relaxed mb-4">
