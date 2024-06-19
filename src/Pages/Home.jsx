@@ -172,7 +172,7 @@ const Home = () => {
                 Previous
               </button>
               <span className="mx-2">
-                page {currentPage} of
+                page {currentPage} of{" "}
                 {Math.ceil(filteredItems.length / itemsPerPage)}
               </span>
               <button
