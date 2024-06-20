@@ -4,7 +4,7 @@ import aboutImg from "../assets/Designer.png";
 import { GoDotFill } from "react-icons/go";
 const About = () => {
   return (
-    <div className="bg-[#FAFAFA] px-4 py-5 mx-auto max-w-screen-2xl ">
+    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5 ">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center text-center mb-12">
           <div className="lg:w-full lg:mb-0 mb-12">

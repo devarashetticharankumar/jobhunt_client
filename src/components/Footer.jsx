@@ -78,22 +78,25 @@ const Footer = () => {
         <div className="mb-8 md:mb-0 ">
           <h3 className="text-xl font-semibold text-white">Social Share</h3>
           <div className="mt-2 flex flex-wrap lg:flex-nowrap md:flex-nowrap space-x-4 text-gray-400">
-            <Link href="#" className="hover:text-blue">
+            <Link
+              to={"https://www.instagram.com/jobhunt.pro/"}
+              className="hover:text-blue"
+            >
               <FiInstagram size={22} />
             </Link>
-            <Link href="#" className="hover:text-blue">
+            <Link to={"/"} className="hover:text-blue">
               <FaSquareFacebook size={22} />
             </Link>
-            <Link href="#" className="hover:text-blue">
+            <Link to={"/"} className="hover:text-blue">
               <IoLogoLinkedin size={22} />
             </Link>
-            <Link href="#" className="hover:text-blue">
+            <Link to={"/"} className="hover:text-blue">
               <FaTwitter size={22} />
             </Link>
-            <Link href="#" className="hover:text-blue">
+            <Link to={"/"} className="hover:text-blue">
               <FaTelegram size={22} />
             </Link>
-            <Link href="#" className="hover:text-blue">
+            <Link to={"/"} className="hover:text-blue">
               <FaYoutube size={22} />
             </Link>
           </div>
