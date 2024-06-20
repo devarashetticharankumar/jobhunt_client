@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaEnvelopeOpenText, FaRocket } from "react-icons/fa6";
 
 const NewsLetter = () => {
+  const [email, setEmail] = useState("");
   const handleSubscribe = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
+    console.log(email);
+    setEmail("");
   };
   return (
     <div>
@@ -23,6 +25,8 @@ const NewsLetter = () => {
             type="email"
             name="email"
             id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Example@gmail.com"
             className="w-full block py-2 pl-3 border focus:outline-none"
           />
