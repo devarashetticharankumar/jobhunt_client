@@ -12,6 +12,7 @@ import RegisterUser from "../components/RegisterUser";
 import About from "../Pages/About";
 import Terms from "../Pages/Terms";
 import ContactUs from "../Pages/ContactUs";
+import PrivacyPolicy from "../Pages/PrivacyPolicy";
 // =============================
 
 const router = createBrowserRouter([
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/terms",
         element: <Terms />,
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
       },
     ],
   },
