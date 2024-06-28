@@ -9,7 +9,8 @@ const MyJobs = () => {
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  const email = location.state?.email || " ";
+  const email =
+    location.state?.email || "devarashetticharankumar2580@gmail.com";
 
   // set current page
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,35 +129,35 @@ const MyJobs = () => {
             </div>
 
             <div className="block w-full overflow-x-auto no-scrollbar">
-              <table className="items-center bg-transparent w-full border-collapse ">
-                <thead>
-                  <tr>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      NO.
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      TITLE
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      COMPANY NAME
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      SALARY
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      EDIT
-                    </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                      DELETE
-                    </th>
-                  </tr>
-                </thead>
+              {isLoading ? (
+                <div className="flex items-center justify-center h-20">
+                  <p>Loading...</p>
+                </div>
+              ) : (
+                <table className="items-center bg-transparent w-full border-collapse ">
+                  <thead>
+                    <tr>
+                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        NO.
+                      </th>
+                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        TITLE
+                      </th>
+                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        COMPANY NAME
+                      </th>
+                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        SALARY
+                      </th>
+                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        EDIT
+                      </th>
+                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                        DELETE
+                      </th>
+                    </tr>
+                  </thead>
 
-                {isLoading ? (
-                  <div className="flex items-center justify-center h-20">
-                    <p>Loading....</p>
-                  </div>
-                ) : (
                   <tbody>
                     {currentJobs.map((job, index) => {
                       return (
@@ -190,8 +191,8 @@ const MyJobs = () => {
                       );
                     })}
                   </tbody>
-                )}
-              </table>
+                </table>
+              )}
             </div>
           </div>
         </div>
