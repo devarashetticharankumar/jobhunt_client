@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { API_URL } from "../data/apiPath";
 import { useLocation } from "react-router-dom";
+import { Bounce, toast } from "react-toastify";
 
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -56,31 +57,47 @@ const MyJobs = () => {
     setIsLoading(false);
   };
 
+  // const handleDelete = (id) => {
+  //   fetch(`${API_URL}/jobs/job/${id}`, { method: "DELETE" }).then((res) =>
+  //     res.json().then((data) => {
+  //       if (data.acknowledged === true) {
+  //         alert("Job Deleted Successfully");
+  //       }
+  //       console.log(data);
+  //     })
+  //   );
+  // };
+
   const handleDelete = (id) => {
-    // console.log(id);
-    fetch(`${API_URL}/jobs/job/${id}`, { method: "DELETE" }).then((res) =>
-      res.json().then((data) => {
+    fetch(`${API_URL}/jobs/job/${id}`, { method: "DELETE" })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Error deleting job: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
         if (data.acknowledged === true) {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: false,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "Deleted!",
-                text: "Your post has been deleted.",
-                icon: "success",
-              });
-            }
+          // Use toast to display the success message
+          toast.success("job deleted successfully!!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
           });
         }
+        console.log(data);
       })
-    );
+      .catch((error) => {
+        console.error("Error deleting job:", error);
+        // Display an error message to the user
+        toast.error("Error deleting job. Please try again.");
+      });
   };
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
@@ -176,9 +193,7 @@ const MyJobs = () => {
                           </td>
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                             <button>
-                              <Link to={`/jobs/edit-job/${job?._id}`}>
-                                Edit
-                              </Link>
+                              <Link to={`/edit-job/${job?._id}`}>Edit</Link>
                             </button>
                           </td>
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
@@ -212,44 +227,6 @@ const MyJobs = () => {
             </button>
           )}
         </div>
-
-        {/* <div>
-          <form onSubmit={fetchUserEmail}>
-            <label>
-              Email:
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </label>
-            <br />
-            <label>
-              Password:
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </label>
-            <br />
-            <button type="submit">Login</button>
-          </form>
-          {user && (
-            <div>
-              <h2>Login Successful</h2>
-              <p>Username: {user.name}</p>
-              <p>Email: {user.email}</p>
-              <p>Token: {token}</p>
-            </div>
-          )}
-          {error && (
-            <div>
-              <h2>Error</h2>
-              <p>{error}</p>
-            </div>
-          )}
-        </div> */}
       </section>
     </div>
   );

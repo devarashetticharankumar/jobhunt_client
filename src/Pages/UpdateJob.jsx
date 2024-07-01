@@ -35,17 +35,16 @@ const UpdateJob = () => {
   const onSubmit = (data) => {
     data.skills = selectedOptions;
     // console.log(data);
-    fetch(`${API_URL}/update-job/${id}`, {
+    fetch(`${API_URL}/jobs/update-job/${id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
-
         if (result.acknowledged === true) {
           alert("job updated successfully!!!");
+          console.log("job updated successfullly!!!!!");
         }
         reset();
       });

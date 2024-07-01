@@ -562,19 +562,19 @@ const PrivacyPolicy = () => {
       </p>
       <br></br>
       <ul className="flex  my-4 flex-col justify-start">
-        <li className="flex items-center">
+        <li className="flex items-start">
           <GoDotFill className=" text-xs" />
           Comply with a legal obligation
         </li>
-        <li className="flex items-center">
+        <li className="flex items-start">
           <GoDotFill className=" text-xs" />
           Protect and defend the rights or property of the Company
         </li>
-        <li className="flex items-center">
+        <li className="flex items-start">
           <GoDotFill className=" text-xs" /> Prevent or investigate possible
           wrongdoing in connection with the Service
         </li>
-        <li className="flex items-center">
+        <li className="flex items-start">
           <GoDotFill className=" text-xs" /> Protect the personal safety of
           Users of the Service or the public
         </li>

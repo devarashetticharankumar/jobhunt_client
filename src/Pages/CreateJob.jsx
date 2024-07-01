@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
 
 import { API_URL } from "../data/apiPath";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 const CreateJob = () => {
   const [selectedOptions, setSelectedOPtions] = useState(null);
   const {
@@ -14,7 +15,7 @@ const CreateJob = () => {
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
-    // console.log(data);
+    console.log(data);
     fetch(`${API_URL}/jobs/postjob`, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -25,7 +26,17 @@ const CreateJob = () => {
         console.log(result);
 
         if (result.acknowledged === true) {
-          alert("job posted successfully");
+          toast.success("Job Posted Successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            // draggable: true,
+            // progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
         }
         reset();
       });
@@ -236,6 +247,19 @@ const CreateJob = () => {
           />
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+      />
     </div>
   );
 };

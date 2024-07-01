@@ -40,16 +40,16 @@ const About = () => {
             </p>
             <h2 className="text-3xl font-bold mb-4">Our Values</h2>
             <ul className="list-disc list-inside text-gray-600 leading-relaxed mb-4">
-              <li className="flex items-center gap-1">
+              <li className="flex  gap-1">
                 <GoDotFill /> We believe in the power of community and
                 collaboration.
               </li>
-              <li className="flex items-center gap-1">
+              <li className="flex  gap-1">
                 <GoDotFill />
                 {`We're committed to providing high-quality job listings and
                 career resources.`}
               </li>
-              <li className="flex items-center gap-1">
+              <li className="flex  gap-1">
                 <GoDotFill />
                 {`We're dedicated to helping job seekers achieve their career
                 goals.`}
