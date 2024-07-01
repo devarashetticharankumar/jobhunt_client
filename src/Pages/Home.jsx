@@ -18,10 +18,11 @@ const Home = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`${API_URL}/all-jobs`)
+    fetch(`${API_URL}/jobs/all-jobs`)
       .then((res) => res.json())
       .then((data) => {
         setJobs(data);
+        console.log(data);
         setIsLoading(false);
       });
   }, []);

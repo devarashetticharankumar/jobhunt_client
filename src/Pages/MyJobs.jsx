@@ -19,7 +19,7 @@ const MyJobs = () => {
 
   useEffect(() => {
     if (email) {
-      fetch(`${API_URL}/myJobs/${email}`)
+      fetch(`${API_URL}/jobs/myJobs/${email}`)
         .then((res) => res.json())
         .then((data) => {
           setJobs(data);
@@ -58,7 +58,7 @@ const MyJobs = () => {
 
   const handleDelete = (id) => {
     // console.log(id);
-    fetch(`${API_URL}/job/${id}`, { method: "DELETE" }).then((res) =>
+    fetch(`${API_URL}/jobs/job/${id}`, { method: "DELETE" }).then((res) =>
       res.json().then((data) => {
         if (data.acknowledged === true) {
           Swal.fire({
@@ -176,7 +176,9 @@ const MyJobs = () => {
                           </td>
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                             <button>
-                              <Link to={`/edit-job/${job?._id}`}>Edit</Link>
+                              <Link to={`/jobs/edit-job/${job?._id}`}>
+                                Edit
+                              </Link>
                             </button>
                           </td>
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">

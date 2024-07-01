@@ -7,7 +7,7 @@ const JobDetails = () => {
   const [job, setJob] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/all-jobs/${id}`)
+    fetch(`${API_URL}/jobs/all-jobs/${id}`)
       .then((res) => res.json())
       .then((data) => setJob(data));
   }, []);
