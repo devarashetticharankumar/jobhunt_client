@@ -26,17 +26,7 @@ const CreateJob = () => {
         console.log(result);
 
         if (result.acknowledged === true) {
-          toast.success("Job Posted Successfully", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            // draggable: true,
-            // progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
+          alert("job posted successfully!!");
         }
         reset();
       });
@@ -213,6 +203,7 @@ const CreateJob = () => {
               className="w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-400"
               rows={6}
               placeholder="Job Description"
+              type="text"
               defaultValue={
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. "
               }
@@ -247,19 +238,6 @@ const CreateJob = () => {
           />
         </form>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition:Bounce
-      />
     </div>
   );
 };

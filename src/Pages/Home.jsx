@@ -22,7 +22,6 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => {
         setJobs(data);
-        console.log(data);
         setIsLoading(false);
       });
   }, []);
@@ -152,7 +151,9 @@ const Home = () => {
         {/* job cards */}
         <div className="col-span-2 bg-white">
           {isLoading ? (
-            <p className="font-medium">Loading...</p>
+            <p className="font-medium flex items-center justify-center mt-16">
+              Loading...
+            </p>
           ) : result.length > 0 ? (
             <Jobs result={result} />
           ) : (

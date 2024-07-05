@@ -79,19 +79,8 @@ const MyJobs = () => {
       .then((data) => {
         if (data.acknowledged === true) {
           // Use toast to display the success message
-          toast.success("job deleted successfully!!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
+          alert("job deleted successfully!!!");
         }
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error deleting job:", error);
