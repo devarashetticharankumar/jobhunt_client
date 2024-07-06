@@ -27,6 +27,7 @@ const RegisterUser = () => {
           setPassword("");
           setConfirmPassword("");
           setError(null);
+          window.location.href = "/login";
         } else {
           setError("Failed to register");
         }
