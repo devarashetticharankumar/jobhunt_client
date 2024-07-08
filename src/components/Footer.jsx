@@ -6,6 +6,7 @@ import { IoLogoLinkedin } from "react-icons/io5";
 import { FaTwitter } from "react-icons/fa";
 import { FaTelegram } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
+import logo from "/jobhuntlogofooter.png";
 
 const Footer = () => {
   return (
@@ -16,7 +17,7 @@ const Footer = () => {
             href="/"
             className="flex items-center gap-1 text-2xl text-black-500"
           >
-            <svg
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               width="45"
               height="46"
@@ -32,7 +33,8 @@ const Footer = () => {
                 fill="#2D42FF"
               />
             </svg>
-            <span className="logo text-white">JobHunt</span>
+            <span className="logo text-white">JobHunt</span> */}
+            <img src={logo} alt="" className="w-2/6 " />
           </a>
           <p className="mt-2 text-gray-400 text-sm flex flex-wrap lg:w-96 ">
             {
