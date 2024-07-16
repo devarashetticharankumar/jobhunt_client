@@ -17,7 +17,7 @@ const Footer = () => {
             href="/"
             className="flex items-center gap-1 text-2xl text-black-500"
           >
-            {/* <svg
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               width="45"
               height="46"
@@ -33,8 +33,10 @@ const Footer = () => {
                 fill="#2D42FF"
               />
             </svg>
-            <span className="logo text-white">JobHunt</span> */}
-            <img src={logo} alt="" className="w-2/6 " />
+            <span className="logo font-ChakraPetch font-normal text-white">
+              JobHunt
+            </span>
+            {/* <img src={logo} alt="" className="w-2/6 " /> */}
           </a>
           <p className="mt-2 text-gray-400 text-sm flex flex-wrap lg:w-96 ">
             {
@@ -89,7 +91,7 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white">Social Share</h3>
           <div className="mt-2 flex flex-wrap lg:flex-nowrap md:flex-nowrap space-x-4 text-gray-400">
             <Link
-              to={"https://www.instagram.com/jobhunt.pro/"}
+              to={"https://www.instagram.com/jobhuntpro/"}
               className="hover:text-blue"
             >
               <FiInstagram size={22} />

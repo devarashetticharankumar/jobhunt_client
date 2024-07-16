@@ -1,12 +1,68 @@
 import React, { useState } from "react";
 import { FaEnvelopeOpenText, FaRocket } from "react-icons/fa6";
+import { API_URL } from "../data/apiPath";
 
+import axios from "axios";
 const NewsLetter = () => {
   const [email, setEmail] = useState("");
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    console.log(email);
-    setEmail("");
+  const [message, setMessage] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
+  const handleSubscribe = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/subscriptions/subscribe`, {
+        email,
+      });
+      setMessage(response.data.message);
+      setEmail(" ");
+      setIsValidEmail(false);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+    } catch (error) {
+      setMessage(error.response.data.message);
+      setEmail(" ");
+      setIsValidEmail(false);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+    }
+  };
+
+  const validateEmail = (email) => {
+    // Simple email validation regex
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleChange = (e) => {
+    const email = e.target.value;
+    setEmail(email);
+    setIsValidEmail(validateEmail(email));
+  };
+
+  const handleUnsubscribe = async () => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/subscriptions/unsubscribe`,
+        {
+          email,
+        }
+      );
+      setMessage(response.data.message);
+      setEmail("");
+      setIsValidEmail(false);
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+    } catch (error) {
+      setMessage(error.response.data.message);
+      setEmail("");
+      setIsValidEmail(false);
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+    }
   };
   return (
     <div>
@@ -26,7 +82,8 @@ const NewsLetter = () => {
             name="email"
             id="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            // onChange={(e) => setEmail(e.target.value)}
+            onChange={handleChange}
             placeholder="Example@gmail.com"
             className="w-full block py-2 pl-3 border focus:outline-none"
           />
@@ -36,6 +93,15 @@ const NewsLetter = () => {
             className="w-full block py-2 pl-3 border focus:outline-none bg-blue text-white rounded font-semibold cursor-pointer"
             onClick={handleSubscribe}
           />
+          {isValidEmail && (
+            <input
+              type="submit"
+              value={"Unsubscribe"}
+              className="w-full block py-2 pl-3 border focus:outline-none bg-red-600 text-white rounded font-semibold cursor-pointer"
+              onClick={handleUnsubscribe}
+            />
+          )}
+          {message && <p className="text-center text-pink-800	">{message}</p>}
         </div>
       </div>
       {/* second part */}
@@ -53,7 +119,7 @@ const NewsLetter = () => {
             type="submit"
             value={"Upload your resume"}
             className="w-full block py-2 pl-3 border focus:outline-none bg-blue text-white rounded font-semibold cursor-pointer"
-            onClick={handleSubscribe}
+            onClick={" "}
           />
         </div>
       </div>

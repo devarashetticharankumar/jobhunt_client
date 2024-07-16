@@ -42,9 +42,9 @@ const UpdateJob = () => {
     })
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
         if (result.acknowledged === true) {
-          alert("job updated successfully!!!");
-          console.log("job updated successfullly!!!!!");
+          alert("job updated successfully!!");
         }
         reset();
       });
