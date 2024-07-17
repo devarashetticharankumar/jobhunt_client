@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiMapPin, FiSearch } from "react-icons/fi";
+import { API_URL } from "../data/apiPath";
 
 const Banner = ({
   query,
@@ -10,6 +11,17 @@ const Banner = ({
 }) => {
   const [jobs, setJobs] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(`${API_URL}/jobs/all-jobs`)
+      .then((res) => res.json())
+      .then((data) => {
+        setJobs(data);
+        setIsLoading(false);
+      });
+  }, [searchText]);
 
   const handleSearch = () => {
     const filter = jobs.filter(
@@ -37,6 +49,7 @@ const Banner = ({
               id="title"
               value={query}
               onChange={handelInputChange}
+              // onChange={(e) => setSearchText(e.target.value)}
               placeholder="what position are you looking for?"
               className="block flex-1 border-0 bg-transparent py-1.5 pl-8 text-gray-900 placeholder:text-gray-400 focus:right-0 sm:text-sm sm:leading-6"
             />
