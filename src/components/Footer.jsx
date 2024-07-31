@@ -10,7 +10,7 @@ import logo from "/jobhuntlogofooter.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 py-6 ">
+    <footer className="bg-[#1a1a1a] py-6 ">
       <div className="container mx-auto px-8 flex flex-col md:flex-row  justify-between gap-4 max-w-screen-2xl ">
         <div className="mb-8 md:mb-0">
           <a

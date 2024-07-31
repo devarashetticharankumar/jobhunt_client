@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
-import logo from "/jobhunt logo.png";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -94,7 +93,7 @@ const Navbar = () => {
 
       {/* navItems for mobile */}
       <div
-        className={`px-4 bg-gray-900 py-5 rounded-sm ${
+        className={`px-4 bg-[#1a1a1a] py-5 rounded-sm ${
           isMenuOpen ? "" : "hidden"
         } `}
       >
