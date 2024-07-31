@@ -57,27 +57,27 @@ const Footer = () => {
         <div className="mb-8 md:mb-0 text-sm ">
           <h3 className="text-xl font-semibold text-white">Quick Link</h3>
           <ul className="mt-2 text-gray-600">
-            <li>
+            <li className="py-1">
               <Link to="/about-us" className="hover:text-blue text-gray-400">
                 About Us
               </Link>
             </li>
-            <li>
+            <li className="py-1">
               <Link to="/terms" className="hover:text-blue text-gray-400">
                 Terms of use
               </Link>
             </li>
-            <li>
+            <li className="py-1">
               <Link to="/" className="hover:text-blue text-gray-400">
                 Recent Jobs
               </Link>
             </li>
-            <li>
+            <li className="py-1">
               <Link to="/contact-us" className="hover:text-blue text-gray-400">
                 Contact
               </Link>
             </li>
-            <li>
+            <li className="py-1">
               <Link
                 to="/privacy-policy"
                 className="hover:text-blue text-gray-400"
