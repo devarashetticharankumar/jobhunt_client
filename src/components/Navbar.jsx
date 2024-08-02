@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { loginWithRedirect } = useAuth0();
+  const { logout } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   const handleMenuToggler = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -66,16 +70,39 @@ const Navbar = () => {
         </ul>
 
         {/* signup and login btn */}
-        <div className="text-base text-primary font-medium space-x-5 hidden lg:block">
-          {/* <Link to="/login" className="py-2 px-5 border rounded">
-            Log in
-          </Link> */}
-          <Link
+        <div className="text-base text-primary font-medium space-x-5 hidden lg:flex items-center">
+          {/* <Link
             to="/sign-up"
             className="py-2 px-5 border rounded bg-blue hover:bg-indigo-700 text-white"
           >
             Sign up
-          </Link>
+          </Link> */}
+
+          {isAuthenticated && (
+            <img
+              src={user.picture}
+              alt={user.name}
+              className="w-9 h-9 rounded-full border-blue outline outline-offset-2 outline-1 outline-blue"
+            />
+          )}
+
+          {isAuthenticated ? (
+            <button
+              onClick={() =>
+                logout({ logoutParams: { returnTo: window.location.origin } })
+              }
+              className="py-2 px-5 border rounded bg-blue hover:bg-indigo-700 text-white"
+            >
+              Log Out
+            </button>
+          ) : (
+            <button
+              onClick={() => loginWithRedirect()}
+              className="py-2 px-5 border rounded bg-blue hover:bg-indigo-700 text-white"
+            >
+              Log In
+            </button>
+          )}
         </div>
 
         {/* mobile menu */}
@@ -112,7 +139,17 @@ const Navbar = () => {
             </li>
           ))}
           <li className="text-white py-1">
-            <Link to="/login">Log in</Link>
+            {isAuthenticated ? (
+              <button
+                onClick={() =>
+                  logout({ logoutParams: { returnTo: window.location.origin } })
+                }
+              >
+                Log Out
+              </button>
+            ) : (
+              <button onClick={() => loginWithRedirect()}>Log In</button>
+            )}
           </li>
         </ul>
       </div>
