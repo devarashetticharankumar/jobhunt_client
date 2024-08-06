@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
+import { motion } from "framer-motion";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -18,7 +19,12 @@ const JobDetails = () => {
 
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
-      <div className="flex flex-wrap justify-center mb-4 items-center">
+      <motion.div
+        className="flex flex-wrap justify-center mb-4 items-center"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
         <img
           src={job.companyLogo}
           alt={job.companyName}
@@ -28,8 +34,13 @@ const JobDetails = () => {
           <h1 className="text-2xl text-semibold font-bold ">{job.jobTitle}</h1>
           <h4 className="text-xl font-semibold">{job.companyName}</h4>
         </div>
-      </div>
-      <div className="flex flex-wrap justify-between mb-4">
+      </motion.div>
+      <motion.div
+        className="flex flex-wrap justify-between mb-4"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div>
           <p>
             <span className="font-semibold ">Salary:</span> {job.minPrice}k -
@@ -49,21 +60,39 @@ const JobDetails = () => {
             {job.employmentType}
           </p>
         </div>
-      </div>
-      <p className="mb-4">
+      </motion.div>
+      <motion.p
+        className="mb-4"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <span className="font-semibold">Description: </span>
-        <ul>
+        <motion.ul
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+        >
           {job?.description?.split(".").map((desc, index) => (
             <li className=" font-medium text-gray-600" key={index}>
               {desc}.
             </li>
           ))}
-        </ul>
-      </p>
-      <p className="mb-4">
+        </motion.ul>
+      </motion.p>
+      <motion.p
+        className="mb-4"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
         <span className="font-semibold">Required Skills: </span>
-      </p>
-      <ul>
+      </motion.p>
+      <motion.ul
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
         {job.skills && (
           <ul>
             {job.skills?.map((skill, index) => (
@@ -73,13 +102,16 @@ const JobDetails = () => {
             ))}
           </ul>
         )}
-      </ul>
-      <button
+      </motion.ul>
+      <motion.button
         className="bg-blue hover:bg-indigo-700 text-white  px-5 py-2 rounded-sm mt-5 mr-8"
         onClick={applyLink}
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         Apply Now
-      </button>
+      </motion.button>
     </div>
   );
 };
