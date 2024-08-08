@@ -4,6 +4,9 @@ import CreatableSelect from "react-select/creatable";
 
 import { API_URL } from "../data/apiPath";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import PageHeader from "../components/PageHeader";
+import { motion } from "framer-motion";
+
 const CreateJob = () => {
   const [selectedOptions, setSelectedOPtions] = useState(null);
   const {
@@ -55,7 +58,14 @@ const CreateJob = () => {
     return `${year}-${month}-${day}`;
   }
   return (
-    <div className="max-w-screen-2xl container max-auto xl:px-24 px-4">
+    <motion.div
+      className="max-w-screen-2xl container max-auto xl:px-24 px-4"
+      initial={{ opacity: 0, y: -60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeIn" }}
+    >
+      <PageHeader title={"Post a Job"} path={"post a job"} />
+
       {/* form  */}
       <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -238,7 +248,7 @@ const CreateJob = () => {
           />
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

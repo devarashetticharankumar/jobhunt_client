@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
+import { motion } from "framer-motion";
 
 const SalaryPage = () => {
   const [searchText, setSearchText] = useState("");
@@ -20,10 +21,20 @@ const SalaryPage = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 ">
+    <motion.div
+      className="max-w-screen-2xl container mx-auto xl:px-24 px-4 "
+      initial={{ opacity: 0, y: -60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeIn" }}
+    >
       <PageHeader title={"Estimated Salary"} path={"Salary"} />
 
-      <div className="mt-5 ">
+      <motion.div
+        className="mt-5 "
+        initial={{ opacity: 0, x: -60 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: "easeIn", delay: 0.2 }}
+      >
         <div className="search-box p-2 text-center mb-2">
           <input
             type="text"
@@ -39,9 +50,14 @@ const SalaryPage = () => {
             Search
           </button>
         </div>
-      </div>
+      </motion.div>
       {/* salary dissplay card */}
-      <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-12 my-12 items-center">
+      <motion.div
+        className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-12 my-12 items-center"
+        initial={{ opacity: 0, x: -60 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: "easeIn", delay: 0.4 }}
+      >
         {salary.map((data) => {
           return (
             <div key={data.id} className="shadow px-4 py-8">
@@ -60,8 +76,8 @@ const SalaryPage = () => {
             </div>
           );
         })}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

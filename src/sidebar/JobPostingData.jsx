@@ -5,14 +5,14 @@ const JobPostingData = ({ handleChange }) => {
   const now = new Date();
 
   const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const SevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const ThirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  // =======convert date to string===========
+  // Convert date to string
   const today = now.toISOString().slice(0, 10);
   const twentyFourHoursAgoDate = twentyFourHoursAgo.toISOString().slice(0, 10);
-  const SevenDaysAgoDate = SevenDaysAgo.toISOString().slice(0, 10);
-  const ThirtyDaysAgoDate = ThirtyDaysAgo.toISOString().slice(0, 10);
+  const sevenDaysAgoDate = sevenDaysAgo.toISOString().slice(0, 10);
+  const thirtyDaysAgoDate = thirtyDaysAgo.toISOString().slice(0, 10);
 
   return (
     <div>
@@ -43,13 +43,13 @@ const JobPostingData = ({ handleChange }) => {
         />
         <InputField
           handleChange={handleChange}
-          value={SevenDaysAgoDate}
+          value={sevenDaysAgoDate}
           title="Last 7 Days"
           name="test"
         />
         <InputField
           handleChange={handleChange}
-          value={ThirtyDaysAgoDate}
+          value={thirtyDaysAgoDate}
           title="Last Month"
           name="test"
         />

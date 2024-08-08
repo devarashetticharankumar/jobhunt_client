@@ -1,10 +1,15 @@
 import React from "react";
 import Button from "./Button";
 import InputField from "../components/InputField";
+import { motion } from "framer-motion";
 
 const Salary = ({ handleChange, handleClick }) => {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: -60 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6, ease: "easeIn" }}
+    >
       <h4 className="text-lg font-bold mb-2">Salary</h4>
       <div className="mb-4">
         <Button onClickHandler={handleClick} value="hourly" title="Hourly" />
@@ -47,7 +52,7 @@ const Salary = ({ handleChange, handleClick }) => {
           name="test2"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

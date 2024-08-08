@@ -229,6 +229,8 @@ import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react"; // Import the useAuth0 hook
 import { API_URL } from "../data/apiPath";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
+import PageHeader from "../components/PageHeader";
 
 const MyJobs = () => {
   const { user, getAccessTokenSilently } = useAuth0();
@@ -236,8 +238,7 @@ const MyJobs = () => {
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
-
+  const itemsPerPage = 10;
   useEffect(() => {
     if (user) {
       const fetchJobs = async () => {
@@ -315,8 +316,9 @@ const MyJobs = () => {
 
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
+      <PageHeader title={"My Jobs"} path={"My jobs"} />
+
       <div className="my-jobs-container">
-        <h1 className="text-center">All My Jobs</h1>
         <div className="search-box p-2 text-center">
           <input
             type="text"
@@ -337,7 +339,12 @@ const MyJobs = () => {
 
       {/* Table */}
       <section className="py-1 bg-blueGray-50 ">
-        <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-5">
+        <motion.div
+          className="w-full xl:w-12/12 mb-12 xl:mb-0 px-4 mx-auto mt-5"
+          initial={{ opacity: 0, y: -60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeIn" }}
+        >
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center w-full">
@@ -402,7 +409,7 @@ const MyJobs = () => {
                           {job.companyName}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          ${job.minPrice}k - ${job.maxPrice}k
+                          {job.minPrice}k - {job.maxPrice}k
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <button>
@@ -424,7 +431,7 @@ const MyJobs = () => {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Pagination */}
         <div className="flex justify-center text-black space-x-8 mb-8">
