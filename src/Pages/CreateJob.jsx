@@ -6,9 +6,12 @@ import { API_URL } from "../data/apiPath";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
-
+// import ReactQuill from "react-quill";
+// import "react-quill/dist/quill.snow.css"; // Import the CSS file
+// import { htmlToText } from "html-to-text";
 const CreateJob = () => {
   const [selectedOptions, setSelectedOPtions] = useState(null);
+  // const [jobDescription, setJobDescription] = useState(""); // State for Rich Text Editor
   const {
     register,
     handleSubmit,
@@ -18,7 +21,9 @@ const CreateJob = () => {
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
-    console.log(data);
+    // data.description = htmlToText(jobDescription);
+    // console.log(data.description);
+    // // Attach the sanitized content to form data    console.log(data);
     fetch(`${API_URL}/jobs/postjob`, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -32,6 +37,7 @@ const CreateJob = () => {
           alert("job posted successfully!!");
         }
         reset();
+        // setJobDescription(""); // Reset rich text editor
       });
   };
 
@@ -47,6 +53,39 @@ const CreateJob = () => {
     { value: "C", label: "C" },
     { value: "CSS", label: "CSS" },
   ];
+
+  // const modules = {
+  //   toolbar: [
+  //     [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
+  //     [{ size: [] }],
+  //     ["bold", "italic", "underline", "strike", "blockquote"],
+  //     [
+  //       { list: "ordered" },
+  //       { list: "bullet" },
+  //       { indent: "-1" },
+  //       { indent: "+1" },
+  //     ],
+  //     ["link", "image", "video"],
+  //     ["clean"],
+  //   ],
+  // };
+
+  // const formats = [
+  //   "header",
+  //   "font",
+  //   "size",
+  //   "bold",
+  //   "italic",
+  //   "underline",
+  //   "strike",
+  //   "blockquote",
+  //   "list",
+  //   "bullet",
+  //   "indent",
+  //   "link",
+  //   "image",
+  //   "video",
+  // ];
 
   const [minDate, setMinDate] = useState(getTodayDateString());
 
