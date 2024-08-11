@@ -42,8 +42,11 @@ const Card = ({ data }) => {
               <FiCalendar /> {postingDate}
             </span>
           </div>
-          <p className="text-base text-primary/70">
-            {description.slice(0, 250)}...
+          <p
+            dangerouslySetInnerHTML={{ __html: description.slice(0, 250) }}
+            className="text-base text-primary/70"
+          >
+            {/* {description.slice(0, 250)}... */}
           </p>
         </div>
       </Link>

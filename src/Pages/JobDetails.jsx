@@ -68,7 +68,7 @@ const JobDetails = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <span className="font-semibold">Description: </span>
-        <motion.ul
+        {/* <motion.ul
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
@@ -78,7 +78,13 @@ const JobDetails = () => {
               {desc}.
             </li>
           ))}
-        </motion.ul>
+        </motion.ul> */}
+        <p
+          dangerouslySetInnerHTML={{
+            __html: job.description,
+          }}
+          className="text-gray-600"
+        ></p>
       </motion.p>
       <motion.p
         className="mb-4"

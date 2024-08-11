@@ -6,12 +6,12 @@ import { API_URL } from "../data/apiPath";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
-// import ReactQuill from "react-quill";
-// import "react-quill/dist/quill.snow.css"; // Import the CSS file
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the CSS file
 // import { htmlToText } from "html-to-text";
 const CreateJob = () => {
   const [selectedOptions, setSelectedOPtions] = useState(null);
-  // const [jobDescription, setJobDescription] = useState(""); // State for Rich Text Editor
+  const [jobDescription, setJobDescription] = useState(""); // State for Rich Text Editor
   const {
     register,
     handleSubmit,
@@ -21,9 +21,9 @@ const CreateJob = () => {
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
-    // data.description = htmlToText(jobDescription);
-    // console.log(data.description);
-    // // Attach the sanitized content to form data    console.log(data);
+    data.description = jobDescription;
+    console.log(data.description);
+    // Attach the sanitized content to form data    console.log(data);
     fetch(`${API_URL}/jobs/postjob`, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -37,7 +37,7 @@ const CreateJob = () => {
           alert("job posted successfully!!");
         }
         reset();
-        // setJobDescription(""); // Reset rich text editor
+        setJobDescription(""); // Reset rich text editor
       });
   };
 
@@ -54,38 +54,38 @@ const CreateJob = () => {
     { value: "CSS", label: "CSS" },
   ];
 
-  // const modules = {
-  //   toolbar: [
-  //     [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
-  //     [{ size: [] }],
-  //     ["bold", "italic", "underline", "strike", "blockquote"],
-  //     [
-  //       { list: "ordered" },
-  //       { list: "bullet" },
-  //       { indent: "-1" },
-  //       { indent: "+1" },
-  //     ],
-  //     ["link", "image", "video"],
-  //     ["clean"],
-  //   ],
-  // };
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
+      [{ size: [] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+  };
 
-  // const formats = [
-  //   "header",
-  //   "font",
-  //   "size",
-  //   "bold",
-  //   "italic",
-  //   "underline",
-  //   "strike",
-  //   "blockquote",
-  //   "list",
-  //   "bullet",
-  //   "indent",
-  //   "link",
-  //   "image",
-  //   "video",
-  // ];
+  const formats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+  ];
 
   const [minDate, setMinDate] = useState(getTodayDateString());
 
@@ -247,7 +247,7 @@ const CreateJob = () => {
           {/* seventh row */}
           <div className="w-full">
             <label className="block mb-2 text-lg">Job Description</label>
-            <textarea
+            {/* <textarea
               {...register("description")}
               className="w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-400"
               rows={6}
@@ -256,6 +256,15 @@ const CreateJob = () => {
               defaultValue={
                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. "
               }
+            /> */}
+            <ReactQuill
+              value={jobDescription}
+              onChange={setJobDescription}
+              modules={modules}
+              formats={formats}
+              className="create-job-input"
+              placeholder="Enter job description..."
+              theme="snow"
             />
           </div>
 

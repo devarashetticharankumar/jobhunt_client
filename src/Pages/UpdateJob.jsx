@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { useLoaderData, useParams } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 import { API_URL } from "../data/apiPath";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the CSS file
 
 const UpdateJob = () => {
   const { id } = useParams();
@@ -25,6 +27,8 @@ const UpdateJob = () => {
   } = useLoaderData();
 
   const [selectedOptions, setSelectedOPtions] = useState(null);
+  const [jobDescription, setJobDescription] = useState(""); // State for Rich Text Editor
+
   const {
     register,
     handleSubmit,
@@ -52,6 +56,8 @@ const UpdateJob = () => {
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
+    data.description = jobDescription;
+
     console.log("Submitting data:", data);
 
     fetch(`${API_URL}/jobs/update-job/${id}`, {
@@ -92,6 +98,40 @@ const UpdateJob = () => {
     { value: "C", label: "C" },
     { value: "CSS", label: "CSS" },
   ];
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
+      [{ size: [] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+  ];
+
   return (
     <div className="max-w-screen-2xl container max-auto xl:px-24 px-4">
       {/* form  */}
@@ -237,12 +277,21 @@ const UpdateJob = () => {
           {/* seventh row */}
           <div className="w-full">
             <label className="block mb-2 text-lg">Job Description</label>
-            <textarea
+            {/* <textarea
               {...register("description")}
               className="w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-400"
               rows={6}
               placeholder="Job Description"
               defaultValue={description}
+            /> */}
+            <ReactQuill
+              value={jobDescription}
+              onChange={setJobDescription}
+              modules={modules}
+              formats={formats}
+              className="create-job-input"
+              placeholder="Enter job description..."
+              theme="snow"
             />
           </div>
 
