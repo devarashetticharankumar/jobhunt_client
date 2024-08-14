@@ -386,7 +386,7 @@ const Navbar = () => {
   return (
     <header className="max-w-screen-2xl container mx-auto xl:px-24 px-3 sticky top-0 left-0 z-10 bg-transparent backdrop-blur-xl">
       <nav className="flex justify-between items-center py-4">
-        <a href="/" className="flex items-center gap-1 text-2xl text-black-500">
+        <a href="/" className="flex items-center text-2xl text-black-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="45"
@@ -403,7 +403,9 @@ const Navbar = () => {
               fill="#2D42FF"
             />
           </svg>
-          <span className="logo font-ChakraPetch font-semibold">JobHunt</span>
+          <span className="logo font-ChakraPetch font-semibold">
+            Job<span className="text-blue">N</span>irvana
+          </span>
         </a>
 
         {/* nav items for large devices */}

@@ -6,17 +6,13 @@ import { IoLogoLinkedin } from "react-icons/io5";
 import { FaTwitter } from "react-icons/fa";
 import { FaTelegram } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
-import logo from "/jobhuntlogofooter.png";
 
 const Footer = () => {
   return (
     <footer className="bg-[#1a1a1a] py-6 ">
       <div className="container mx-auto px-8 flex flex-col md:flex-row  justify-between gap-4 max-w-screen-2xl ">
         <div className="mb-8 md:mb-0">
-          <a
-            href="/"
-            className="flex items-center gap-1 text-2xl text-black-500"
-          >
+          <a href="/" className="flex items-center text-2xl text-black-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="45"
@@ -33,14 +29,14 @@ const Footer = () => {
                 fill="#2D42FF"
               />
             </svg>
-            <span className="logo font-ChakraPetch font-normal text-white">
-              JobHunt
+            <span className="logo font-ChakraPetch font-semibold text-white">
+              Job<span className="text-blue">N</span>irvana
             </span>
             {/* <img src={logo} alt="" className="w-2/6 " /> */}
           </a>
           <p className="mt-2 text-gray-400 text-sm flex flex-wrap lg:w-96 ">
             {
-              "JobHunt is more than just a job board - it's a community of job seekers, employers, and career experts dedicated to helping you succeed. Join the movement today!"
+              "JobNirvana is more than just a job board - it's a community of job seekers, employers, and career experts dedicated to helping you succeed. Join the movement today!"
             }
           </p>
         </div>
@@ -50,7 +46,7 @@ const Footer = () => {
             <span>9-63B Balaji Nagar, Hyderabad Telangana 514872</span>
             <br />
             <a href="#" className="text-gray-400 text-sm ">
-              jobhunt@gmail.com
+              jobhunt2580@gmail.com
             </a>
           </p>
         </div>
@@ -114,10 +110,10 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t border-gray-300 mt-8 pt-4 ">
+      <div className="border-t border-gray-300 mt-8 pt-4 flex items-center justify-center ">
         <p className="text-center text-gray-400">
           &copy; Copyright 2024. Powered By
-          <span className="font-bold text-blue"> JobHunt</span>
+          <span className="font-bold text-blue"> JobNirvana</span>
         </p>
       </div>
     </footer>

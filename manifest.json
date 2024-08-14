@@ -1,7 +1,7 @@
 {
-  "name": "jobHunt",
-  "short_name": "jobHunt",
-  "description": "jobHunt will notify the latest job updates!",
+  "name": "jobNirvana",
+  "short_name": "jobNirvana",
+  "description": "jobNirvana will notify the latest job updates!",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

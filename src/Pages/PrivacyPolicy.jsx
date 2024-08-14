@@ -4,33 +4,28 @@ import { GoDotFill } from "react-icons/go";
 const PrivacyPolicy = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5 ">
-      <header className="bg-gray-900 text-white py-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <a
-              href="/"
-              className="flex items-center gap-1 text-2xl text-black-500"
+      <header className="bg-gray-900 text-white py-4 ">
+        <div className="container mx-auto flex justify-center items-center ">
+          <div className="flex items-center ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="45"
+              height="46"
+              viewBox="0 0 45 46"
+              fill="none"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="45"
-                height="46"
-                viewBox="0 0 45 46"
-                fill="none"
-              >
-                <path
-                  d="M35.6392 17.6831C37.1506 17.9768 37.7772 19.7964 36.7673 20.9584L21.9962 37.953C20.9862 39.115 19.097 38.7479 18.5957 37.2923L11.2635 16.0029C10.7621 14.5472 12.0246 13.0946 13.536 13.3883L35.6392 17.6831Z"
-                  fill="#8B94E7"
-                />
-                <path
-                  d="M9.10566 15.7428C8.33756 14.4085 9.30193 12.7431 10.8415 12.745L33.3582 12.7737C34.8978 12.7756 35.8579 14.4435 35.0864 15.7759L23.8033 35.2615C23.0318 36.5939 21.1073 36.5914 20.3392 35.2571L9.10566 15.7428Z"
-                  fill="#2D42FF"
-                />
-              </svg>
-              <span className="logo text-white">
-                Privacy Policy for Jobhunt
-              </span>
-            </a>
+              <path
+                d="M35.6392 17.6831C37.1506 17.9768 37.7772 19.7964 36.7673 20.9584L21.9962 37.953C20.9862 39.115 19.097 38.7479 18.5957 37.2923L11.2635 16.0029C10.7621 14.5472 12.0246 13.0946 13.536 13.3883L35.6392 17.6831Z"
+                fill="#8B94E7"
+              />
+              <path
+                d="M9.10566 15.7428C8.33756 14.4085 9.30193 12.7431 10.8415 12.745L33.3582 12.7737C34.8978 12.7756 35.8579 14.4435 35.0864 15.7759L23.8033 35.2615C23.0318 36.5939 21.1073 36.5914 20.3392 35.2571L9.10566 15.7428Z"
+                fill="#2D42FF"
+              />
+            </svg>
+            <span className="logo text-white">
+              Privacy Policy for JobNirvana
+            </span>
           </div>
         </div>
       </header>
@@ -88,7 +83,7 @@ const PrivacyPolicy = () => {
           <p>
             <strong>Company</strong> (referred to as either &quot;the
             Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in
-            this Agreement) refers to Jobhunt .
+            this Agreement) refers to JobNirvana .
           </p>
         </li>
         <li className="my-4">
@@ -147,14 +142,14 @@ const PrivacyPolicy = () => {
         </li>
         <li className="my-4">
           <p>
-            <strong>Website</strong> refers to Jobhunt , accessible from{" "}
+            <strong>Website</strong> refers to JobNirvana , accessible from{" "}
             <a
-              href="https://jobhunt-gray.vercel.app"
+              href="https://jobhunt1.netlify.app"
               rel="external nofollow noopener"
               target="_blank"
               className=" underline text-blue"
             >
-              https://jobhunt-gray.vercel.app
+              https://jobhunt1.netlify.app
             </a>
           </p>
         </li>
@@ -645,7 +640,7 @@ const PrivacyPolicy = () => {
         If you have any questions about this Privacy Policy, You can contact us:
       </p>
       <ul>
-        <li>By email: devarashetticharankumar2580@gmail.com</li>
+        <li>By email:jobhunt2580@gmail.com</li>
       </ul>
     </div>
   );

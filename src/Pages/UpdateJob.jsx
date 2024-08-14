@@ -58,8 +58,6 @@ const UpdateJob = () => {
     data.skills = selectedOptions;
     data.description = jobDescription;
 
-    console.log("Submitting data:", data);
-
     fetch(`${API_URL}/jobs/update-job/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -289,6 +287,7 @@ const UpdateJob = () => {
               onChange={setJobDescription}
               modules={modules}
               formats={formats}
+              defaultValue={setJobDescription}
               className="create-job-input"
               placeholder="Enter job description..."
               theme="snow"

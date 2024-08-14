@@ -12,7 +12,7 @@ const About = () => {
               About Us
             </h1>
             <p className="text-gray-600 text-xl mb-8 ">
-              {`JobHunt is more than just a job board - it's a community of job
+              {`JobNirvana is more than just a job board - it's a community of job
               seekers, employers, and career experts dedicated to helping you
               succeed.`}
             </p>
