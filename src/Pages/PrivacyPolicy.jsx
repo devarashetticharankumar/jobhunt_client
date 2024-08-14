@@ -144,12 +144,12 @@ const PrivacyPolicy = () => {
           <p>
             <strong>Website</strong> refers to JobNirvana , accessible from{" "}
             <a
-              href="https://jobhunt1.netlify.app"
+              href="https://jobnirvana.netlify.app"
               rel="external nofollow noopener"
               target="_blank"
               className=" underline text-blue"
             >
-              https://jobhunt1.netlify.app
+              https://jobnirvana.netlify.app
             </a>
           </p>
         </li>
