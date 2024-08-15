@@ -296,6 +296,8 @@ const Home = () => {
       filteredJobs = filteredLocation;
     }
 
+    // categoty filtering
+
     if (selectedCategory) {
       filteredJobs = filteredJobs.filter(
         ({
