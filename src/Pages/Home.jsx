@@ -345,7 +345,7 @@ const Home = () => {
 
         <div className="col-span-2 bg-white" ref={jobsRef}>
           {isLoading ? (
-            <div className="text-center mt-32">
+            <div className="text-center lg:mt-32  ">
               <div role="status">
                 <svg
                   aria-hidden="true"

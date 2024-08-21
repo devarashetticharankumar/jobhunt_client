@@ -455,9 +455,9 @@ const Navbar = () => {
         <div className="md:hidden block">
           <button onClick={handleMenuToggler}>
             {isMenuOpen ? (
-              <FaXmark className="w-4 h-5 text-primary" />
+              <FaXmark className="w-5 h-5 text-primary" />
             ) : (
-              <FaBarsStaggered className="w-4 h-5 text-primary" />
+              <FaBarsStaggered className="w-5 h-5 text-primary" />
             )}
           </button>
         </div>
