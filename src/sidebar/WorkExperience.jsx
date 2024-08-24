@@ -17,6 +17,12 @@ const WorkExperience = ({ handleChange }) => {
           />
           <span className="checkmark"></span>Any Experience
         </label>
+        <InputField
+          handleChange={handleChange}
+          value="0-1 years"
+          title="0-1 years"
+          name="test"
+        />
 
         <InputField
           handleChange={handleChange}

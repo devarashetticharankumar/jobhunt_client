@@ -108,7 +108,7 @@ const NewsLetter = () => {
           {message && <p className="text-center text-pink-800">{message}</p>}
         </div>
       </motion.div>
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, x: 50 }} // Start 50px to the right
         animate={{ opacity: 1, x: 0 }} // End at its natural position
         transition={{ duration: 0.5, delay: 0.3 }}
@@ -130,7 +130,7 @@ const NewsLetter = () => {
             onClick={() => {}}
           />
         </div>
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 };

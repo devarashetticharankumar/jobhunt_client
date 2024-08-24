@@ -123,7 +123,7 @@ const Banner = ({
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 md:py-20">
       <motion.h1
-        className="text-5xl font-bold text-primary pt-8"
+        className="text-5xl font-bold text-gray-800 pt-8 "
         style={{ opacity: opacity1 }}
         variants={fadeIn}
         initial="hidden"

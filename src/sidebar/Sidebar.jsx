@@ -24,7 +24,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Location from "./Location";
 import Salary from "./Salary";
-import JobPostingData from "./JobPostingData";
+// import JobPostingData from "./JobPostingData";
 import WorkExperience from "./WorkExperience";
 import EmploymentType from "./EmploymentType";
 
@@ -39,7 +39,7 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
       <h3 className="text-xl font-bold mb-2">Filters</h3>
       <Location handleChange={handleChange} setJobs={setJobs} />
       <Salary handleChange={handleChange} handleClick={handleClick} />
-      <JobPostingData handleChange={handleChange} />
+      {/* <JobPostingData handleChange={handleChange} /> */}
       <WorkExperience handleChange={handleChange} />
       <EmploymentType handleChange={handleChange} />
     </motion.div>

@@ -17,6 +17,12 @@ const JobDetails = () => {
     window.open(job.ApplyLink);
   };
 
+  // Utility function to format the date
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       <motion.div
@@ -49,6 +55,10 @@ const JobDetails = () => {
           <p>
             <span className="font-semibold">Location:</span> {job.jobLocation}
           </p>
+          <p>
+            <span className="font-semibold">Posted On: </span>
+            {formatDate(job.createdAt)}
+          </p>
         </div>
         <div>
           <p>
@@ -68,17 +78,6 @@ const JobDetails = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <span className="font-semibold">Description: </span>
-        {/* <motion.ul
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-        >
-          {job?.description?.split(".").map((desc, index) => (
-            <li className=" font-medium text-gray-600" key={index}>
-              {desc}.
-            </li>
-          ))}
-        </motion.ul> */}
         <p
           dangerouslySetInnerHTML={{
             __html: job.description,

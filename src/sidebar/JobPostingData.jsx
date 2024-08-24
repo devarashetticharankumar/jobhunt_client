@@ -29,12 +29,12 @@ const JobPostingData = ({ handleChange }) => {
           />
           <span className="checkmark"></span>All Time
         </label>
-        <InputField
+        {/* <InputField
           handleChange={handleChange}
           value={today}
           title="Today"
           name="test"
-        />
+        /> */}
         <InputField
           handleChange={handleChange}
           value={twentyFourHoursAgoDate}
