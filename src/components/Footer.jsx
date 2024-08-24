@@ -88,25 +88,25 @@ const Footer = () => {
           <div className="mt-2 flex flex-wrap lg:flex-nowrap md:flex-nowrap space-x-4 text-gray-400">
             <Link
               to={"https://www.instagram.com/job_nirvana/"}
-              className="hover:text-blue"
+              className="hover:text-pink-600"
             >
               <FiInstagram size={22} />
             </Link>
             <Link to={"/"} className="hover:text-blue">
               <FaSquareFacebook size={22} />
             </Link>
-            <Link to={"/"} className="hover:text-blue">
+            <Link to={"/"} className="hover:text-orange-300">
               <IoLogoLinkedin size={22} />
             </Link>
-            <Link to={"/"} className="hover:text-blue">
+            {/* <Link to={"/"} className="hover:text-blue">
               <FaTwitter size={22} />
-            </Link>
-            <Link to={"/"} className="hover:text-blue">
+            </Link> */}
+            <Link to={"/"} className="hover:text-sky-500">
               <FaTelegram size={22} />
             </Link>
-            <Link to={"/"} className="hover:text-blue">
+            {/* <Link to={"/"} className="hover:text-blue">
               <FaYoutube size={22} />
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
