@@ -87,7 +87,7 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white">Social Share</h3>
           <div className="mt-2 flex flex-wrap lg:flex-nowrap md:flex-nowrap space-x-4 text-gray-400">
             <Link
-              to={"https://www.instagram.com/jobhuntpro/"}
+              to={"https://www.instagram.com/job_nirvana/"}
               className="hover:text-blue"
             >
               <FiInstagram size={22} />
