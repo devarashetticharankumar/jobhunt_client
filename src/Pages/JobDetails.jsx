@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -23,8 +24,22 @@ const JobDetails = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const jobTitle = job.jobTitle || "Job Details"; // Fallback title
+  const jobLocation = job.jobLocation || "Job description not available";
+
+  // Construct the canonical URL
+  const canonicalUrl = `${window.location.origin}/jobs/${id}`;
+
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
+      <Helmet>
+        <title>{jobTitle} - JobNirvana</title>
+        <meta name="description" content={jobLocation} />
+        <meta property="og:title" content={jobTitle} />
+        <meta property="og:description" content={jobLocation} />
+        <meta property="og:image" content={job.companyLogo} />
+        <link rel="canonical" href={canonicalUrl} />
+      </Helmet>
       <motion.div
         className="flex flex-wrap justify-center mb-4 items-center"
         initial={{ opacity: 0, y: -50 }}
