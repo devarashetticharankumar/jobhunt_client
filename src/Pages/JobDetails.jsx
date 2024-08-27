@@ -25,7 +25,7 @@ const JobDetails = () => {
   };
 
   const jobTitle = job.jobTitle || "Job Details"; // Fallback title
-  const jobLocation = job.jobLocation || "Job description not available";
+  const jobDescription = job.description || "Latest jobs are posted!!";
 
   // Construct the canonical URL
   const canonicalUrl = `${window.location.origin}/jobs/${id}`;
@@ -34,11 +34,13 @@ const JobDetails = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       <Helmet>
         <title>{jobTitle} - JobNirvana</title>
-        <meta name="description" content={jobLocation} />
+        <meta name="description" content={jobDescription} />
         <meta property="og:title" content={jobTitle} />
-        <meta property="og:description" content={jobLocation} />
+        <meta property="og:description" content={jobDescription} />
         <meta property="og:image" content={job.companyLogo} />
         <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="website" />
       </Helmet>
       <motion.div
         className="flex flex-wrap justify-center mb-4 items-center"
