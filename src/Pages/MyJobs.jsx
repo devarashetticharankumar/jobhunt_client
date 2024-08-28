@@ -304,7 +304,7 @@ const MyJobs = () => {
 
       const data = await response.json();
       if (data.acknowledged) {
-        toast.success("Job deleted successfully!");
+        alert("Job deleted successfully!");
         // Re-fetch jobs after deletion
         await fetchJobs();
       }
