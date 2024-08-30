@@ -222,7 +222,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [suggestions, setSuggestions] = useState([]);
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
 
   const jobsRef = useRef(null);
 
@@ -294,17 +294,17 @@ const Home = () => {
     return { startIndex, endIndex };
   };
 
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredData().length / itemsPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+  // const nextPage = () => {
+  //   if (currentPage < Math.ceil(handleInputChange.length / itemsPerPage)) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // const prevPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
 
   const filteredData = () => {
     let filteredJobs = jobs;
@@ -405,12 +405,12 @@ const Home = () => {
             </>
           )}
 
-          {result.length > 0 && (
+          {/* {result.length > 0 && (
             <div className="flex justify-center mt-4 space-x-8">
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-200"
+                className="px-4 py-2 bg-blue text-white rounded disabled:bg-blue-200"
               >
                 Previous
               </button>
@@ -418,14 +418,14 @@ const Home = () => {
                 onClick={nextPage}
                 disabled={
                   currentPage ===
-                  Math.ceil(filteredData().length / itemsPerPage)
+                  Math.ceil(handleInputChange.length / itemsPerPage)
                 }
-                className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-blue-200"
+                className="px-4 py-2 bg-blue text-white rounded disabled:bg-blue-200"
               >
                 Next
               </button>
             </div>
-          )}
+          )} */}
         </div>
 
         <div>

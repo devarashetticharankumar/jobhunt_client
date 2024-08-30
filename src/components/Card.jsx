@@ -47,7 +47,7 @@ const Card = ({ data }) => {
             </span>
           </div>
           <p
-            dangerouslySetInnerHTML={{ __html: description.slice(0, 250) }}
+            dangerouslySetInnerHTML={{ __html: description.slice(0, 120) }}
             className="text-base text-primary/70"
           >
             {/* {description.slice(0, 250)}... */}
