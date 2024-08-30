@@ -28,7 +28,7 @@ const Card = ({ data }) => {
         <div>
           <h4 className="text-primary mb-1">{companyName}</h4>
           <h3 className="text-lg font-semibold mb-2">{jobTitle}</h3>
-          <div className="flex gap-2 text-primary/70 text-base flex-wrap mb-2">
+          {/* <div className="flex gap-2 text-primary/70 text-base flex-wrap mb-2">
             <span className="flex items-center gap-2">
               <FiMapPin />
               {jobLocation}
@@ -45,7 +45,7 @@ const Card = ({ data }) => {
               <FiCalendar />
               {postingDate}
             </span>
-          </div>
+          </div> */}
         </div>
       </Link>
     </section>
