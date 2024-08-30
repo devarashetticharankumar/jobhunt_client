@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../data/apiPath";
-import Card from "../components/Card";
 import RelatedJobCard from "../components/RelatedJobsCard";
 
 const RelatedJobs = ({ currentJob }) => {
