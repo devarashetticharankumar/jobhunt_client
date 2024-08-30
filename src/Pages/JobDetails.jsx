@@ -3,20 +3,27 @@ import { Link, useParams } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
+import Card from "../components/Card";
+import RelatedJobs from "../components/RelatedJobs";
 
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState([]);
 
   useEffect(() => {
+    // Fetch the current job details
     fetch(`${API_URL}/jobs/all-jobs/${id}`)
       .then((res) => res.json())
-      .then((data) => setJob(data));
-  }, []);
+      .then((data) => {
+        setJob(data);
+      });
+  }, [id]);
 
   const applyLink = () => {
     window.open(job.ApplyLink);
   };
+
+  // Filter related jobs by companyName
 
   // Utility function to format the date
   const formatDate = (dateString) => {
@@ -134,6 +141,9 @@ const JobDetails = () => {
       >
         Apply Now
       </motion.button>
+
+      {/* Related Jobs Section */}
+      <RelatedJobs currentJob={job} />
     </div>
   );
 };
