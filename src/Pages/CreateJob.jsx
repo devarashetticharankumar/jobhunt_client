@@ -70,6 +70,22 @@ const CreateJob = () => {
     ],
   };
 
+  const categories = [
+    "BTech Jobs",
+    "Degree Jobs",
+    "Internships",
+    "Software Development",
+    "Data Science",
+    "Design",
+    "Marketing",
+    "Sales",
+    "Customer Support",
+    "Human Resources",
+    "Finance",
+    "Operations",
+    "Product Management",
+  ];
+
   const formats = [
     "header",
     "font",
@@ -202,7 +218,10 @@ const CreateJob = () => {
                 <option value="1-2 years">1-2 years</option>
                 <option value="3-4 years">3-4 years</option>
                 <option value="above 5 years">more than 5</option>
-                <option value="Internship">Internship</option>
+                <option value="entry-level">Entry-Level</option>
+                <option value="mid-level">Mid-Level</option>
+                <option value="experienced">Experienced</option>
+                <option value="Intern">Intern</option>
                 <option value="Work remotely">Work Remotely</option>
               </select>
             </div>
@@ -244,6 +263,19 @@ const CreateJob = () => {
               </select>
             </div>
           </div>
+          {/* Categories row */}
+          {/* <div className="create-job-flex">
+            <div className="lg:w-1/2 w-full">
+              <label className="block mb-2 text-lg">Qualification</label>
+              <select {...register("categories")} className="create-job-input">
+                <option value="">Choose Qualification</option>
+                <option value="Btech">Btech</option>
+                <option value="Degree">Degree</option>
+                <option value="Internship">Internship</option>
+          
+              </select>
+            </div>
+          </div> */}
 
           {/* seventh row */}
           <div className="w-full">

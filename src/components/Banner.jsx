@@ -205,6 +205,7 @@
 import React from "react";
 import { FiMapPin, FiSearch } from "react-icons/fi";
 import { motion } from "framer-motion";
+import Categories from "../sidebar/Categories";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 50 },
@@ -219,6 +220,7 @@ const Banner = ({
   handleSearch,
   suggestions,
   handleSuggestionClick,
+  // handleSearchByCategories,
 }) => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 md:py-20">
@@ -308,6 +310,7 @@ const Banner = ({
           </motion.button>
         </div>
       </form>
+      {/* <Categories categories={handleSearchByCategories} /> */}
     </div>
   );
 };

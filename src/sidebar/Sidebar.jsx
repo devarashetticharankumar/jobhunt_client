@@ -27,6 +27,7 @@ import Salary from "./Salary";
 // import JobPostingData from "./JobPostingData";
 import WorkExperience from "./WorkExperience";
 import EmploymentType from "./EmploymentType";
+import Categories from "./Categories";
 
 const Sidebar = ({ handleChange, handleClick, setJobs }) => {
   return (
@@ -42,6 +43,7 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
       {/* <JobPostingData handleChange={handleChange} /> */}
       <WorkExperience handleChange={handleChange} />
       <EmploymentType handleChange={handleChange} />
+      {/* <Categories handleChange={handleChange} /> */}
     </motion.div>
   );
 };

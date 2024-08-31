@@ -253,7 +253,7 @@ const Home = () => {
         .filter((job) =>
           job.jobTitle.toLowerCase().includes(value.toLowerCase())
         )
-        .slice(0, 10); // Show up to 5 suggestions
+        .slice(0, 10); // Show up to 10 suggestions
       setSuggestions(filteredSuggestions);
     } else {
       setSuggestions([]);
@@ -330,6 +330,7 @@ const Home = () => {
           salaryType,
           employmentType,
           postingDate,
+          qualification,
         }) =>
           jobLocation.toLowerCase() === selectedCategory.toLowerCase() ||
           postingDate >= selectedCategory ||
@@ -337,6 +338,7 @@ const Home = () => {
           salaryType.toLowerCase() === selectedCategory.toLowerCase() ||
           experienceLevel.toLowerCase() === selectedCategory.toLowerCase() ||
           employmentType.toLowerCase() === selectedCategory.toLowerCase()
+        // qualification.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
 
