@@ -437,7 +437,7 @@ const Home = () => {
           )}
         </div>
 
-        <div>
+        <div className="bg-white p-4 rounded">
           <NewsLetter />
         </div>
       </div>
