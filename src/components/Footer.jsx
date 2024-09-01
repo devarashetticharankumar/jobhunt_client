@@ -92,16 +92,16 @@ const Footer = () => {
             >
               <FiInstagram size={22} />
             </Link>
-            <Link to={"/"} className="hover:text-blue">
+            <Link to={"#"} className="hover:text-blue">
               <FaSquareFacebook size={22} />
             </Link>
-            <Link to={"/"} className="hover:text-orange-300">
+            <Link to={"#"} className="hover:text-orange-300">
               <IoLogoLinkedin size={22} />
             </Link>
             {/* <Link to={"/"} className="hover:text-blue">
               <FaTwitter size={22} />
             </Link> */}
-            <Link to={"/"} className="hover:text-sky-500">
+            <Link to={"#"} className="hover:text-sky-500">
               <FaTelegram size={22} />
             </Link>
             {/* <Link to={"/"} className="hover:text-blue">
