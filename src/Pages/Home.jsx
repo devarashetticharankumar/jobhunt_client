@@ -265,6 +265,10 @@ const Home = () => {
     setSuggestions([]);
   };
 
+  const filteredItems = jobs.filter((job) =>
+    job.jobTitle.toLowerCase().includes(query.toLowerCase())
+  );
+
   const handleSearchByLocation = (event) => {
     setLocation(event.target.value);
   };
@@ -294,17 +298,17 @@ const Home = () => {
     return { startIndex, endIndex };
   };
 
-  // const nextPage = () => {
-  //   if (currentPage < Math.ceil(handleInputChange.length / itemsPerPage)) {
-  //     setCurrentPage(currentPage + 1);
-  //   }
-  // };
+  const nextPage = () => {
+    if (currentPage < Math.ceil(filteredItems.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-  // const prevPage = () => {
-  //   if (currentPage > 1) {
-  //     setCurrentPage(currentPage - 1);
-  //   }
-  // };
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const filteredData = () => {
     let filteredJobs = jobs;
@@ -407,27 +411,30 @@ const Home = () => {
             </>
           )}
 
-          {/* {result.length > 0 && (
+          {result.length > 0 && (
             <div className="flex justify-center mt-4 space-x-8">
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-blue text-white rounded disabled:bg-blue-200"
+                className="hover:underline"
               >
                 Previous
               </button>
+              <span className="mx-2">
+                page {currentPage} of{" "}
+                {Math.ceil(filteredItems.length / itemsPerPage)}{" "}
+              </span>
               <button
                 onClick={nextPage}
                 disabled={
-                  currentPage ===
-                  Math.ceil(handleInputChange.length / itemsPerPage)
+                  currentPage === Math.ceil(filteredItems.length / itemsPerPage)
                 }
-                className="px-4 py-2 bg-blue text-white rounded disabled:bg-blue-200"
+                className="hover:underline"
               >
                 Next
               </button>
             </div>
-          )} */}
+          )}
         </div>
 
         <div>
