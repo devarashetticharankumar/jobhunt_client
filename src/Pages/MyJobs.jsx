@@ -67,7 +67,32 @@ const MyJobs = () => {
     setJobs(filter);
   };
 
+  // const handleDelete = async (id) => {
+  //   try {
+  //     const response = await fetch(`${API_URL}/jobs/job/${id}`, {
+  //       method: "DELETE",
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+
+  //     const data = await response.json();
+  //     if (data.acknowledged === true) {
+  //       alert("Job deleted successfully!");
+  //       // Re-fetch jobs after deletion
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting job:", error);
+  //     toast.error("Error deleting job. Please try again.");
+  //   }
+  // };
   const handleDelete = async (id) => {
+    // Confirm deletion with the user
+    if (!window.confirm("Are you sure you want to delete this job?")) {
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/jobs/job/${id}`, {
         method: "DELETE",
@@ -78,13 +103,16 @@ const MyJobs = () => {
       }
 
       const data = await response.json();
-      if (data.acknowledged) {
+      if (data.acknowledged === true) {
         alert("Job deleted successfully!");
-        // Re-fetch jobs after deletion
-        await fetchJobs();
+        // Optionally, re-fetch the list of jobs here
+        // For example: fetchJobs();
+      } else {
+        throw new Error("Job deletion not acknowledged");
       }
     } catch (error) {
       console.error("Error deleting job:", error);
+      // Ensure toast is imported and configured properly
       toast.error("Error deleting job. Please try again.");
     }
   };
@@ -193,7 +221,7 @@ const MyJobs = () => {
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <button
-                            className="bg-red-700 text-white rounded-sm px-6 py-2"
+                            className="bg-red-600 text-white rounded-sm px-6 py-2 hover:bg-red-700"
                             onClick={() => handleDelete(job._id)}
                           >
                             Delete
