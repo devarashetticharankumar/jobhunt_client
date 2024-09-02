@@ -406,8 +406,10 @@ const Home = () => {
             <Jobs result={result} />
           ) : (
             <>
-              <h3 className="text-lg font-bold mb-2">{result.length} jobs</h3>
-              <p>No data found.</p>
+              <div className="text-center m-auto flex flex-col items-center justify-center">
+                <h3 className="text-lg font-bold mb-2">{result.length} jobs</h3>
+                <p>No data found.</p>
+              </div>
             </>
           )}
 
