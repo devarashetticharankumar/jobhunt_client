@@ -247,6 +247,7 @@ const CreateJob = () => {
                 placeholder="paste your company logo URL: https://logo.com/img1"
                 {...register("companyLogo")}
                 className="create-job-input"
+                defaultValue="https://i.imgur.com/0qGt7qj.png"
               />
             </div>
 
