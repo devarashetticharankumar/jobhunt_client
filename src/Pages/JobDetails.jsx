@@ -73,9 +73,8 @@ const JobDetails = () => {
       >
         <div>
           <p>
-            <span className="font-semibold">Salary:</span>
-            {job.minPrice}
-            {job.salaryType === "Monthly" ? "k" : "LPA"} - {job.maxPrice}{" "}
+            <span className="font-semibold">Salary: </span>
+            {job.minPrice} - {job.maxPrice}{" "}
             {job.salaryType === "Monthly" ? "k" : "LPA"} / {job.salaryType}
           </p>
           <p>
