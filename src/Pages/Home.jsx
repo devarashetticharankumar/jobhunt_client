@@ -418,7 +418,7 @@ const Home = () => {
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="px-4 py-2 mx-2 bg-gray-200 rounded"
+                className="px-4 py-2 bg-gray-200 rounded"
               >
                 Previous
               </button>
@@ -431,7 +431,7 @@ const Home = () => {
                 disabled={
                   currentPage === Math.ceil(filteredItems.length / itemsPerPage)
                 }
-                className="px-4 py-2 mx-2 bg-gray-200 rounded"
+                className="px-4 py-2 bg-gray-200 rounded"
               >
                 Next
               </button>
