@@ -414,11 +414,11 @@ const Home = () => {
           )}
 
           {result.length > 0 && (
-            <div className="flex justify-center mt-4 space-x-8">
+            <div className="flex items-center justify-center mt-4 space-x-8">
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="hover:underline"
+                className="px-4 py-2 mx-2 bg-gray-200 rounded"
               >
                 Previous
               </button>
@@ -431,7 +431,7 @@ const Home = () => {
                 disabled={
                   currentPage === Math.ceil(filteredItems.length / itemsPerPage)
                 }
-                className="hover:underline"
+                className="px-4 py-2 mx-2 bg-gray-200 rounded"
               >
                 Next
               </button>
