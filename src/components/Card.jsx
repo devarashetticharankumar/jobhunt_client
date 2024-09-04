@@ -39,7 +39,8 @@ const Card = ({ data }) => {
             </span>
             <span className="flex items-center gap-2">
               <MdOutlineCurrencyRupee />
-              {minPrice}-{maxPrice}k
+              {minPrice}-{maxPrice}
+              {salaryType === "Monthly" ? "k" : "LPA"}
             </span>
             <span className="flex items-center gap-2">
               <FiCalendar />
