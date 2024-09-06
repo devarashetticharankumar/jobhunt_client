@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import Card from "../components/Card";
 import RelatedJobs from "../components/RelatedJobs";
-
+import { FaRegStar } from "react-icons/fa";
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState([]);
@@ -126,7 +126,11 @@ const JobDetails = () => {
         {job.skills && (
           <ul>
             {job.skills?.map((skill, index) => (
-              <li className="text-gray-600 font-medium" key={index}>
+              <li
+                className="text-gray-600 font-medium flex items-center mb-2"
+                key={index}
+              >
+                <FaRegStar className="text-yellow-500 mr-2" />
                 {skill.label}
               </li>
             ))}
