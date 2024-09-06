@@ -261,6 +261,7 @@ const CreateJob = () => {
                 <option value="Full-time">Full-time</option>
                 <option value="Part-time">Part-time</option>
                 <option value="Temporary">Temporary</option>
+                <option value="Freelance">Freelance</option>
               </select>
             </div>
           </div>
