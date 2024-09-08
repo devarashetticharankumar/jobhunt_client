@@ -31,6 +31,12 @@ const EmploymentType = ({ handleChange }) => {
         />
         <InputField
           handleChange={handleChange}
+          value="Internship"
+          title="Internship"
+          name="test"
+        />
+        <InputField
+          handleChange={handleChange}
           value="Freelance"
           title="Freelance"
           name="test"

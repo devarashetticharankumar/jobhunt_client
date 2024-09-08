@@ -260,6 +260,7 @@ const CreateJob = () => {
                 <option value="">Choose your employment type</option>
                 <option value="Full-time">Full-time</option>
                 <option value="Part-time">Part-time</option>
+                <option value="Internship">Internship</option>
                 <option value="Temporary">Temporary</option>
                 <option value="Freelance">Freelance</option>
               </select>
