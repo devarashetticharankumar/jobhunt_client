@@ -62,7 +62,7 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
 
   return (
     <motion.div
-      className={`space-y-5 ${isMobile ? "p-4" : "p-6"} ${
+      className={`space-y-5 ${isMobile ? "p-4" : " "} ${
         isMobile ? "bg-white" : " "
       } rounded-md`}
       initial={{ opacity: 0, x: -60 }}
