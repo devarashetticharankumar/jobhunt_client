@@ -116,6 +116,12 @@ const WorkExperience = ({ handleChange }) => {
           </label>
           <InputField
             handleChange={handleChange}
+            value="fresher"
+            title="Fresher"
+            name="experience"
+          />
+          <InputField
+            handleChange={handleChange}
             value="0-1 years"
             title="0-1 years"
             name="experience"
