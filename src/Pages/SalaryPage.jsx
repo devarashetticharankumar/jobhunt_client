@@ -103,35 +103,76 @@ const SalaryPage = () => {
       </motion.div>
 
       {/* Pagination Controls */}
-      <div className="pagination flex justify-center space-x-4 my-6">
+      <div className="pagination flex flex-wrap justify-center gap-2 my-6">
         <button
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-4 py-2 bg-gray-200 ${
+          className={`px-3 py-2 bg-gray-200 text-sm ${
             currentPage === 1 ? "cursor-not-allowed" : "hover:bg-blue"
-          }`}
+          } rounded-md`}
         >
           Previous
         </button>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => paginate(i + 1)}
-            className={`px-4 py-2 ${
-              currentPage === i + 1
-                ? "bg-blue text-white"
-                : "bg-gray-200 hover:bg-blue"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
+
+        {/* Always show the first page */}
+        {currentPage > 2 && (
+          <>
+            <button
+              onClick={() => paginate(1)}
+              className={`px-3 py-2 text-sm rounded-md ${
+                currentPage === 1
+                  ? "bg-blue text-white"
+                  : "bg-gray-200 hover:bg-blue"
+              }`}
+            >
+              1
+            </button>
+            {currentPage > 3 && <span className="px-3 py-2">...</span>}
+          </>
+        )}
+
+        {/* Show pages around the current page */}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter((page) => page >= currentPage - 1 && page <= currentPage + 1)
+          .map((page) => (
+            <button
+              key={page}
+              onClick={() => paginate(page)}
+              className={`px-3 py-2 text-sm rounded-md ${
+                currentPage === page
+                  ? "bg-blue text-white"
+                  : "bg-gray-200 hover:bg-blue"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+        {/* Always show the last page */}
+        {currentPage < totalPages - 1 && (
+          <>
+            {currentPage < totalPages - 2 && (
+              <span className="px-3 py-2">...</span>
+            )}
+            <button
+              onClick={() => paginate(totalPages)}
+              className={`px-3 py-2 text-sm rounded-md ${
+                currentPage === totalPages
+                  ? "bg-blue text-white"
+                  : "bg-gray-200 hover:bg-blue"
+              }`}
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
+
         <button
           onClick={() => paginate(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`px-4 py-2 bg-gray-200 ${
+          className={`px-3 py-2 bg-gray-200 text-sm ${
             currentPage === totalPages ? "cursor-not-allowed" : "hover:bg-blue"
-          }`}
+          } rounded-md`}
         >
           Next
         </button>
