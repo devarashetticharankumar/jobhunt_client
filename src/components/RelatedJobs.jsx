@@ -59,7 +59,7 @@ const RelatedJobs = ({ currentJob }) => {
                 job.experienceLevel === currentJob.experienceLevel)
           );
           // Limit the related jobs to 8
-          setRelatedJobs(filteredJobs.slice(0, 8));
+          setRelatedJobs(filteredJobs.slice(0, 10));
         });
     }
   }, [currentJob]);
