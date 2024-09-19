@@ -22,7 +22,6 @@ const CreateJob = () => {
   const onSubmit = (data) => {
     data.skills = selectedOptions;
     data.description = jobDescription;
-    console.log(data.description);
     // Attach the sanitized content to form data    console.log(data);
     fetch(`${API_URL}/jobs/postjob`, {
       method: "POST",

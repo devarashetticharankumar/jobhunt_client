@@ -179,6 +179,7 @@ const WorkExperience = ({ handleChange }) => {
         // Render select dropdown for mobile view
         <select onChange={handleChange} className="w-full p-2 border rounded">
           <option value="">Any Experience</option>
+          <option value="fresher">Fresher</option>
           <option value="0-1 years">0-1 years</option>
           <option value="1-2 years">1-2 years</option>
           <option value="3-4 years">3-4 years</option>
