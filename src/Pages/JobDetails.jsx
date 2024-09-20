@@ -211,42 +211,75 @@ const JobDetails = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
         >
-          <motion.div className="flex items-center mb-6">
+          <motion.div className="flex flex-wrap items-center justify-center mb-6 ">
             <img
               src={job.companyLogo}
               alt={job.companyName}
               className="w-28 h-28 mr-4"
             />
+
             <div>
-              <h1 className="text-3xl font-bold">{job.jobTitle}</h1>
+              <h1 className="text-2xl font-bold">{job.jobTitle}</h1>
               <h4 className="text-lg text-gray-600">{job.companyName}</h4>
             </div>
           </motion.div>
 
-          <motion.div className="mb-4">
-            <p className="text-lg">
+          {/* <motion.div>
+            <p className="text-base">
               <span className="font-semibold">Salary: </span>
               {job.minPrice} - {job.maxPrice}{" "}
               {job.salaryType === "Monthly" ? "k" : "LPA"} / {job.salaryType}
             </p>
-            <p className="text-lg">
+            <p className="text-base">
               <span className="font-semibold">Location:</span> {job.jobLocation}
             </p>
-            <p className="text-lg">
+            <p className="text-base">
               <span className="font-semibold">Posted On: </span>
               {formatDate(job.createdAt)}
             </p>
           </motion.div>
 
           <motion.div className="mb-6">
-            <p className="text-lg">
+            <p className="text-base">
               <span className="font-semibold">Experience Level: </span>
               {job.experienceLevel}
             </p>
-            <p className="text-lg">
+            <p className="text-base">
               <span className="font-semibold">Employment Type: </span>
               {job.employmentType}
             </p>
+          </motion.div> */}
+          <motion.div
+            className="flex flex-wrap justify-between mb-4"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <div>
+              <p>
+                <span className="font-semibold">Salary: </span>
+                {job.minPrice} - {job.maxPrice}{" "}
+                {job.salaryType === "Monthly" ? "k" : "LPA"} / {job.salaryType}
+              </p>
+              <p>
+                <span className="font-semibold">Location:</span>{" "}
+                {job.jobLocation}
+              </p>
+              <p>
+                <span className="font-semibold">Posted On: </span>
+                {formatDate(job.createdAt)}
+              </p>
+            </div>
+            <div>
+              <p>
+                <span className="font-semibold">Experience Level: </span>
+                {job.experienceLevel}
+              </p>
+              <p>
+                <span className="font-semibold">Employment Type: </span>
+                {job.employmentType}
+              </p>
+            </div>
           </motion.div>
 
           <motion.div className="mb-6">

@@ -122,12 +122,6 @@ const WorkExperience = ({ handleChange }) => {
           />
           <InputField
             handleChange={handleChange}
-            value="0-1 years"
-            title="0-1 years"
-            name="experience"
-          />
-          <InputField
-            handleChange={handleChange}
             value="1-2 years"
             title="1-2 years"
             name="experience"
@@ -180,7 +174,6 @@ const WorkExperience = ({ handleChange }) => {
         <select onChange={handleChange} className="w-full p-2 border rounded">
           <option value="">Any Experience</option>
           <option value="fresher">Fresher</option>
-          <option value="0-1 years">0-1 years</option>
           <option value="1-2 years">1-2 years</option>
           <option value="3-4 years">3-4 years</option>
           <option value="above 5 years">More than 5 years</option>

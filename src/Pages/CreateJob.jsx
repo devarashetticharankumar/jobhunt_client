@@ -214,7 +214,6 @@ const CreateJob = () => {
                 <option value="">Choose your experience</option>
                 <option value="Any Experience">Any Experience</option>
                 <option value="fresher">Fresher</option>
-                <option value="0-1 years">0-1 years</option>
                 <option value="1-2 years">1-2 years</option>
                 <option value="3-4 years">3-4 years</option>
                 <option value="above 5 years">more than 5</option>
