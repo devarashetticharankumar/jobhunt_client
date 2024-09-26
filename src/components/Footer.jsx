@@ -95,7 +95,12 @@ const Footer = () => {
             <Link to={"#"} className="hover:text-blue">
               <FaSquareFacebook size={22} />
             </Link>
-            <Link to={"#"} className="hover:text-orange-300">
+            <Link
+              to={
+                "https://www.linkedin.com/company/jobnirvana/about/?viewAsMember=true"
+              }
+              className="hover:text-orange-300"
+            >
               <IoLogoLinkedin size={22} />
             </Link>
             {/* <Link to={"/"} className="hover:text-blue">
