@@ -97,7 +97,7 @@ const Footer = () => {
             </Link>
             <Link
               to={
-                "https://www.linkedin.com/company/jobnirvana/?viewAsMember=true"
+                "https://www.linkedin.com/company/jobnirvana/posts/?feedView=all&viewAsMember=true"
               }
               className="hover:text-orange-300"
             >
