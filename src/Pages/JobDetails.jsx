@@ -195,6 +195,10 @@ const JobDetails = () => {
         <title>{jobTitle} - JobNirvana</title>
         <meta name="description" content={jobDescription} />
         <meta property="og:title" content={jobTitle} />
+        <meta
+          name="keywords"
+          content={`${jobTitle}, ${job.companyName}, jobs, ${job.jobLocation}, ${job.experienceLevel}`}
+        />
         <meta property="og:description" content={jobDescription} />
         <meta property="og:image" content={job.companyLogo} />
         <link rel="canonical" href={canonicalUrl} />
