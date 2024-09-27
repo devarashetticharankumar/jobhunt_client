@@ -10,9 +10,17 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    window.gtag("config", "G-XQVWKXQYC9", {
-      page_path: location.pathname,
-    });
+    const trackPageView = () => {
+      if (window.gtag) {
+        window.gtag("config", "G-XQVWKXQYC9", {
+          page_path: location.pathname,
+        });
+      } else {
+        console.error("gtag is not loaded yet");
+      }
+    };
+
+    trackPageView();
   }, [location]);
   return (
     <>
