@@ -437,14 +437,14 @@ const Navbar = () => {
               onClick={() =>
                 logout({ logoutParams: { returnTo: window.location.origin } })
               }
-              className="py-2 px-5 border rounded bg-blue hover:bg-indigo-700 text-white"
+              className="w-full bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
             >
               Log Out
             </button>
           ) : (
             <button
               onClick={() => loginWithRedirect()}
-              className="py-2 px-5 border rounded bg-blue hover:bg-indigo-700 text-white"
+              className="w-full bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
             >
               Log In
             </button>

@@ -112,7 +112,7 @@ const Banner = ({
 
           <motion.button
             type="submit"
-            className="md:rounded-e-md rounded bg-blue hover:bg-blue-600 text-white font-bold py-2 px-4 transition-colors duration-300"
+            className=" bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
             variants={fadeIn}
             initial="hidden"
             animate="visible"

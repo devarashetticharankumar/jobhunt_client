@@ -310,7 +310,7 @@ const JobDetails = () => {
           </motion.div>
 
           <motion.button
-            className="bg-blue hover:bg-blue-700 text-white px-6 py-2 rounded-md mt-4"
+            className=" bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
             onClick={applyLink}
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
