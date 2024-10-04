@@ -104,7 +104,7 @@ const Location = ({ handleChange }) => {
               type="radio"
               name="location"
               id="all"
-              value="all"
+              value=""
               checked={selectedLocation === "all"}
               onChange={handleLocationChange}
             />
@@ -196,7 +196,7 @@ const Location = ({ handleChange }) => {
           className="w-full p-2 border rounded"
           value={selectedLocation}
         >
-          <option value="all">All</option>
+          <option value="">All</option>
           <option value="hyderabad">Hyderabad</option>
           <option value="bengaluru">Bengaluru</option>
           <option value="chennai">Chennai</option>
