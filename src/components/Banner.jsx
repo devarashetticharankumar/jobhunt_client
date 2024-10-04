@@ -71,10 +71,10 @@ const Banner = ({
               id="title"
               value={query}
               onChange={handleInputChange}
-              placeholder="e.g., Software Developer, Data Analyst"
+              placeholder="E.g., Software Developer, Data Analyst"
               className="block flex-1 border-0 bg-transparent py-1.5 pl-8 text-gray-900 placeholder:text-gray-400 focus:right-0 sm:text-sm sm:leading-6"
             />
-            <FiSearch className="absolute mt-2.5 ml-2 text-gray-400" />
+            <FiSearch className="absolute mt-4 ml-2 text-gray-400" />
 
             {suggestions.length > 0 && (
               <ul className="absolute z-10 w-full bg-white shadow-lg max-h-60 overflow-auto mt-10 rounded-md">
@@ -92,7 +92,7 @@ const Banner = ({
           </motion.div>
 
           <motion.div
-            className="flex md:rounded-s-none rounded shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 md:w-1/3 w-full"
+            className="flex md:rounded-s-none rounded shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 md:w-1/3 w-full "
             variants={fadeIn}
             initial="hidden"
             animate="visible"
@@ -107,12 +107,12 @@ const Banner = ({
               placeholder="City, State"
               className="block flex-1 border-0 bg-transparent py-1.5 pl-8 text-gray-900 placeholder:text-gray-400 focus:right-0 sm:text-sm sm:leading-6"
             />
-            <FiMapPin className="absolute mt-2.5 ml-2 text-gray-400" />
+            <FiMapPin className="absolute mt-4 ml-2 text-gray-400" />
           </motion.div>
 
           <motion.button
             type="submit"
-            className=" bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+            className=" bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md "
             variants={fadeIn}
             initial="hidden"
             animate="visible"

@@ -179,7 +179,7 @@ const ContactUs = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col lg:flex-row w-full max-w-4xl">
         {/* Left Side: Image */}
-        <div className="lg:w-1/2">
+        <div className="hidden lg:block lg:w-1/2">
           <img
             src={aboutImg}
             alt="Contact Us"
