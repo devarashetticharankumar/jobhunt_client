@@ -12,7 +12,7 @@ const InFeedAd = () => {
   }, []);
 
   return (
-    <div className="in-feed-ad my-4">
+    <div className="in-feed-ad my-4 mx-4">
       {/* <ins
         className="adsbygoogle"
         style={{ display: "block" }}
