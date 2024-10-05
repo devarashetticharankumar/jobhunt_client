@@ -2,6 +2,7 @@ import React from "react";
 import { FiMapPin, FiSearch } from "react-icons/fi";
 import { motion } from "framer-motion";
 import illustration from "../assets/bannerimg.png";
+import InFeedAd from "./InFeedAd";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 50 },
@@ -122,6 +123,7 @@ const Banner = ({
           </motion.button>
         </div>
       </form>
+      <InFeedAd />
     </div>
   );
 };
