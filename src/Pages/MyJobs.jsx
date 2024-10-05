@@ -264,6 +264,8 @@ import { API_URL } from "../data/apiPath";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import PageHeader from "../components/PageHeader";
+import InFeedAd from "../components/InFeedAd";
+import InArticleAd from "../components/InArticleAd";
 
 const MyJobs = () => {
   const { user, getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
@@ -387,6 +389,7 @@ const MyJobs = () => {
           </button>
         </div>
       </div>
+      <InFeedAd />
 
       {/* Table */}
       <section className="py-1 bg-blueGray-50 ">
@@ -502,6 +505,7 @@ const MyJobs = () => {
           </div>
         </motion.div>
       </section>
+      <InArticleAd />
     </div>
   );
 };
