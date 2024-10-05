@@ -389,7 +389,6 @@ const MyJobs = () => {
           </button>
         </div>
       </div>
-      <InFeedAd />
 
       {/* Table */}
       <section className="py-1 bg-blueGray-50 ">
@@ -505,7 +504,6 @@ const MyJobs = () => {
           </div>
         </motion.div>
       </section>
-      <InArticleAd />
     </div>
   );
 };
