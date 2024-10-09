@@ -13,7 +13,7 @@ const InFeedAd = () => {
 
   return (
     <div
-      className="in-article-ad my-4 mx-5
+      className="in-feed-ad my-4 mx-5
     "
     >
       <ins

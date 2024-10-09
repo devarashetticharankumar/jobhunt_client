@@ -175,29 +175,3 @@ li {
 .create-job-input {
   @apply block w-full flex-1 bg-white py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6;
 }
-
-.in-feed-ad {
-  width: 100%;
-  max-width: 100%;
-  margin: 1rem 0;
-}
-
-@media (max-width: 768px) {
-  .in-feed-ad ins.adsbygoogle {
-    width: 100% !important;
-  }
-}
-
-/* If needed, add these styles to your global CSS or Tailwind config */
-
-.in-article-ad {
-  width: 100%;
-  max-width: 100%;
-  margin: 1.5rem 0; /* Adjust vertical spacing */
-}
-
-@media (max-width: 768px) {
-  .in-article-ad ins.adsbygoogle {
-    width: 100% !important;
-  }
-}
