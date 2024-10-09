@@ -322,6 +322,8 @@ import { Helmet } from "react-helmet";
 import { FaRegStar } from "react-icons/fa";
 import RelatedJobs from "../components/RelatedJobs";
 import InArticleAd from "../components/InArticleAd"; // Import the InArticleAd component
+import { FaRupeeSign } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -397,13 +399,15 @@ const JobDetails = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <div>
-              <p>
-                <span className="font-semibold">Salary: </span>
+              <p className="flex items-center">
+                <span className="font-semibold">Salary: </span>{" "}
+                <FaRupeeSign className="text-sm font-thin" />
                 {job.minPrice} - {job.maxPrice}{" "}
                 {job.salaryType === "Monthly" ? "k" : "LPA"} / {job.salaryType}
               </p>
-              <p>
+              <p className="flex items-center">
                 <span className="font-semibold">Location:</span>{" "}
+                <FaLocationDot className="text-sm font-thin" />
                 {job.jobLocation}
               </p>
               <p>

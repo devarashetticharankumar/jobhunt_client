@@ -152,7 +152,7 @@ const CreateJob = () => {
             <div className="lg:w-1/2 w-full">
               <label className="block mb-2 text-lg">Minimum Salary</label>
               <input
-                type="number"
+                type="string"
                 placeholder="$13k"
                 {...register("minPrice")}
                 className="create-job-input"
@@ -161,7 +161,7 @@ const CreateJob = () => {
             <div className="lg:w-1/2 w-full">
               <label className="block mb-2 text-lg">Maximum Salary</label>
               <input
-                type="number"
+                type="string"
                 placeholder="$50k"
                 {...register("maxPrice")}
                 className="create-job-input"
