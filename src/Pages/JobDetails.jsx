@@ -453,15 +453,27 @@ const JobDetails = () => {
             </ul>
           </motion.div>
 
-          <motion.button
-            className="bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
-            onClick={applyLink}
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            Apply Now
-          </motion.button>
+          <div className="flex flex-wrap items-center justify-between gap-6 rounded-md p-5 bg-[#d8f3ff] lg:w-3/4  min-w-fit">
+            <div>
+              <h4 className="text-sky-700 text-xl font-medium">
+                Interested in this job?
+              </h4>
+              <p className="text-sky-700 text-base">
+                Apply now to get started!
+              </p>
+            </div>
+            <div>
+              <motion.button
+                className="bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+                onClick={applyLink}
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                Apply Now
+              </motion.button>
+            </div>
+          </div>
         </motion.div>
 
         {/* Right Side: Related Jobs (25%) */}
