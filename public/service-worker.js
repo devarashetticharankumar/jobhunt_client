@@ -5,8 +5,8 @@ self.addEventListener("push", function (event) {
     : { title: "New Job", body: "Check it out!" };
   const options = {
     body: data.body,
-    icon: "icon.png", // Path to your notification icon
-    badge: "badge.png", // Path to your badge icon
+    icon: "android-chrome-192x192.png", // Path to your notification icon
+    badge: "android-chrome-192x192.png", // Path to your badge icon
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
 });
