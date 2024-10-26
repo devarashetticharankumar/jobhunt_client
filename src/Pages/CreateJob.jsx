@@ -8,6 +8,8 @@ import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the CSS file
+
+import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 // import { htmlToText } from "html-to-text";
 const CreateJob = () => {
   const [selectedOptions, setSelectedOPtions] = useState(null);
@@ -33,7 +35,13 @@ const CreateJob = () => {
         console.log(result);
 
         if (result.acknowledged === true) {
-          alert("job posted successfully!!");
+          toast.success("Job posted successfully!", {
+            autoClose: 3000, // Toast will disappear after 3 seconds
+          });
+        } else {
+          toast.error("Failed to post job. Please try again.", {
+            autoClose: 3000,
+          });
         }
         reset();
         setJobDescription(""); // Reset rich text editor
@@ -119,7 +127,7 @@ const CreateJob = () => {
       transition={{ duration: 0.6, ease: "easeIn" }}
     >
       <PageHeader title={"Post a Job"} path={"post a job"} />
-
+      <ToastContainer />
       {/* form  */}
       <div className="bg-[#FAFAFA] py-10 px-4 lg:px-16">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

@@ -197,7 +197,7 @@ const SalaryPage = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 6; // Number of jobs to show per page
+  const jobsPerPage = 7; // Number of jobs to show per page
 
   useEffect(() => {
     fetch(`${API_URL}/jobs/all-jobs`)
