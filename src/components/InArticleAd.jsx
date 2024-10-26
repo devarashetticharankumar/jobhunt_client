@@ -13,7 +13,7 @@ const InFeedAd = () => {
 
   return (
     <div
-      className="in-feed-ad my-4 mx-5 card hover:bg-neutral-100 transition rounded-lg
+      className="in-feed-ad my-4 mx-5
     "
     >
       <ins
