@@ -117,9 +117,7 @@ const JobDetails = () => {
             <p className="text-lg font-semibold">Description: </p>
             <p
               className="text-gray-700"
-              dangerouslySetInnerHTML={{
-                __html: sanitizeHtml(job.description),
-              }}
+              dangerouslySetInnerHTML={{ __html: job.description }}
             ></p>
           </motion.div>
 
