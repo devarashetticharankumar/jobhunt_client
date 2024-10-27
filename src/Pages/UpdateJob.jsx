@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css"; // Import the CSS file
 import PageHeader from "../components/PageHeader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { color } from "framer-motion";
 
 const UpdateJob = () => {
   const { id } = useParams();
@@ -94,21 +95,54 @@ const UpdateJob = () => {
     { value: "CSS", label: "CSS" },
   ];
 
+  // const modules = {
+  //   toolbar: [
+  //     [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
+  //     [{ size: [] }],
+  //     ["bold", "italic", "underline", "strike", "blockquote"],
+  //     [
+  //       { list: "ordered" },
+  //       { list: "bullet" },
+  //       { indent: "-1" },
+  //       { indent: "+1" },
+  //     ],
+  //     ["link", "image", "video"],
+  //     [{ color: [] }, { background: [] }],
+  //     ["clean"],
+  //   ],
+  // };
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
       [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image", "video"],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }], // Enable color and background formats
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }],
+      ["link", "image"],
       ["clean"],
     ],
   };
+
+  // const formats = [
+  //   "header",
+  //   "font",
+  //   "size",
+  //   "bold",
+  //   "italic",
+  //   "underline",
+  //   "strike",
+  //   "blockquote",
+  //   "list",
+  //   "bullet",
+  //   "indent",
+  //   "link",
+  //   "image",
+  //   "video",
+  //   "color",
+  //   "background",
+  // ];
 
   const formats = [
     "header",
@@ -125,6 +159,8 @@ const UpdateJob = () => {
     "link",
     "image",
     "video",
+    "color", // Ensure color is included
+    "background", // Ensure background is included
   ];
 
   return (
@@ -275,8 +311,8 @@ const UpdateJob = () => {
           <div>
             <label className="block mb-2 text-lg">Job Description</label>
             <ReactQuill
-              value={jobDescription} // Set the value of the editor
-              onChange={setJobDescription} // Handle content changes
+              value={jobDescription}
+              onChange={setJobDescription}
               modules={modules}
               formats={formats}
               className="create-job-input"
@@ -288,7 +324,7 @@ const UpdateJob = () => {
           {/* eighth row */}
           <div className="create-job-flex">
             <div className="lg:w-1/2 w-full">
-              <label className="block mb-2 text-lg">Job Apply Link</label>
+              <label className="block mb-2 text-lg">Apply Link</label>
               <input
                 type="url"
                 defaultValue={ApplyLink}

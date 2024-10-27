@@ -63,16 +63,14 @@ const CreateJob = () => {
 
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
       [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image", "video"],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }], // Enable color and background formats
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }],
+      ["link", "image"],
       ["clean"],
     ],
   };
@@ -108,6 +106,8 @@ const CreateJob = () => {
     "link",
     "image",
     "video",
+    "color", // Ensure color is included
+    "background", // Ensure background is included
   ];
 
   const [minDate, setMinDate] = useState(getTodayDateString());
