@@ -95,22 +95,6 @@ const UpdateJob = () => {
     { value: "CSS", label: "CSS" },
   ];
 
-  // const modules = {
-  //   toolbar: [
-  //     [{ header: [1, 2, 3, 4, 5, 6] }, { font: [] }],
-  //     [{ size: [] }],
-  //     ["bold", "italic", "underline", "strike", "blockquote"],
-  //     [
-  //       { list: "ordered" },
-  //       { list: "bullet" },
-  //       { indent: "-1" },
-  //       { indent: "+1" },
-  //     ],
-  //     ["link", "image", "video"],
-  //     [{ color: [] }, { background: [] }],
-  //     ["clean"],
-  //   ],
-  // };
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -124,25 +108,6 @@ const UpdateJob = () => {
       ["clean"],
     ],
   };
-
-  // const formats = [
-  //   "header",
-  //   "font",
-  //   "size",
-  //   "bold",
-  //   "italic",
-  //   "underline",
-  //   "strike",
-  //   "blockquote",
-  //   "list",
-  //   "bullet",
-  //   "indent",
-  //   "link",
-  //   "image",
-  //   "video",
-  //   "color",
-  //   "background",
-  // ];
 
   const formats = [
     "header",
@@ -160,7 +125,8 @@ const UpdateJob = () => {
     "image",
     "video",
     "color", // Ensure color is included
-    "background", // Ensure background is included
+    "background",
+    "align", // Ensure background is included
   ];
 
   return (

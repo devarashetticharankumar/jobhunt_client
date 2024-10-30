@@ -75,22 +75,6 @@ const CreateJob = () => {
     ],
   };
 
-  const categories = [
-    "BTech Jobs",
-    "Degree Jobs",
-    "Internships",
-    "Software Development",
-    "Data Science",
-    "Design",
-    "Marketing",
-    "Sales",
-    "Customer Support",
-    "Human Resources",
-    "Finance",
-    "Operations",
-    "Product Management",
-  ];
-
   const formats = [
     "header",
     "font",
@@ -107,7 +91,8 @@ const CreateJob = () => {
     "image",
     "video",
     "color", // Ensure color is included
-    "background", // Ensure background is included
+    "background",
+    "align", // Ensure background is included
   ];
 
   const [minDate, setMinDate] = useState(getTodayDateString());
