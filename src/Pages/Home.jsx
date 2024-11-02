@@ -165,7 +165,7 @@ const Home = () => {
   return (
     <div>
       <Helmet>
-        <title>HOME - Find Your Dream Job</title>
+        <title>jobNirvana - Find Your Dream Job</title>
         <meta
           name="description"
           content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
@@ -182,6 +182,7 @@ const Home = () => {
         />
         <meta property="og:url" content="https://jobnirvana.netlify.app" />
         <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
         <meta
           property="og:image"
           content="https://i.imgur.com/0qGt7qj.png"

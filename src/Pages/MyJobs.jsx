@@ -11,6 +11,7 @@ import InArticleAd from "../components/InArticleAd";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet"; // Import Helmet
 
 const MyJobs = () => {
   const { user, getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
@@ -86,35 +87,6 @@ const MyJobs = () => {
     setJobs(filter);
   };
 
-  // const handleDelete = async (id) => {
-  //   // Confirm deletion with the user
-  //   if (!window.confirm("Are you sure you want to delete this job?")) {
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch(`${API_URL}/jobs/job/${id}`, {
-  //       method: "DELETE",
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     if (data.acknowledged === true) {
-  //       alert("Job deleted successfully!");
-  //       // Optionally, re-fetch the list of jobs here
-  //       // For example: fetchJobs();
-  //     } else {
-  //       throw new Error("Job deletion not acknowledged");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting job:", error);
-  //     toast.error("Error deleting job. Please try again.");
-  //   }
-  // };
-
   const handleDelete = async (id) => {
     // Confirm deletion with the user
     if (!window.confirm("Are you sure you want to delete this job?")) {
@@ -132,11 +104,10 @@ const MyJobs = () => {
 
       const data = await response.json();
 
-      if (data.acknowledged === true) {
+      if (response.ok) {
         // Use toast instead of alert
         toast.success("Job deleted successfully!");
         // Optionally, re-fetch the list of jobs here
-        // For example: fetchJobs();
       } else {
         throw new Error("Job deletion not acknowledged");
       }
@@ -148,6 +119,19 @@ const MyJobs = () => {
 
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
+      {/* Add Helmet for meta tags */}
+      <Helmet>
+        <title>My Jobs - JobNirvana</title>
+        <meta
+          name="description"
+          content="View and manage your job listings on JobNirvana. Keep track of your posted jobs, edit details, and delete listings as needed."
+        />
+        <meta
+          name="keywords"
+          content="jobs, job listings, manage jobs, JobNirvana"
+        />
+        <meta name="robots" content="index, follow" />
+      </Helmet>
       <PageHeader title={"My Jobs"} path={"My jobs"} />
       <ToastContainer />
       <div className="my-jobs-container">

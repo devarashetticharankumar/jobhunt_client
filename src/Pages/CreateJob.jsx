@@ -8,6 +8,7 @@ import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the CSS file
+import { Helmet } from "react-helmet"; // Importing React Helmet
 
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 // import { htmlToText } from "html-to-text";
@@ -111,6 +112,19 @@ const CreateJob = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeIn" }}
     >
+      <Helmet>
+        <title>post a Job - JobNirvana</title>
+        <meta
+          name="description"
+          content="Post a job on JobNirvana and connect with top talent. Fill out the job form and reach the right candidates."
+        />
+        <meta
+          name="keywords"
+          content="job posting, job, employment, create job, JobNirvana"
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://jobnirvana.netlify.app/post-job" />
+      </Helmet>
       <PageHeader title={"Post a Job"} path={"post a job"} />
       <ToastContainer />
       {/* form  */}
@@ -258,33 +272,10 @@ const CreateJob = () => {
               </select>
             </div>
           </div>
-          {/* Categories row */}
-          {/* <div className="create-job-flex">
-            <div className="lg:w-1/2 w-full">
-              <label className="block mb-2 text-lg">Qualification</label>
-              <select {...register("categories")} className="create-job-input">
-                <option value="">Choose Qualification</option>
-                <option value="Btech">Btech</option>
-                <option value="Degree">Degree</option>
-                <option value="Internship">Internship</option>
-          
-              </select>
-            </div>
-          </div> */}
 
           {/* seventh row */}
           <div className="w-full">
             <label className="block mb-2 text-lg">Job Description</label>
-            {/* <textarea
-              {...register("description")}
-              className="w-full pl-3 py-1.5 focus:outline-none placeholder:text-gray-400"
-              rows={6}
-              placeholder="Job Description"
-              type="text"
-              defaultValue={
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. "
-              }
-            /> */}
             <ReactQuill
               value={jobDescription}
               onChange={setJobDescription}

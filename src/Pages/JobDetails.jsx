@@ -54,6 +54,7 @@ const JobDetails = () => {
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
       </Helmet>
 
       {/* Flexbox layout for Job Details and Related Jobs */}
