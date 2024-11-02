@@ -8,6 +8,7 @@ import { API_URL } from "../data/apiPath";
 import InFeedAd from "../components/InFeedAd"; // Import the InFeedAd component
 import Skeleton from "react-loading-skeleton"; // Import Skeleton
 import "react-loading-skeleton/dist/skeleton.css";
+import { Helmet } from "react-helmet"; // Import Helmet
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -163,6 +164,30 @@ const Home = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>HOME - Find Your Dream Job</title>
+        <meta
+          name="description"
+          content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
+        />
+        <meta
+          name="keywords"
+          content="jobs, job search, job portal, employment, career opportunities, JobNirvana"
+        />
+        <meta name="author" content="JobNirvana" />
+        <meta property="og:title" content="JobNirvana - Find Your Dream Job" />
+        <meta
+          property="og:description"
+          content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
+        />
+        <meta property="og:url" content="https://jobnirvana.netlify.app" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://i.imgur.com/0qGt7qj.png"
+        />{" "}
+        {/* Replace with your logo URL */}
+      </Helmet>
       <Banner
         query={query}
         handleInputChange={handleInputChange}

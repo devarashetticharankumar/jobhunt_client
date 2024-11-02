@@ -68,7 +68,7 @@ const JobDetails = () => {
           <motion.div className="flex flex-wrap items-center justify-center mb-6 ">
             <img
               src={job.companyLogo}
-              alt={job.companyName}
+              alt={job.jobTitle}
               className="w-28 h-28 mr-4 rounded-lg"
             />
 

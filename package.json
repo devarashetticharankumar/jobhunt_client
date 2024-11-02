@@ -32,6 +32,7 @@
     "react-select": "^5.8.0",
     "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^10.0.6",
+    "react-tsparticles": "^2.12.2",
     "react-use": "^17.5.0",
     "sanitize-html": "^2.13.1",
     "sort-by": "^1.2.0",

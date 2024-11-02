@@ -91,8 +91,8 @@ const CreateJob = () => {
     "image",
     "video",
     "color", // Ensure color is included
-    "background",
-    "align", // Ensure background is included
+    "background", // Ensure background is included
+    "align",
   ];
 
   const [minDate, setMinDate] = useState(getTodayDateString());
