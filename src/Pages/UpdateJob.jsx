@@ -92,12 +92,16 @@ const UpdateJob = () => {
     { value: "HTML", label: "HTML" },
     { value: "Angular", label: "Angular" },
     { value: "C", label: "C" },
-    { value: "CSS", label: "CSS" },
+    { value: "SQL", label: "SQL" },
+    { value: "mySQL", label: "mySQL" },
+    { value: "communication", label: "communication" },
+    { value: "C#", label: "C#" },
+    { value: "GoLang", label: "GoLang" },
   ];
 
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ header: [1, 2, 3, 4, false] }],
       [{ font: [] }],
       [{ size: [] }],
       ["bold", "italic", "underline", "strike"],
@@ -227,9 +231,16 @@ const UpdateJob = () => {
               >
                 <option value={experienceLevel}>{experienceLevel}</option>
                 <option value="Any Experience">Any Experience</option>
-                <option value="Internship">Internship</option>
+                <option value="fresher">Fresher</option>
+                <option value="1-2 years">1-2 years</option>
+                <option value="3-4 years">3-4 years</option>
+                <option value="above 5 years">more than 5</option>
+                <option value="entry-level">Entry-Level</option>
+                <option value="mid-level">Mid-Level</option>
+                <option value="mid-level">MidSenior-Level</option>
+                <option value="experienced">Experienced</option>
+                <option value="Intern">Intern</option>
                 <option value="Work remotely">Work Remotely</option>
-                <option value="Experienced">Experienced</option>
               </select>
             </div>
           </div>
@@ -265,10 +276,12 @@ const UpdateJob = () => {
                 className="create-job-input"
               >
                 <option value={employmentType}>{employmentType}</option>
-                <option value="Part-Time">Part-Time</option>
-                <option value="Full-Time">Full-Time</option>
-                <option value="Contract">Contract</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Internship">Internship</option>
+                <option value="Temporary">Temporary</option>
                 <option value="Freelance">Freelance</option>
+                <option value="Freelance">Contract</option>
               </select>
             </div>
           </div>

@@ -116,10 +116,10 @@ const JobDetails = () => {
 
           <motion.div className="mb-6">
             <p className="text-lg font-semibold">Description: </p>
-            <p
+            <div
               className="text-gray-700"
               dangerouslySetInnerHTML={{ __html: job.description }}
-            ></p>
+            ></div>
           </motion.div>
 
           {/* Insert In-Article Ad after Description */}
