@@ -6,18 +6,14 @@ import { API_URL } from "../data/apiPath";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import PageHeader from "../components/PageHeader";
-import InFeedAd from "../components/InFeedAd";
-import InArticleAd from "../components/InArticleAd";
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Helmet } from "react-helmet"; // Import Helmet
-import MyBlogs from "./MyBlogs";
 
-const MyJobs = () => {
+const MyBlogs = () => {
   const { user, getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
     useAuth0();
-  const [jobs, setJobs] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,10 +24,10 @@ const MyJobs = () => {
     if (!isAuthenticated) {
       loginWithRedirect();
     } else if (user) {
-      const fetchJobs = async () => {
+      const fetchBlogs = async () => {
         try {
           const token = await getAccessTokenSilently();
-          const response = await fetch(`${API_URL}/jobs/myJobs/${user.email}`, {
+          const response = await fetch(`${API_URL}/blogs/all-blogs`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -42,19 +38,19 @@ const MyJobs = () => {
           }
 
           const data = await response.json();
-          // Sort jobs by createdAt date (most recent first)
+          // Sort blogs by createdAt date (most recent first)
           data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-          setJobs(data);
+          setBlogs(data);
         } catch (error) {
-          console.error("Error fetching jobs:", error);
-          toast.error("Error fetching jobs. Please try again.");
+          console.error("Error fetching blogs:", error);
+          toast.error("Error fetching blogs. Please try again.");
         } finally {
           setIsLoading(false);
         }
       };
 
-      fetchJobs();
+      fetchBlogs();
     }
   }, [
     isAuthenticated,
@@ -67,10 +63,10 @@ const MyJobs = () => {
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentJobs = jobs.slice(indexOfFirstItem, indexOfLastItem);
+  const currentBlogs = blogs.slice(indexOfFirstItem, indexOfLastItem);
 
   const nextPage = () => {
-    if (indexOfLastItem < jobs.length) {
+    if (indexOfLastItem < blogs.length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -82,20 +78,20 @@ const MyJobs = () => {
   };
 
   const handleSearch = () => {
-    const filter = jobs.filter((job) =>
-      job.jobTitle.toLowerCase().includes(searchText.toLowerCase())
+    const filter = blogs.filter((blog) =>
+      blog.title.toLowerCase().includes(searchText.toLowerCase())
     );
-    setJobs(filter);
+    setBlogs(filter);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (slug) => {
     // Confirm deletion with the user
-    if (!window.confirm("Are you sure you want to delete this job?")) {
+    if (!window.confirm("Are you sure you want to delete this blog?")) {
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/jobs/job/${id}`, {
+      const response = await fetch(`${API_URL}/blogs/blog/${slug}`, {
         method: "DELETE",
       });
 
@@ -107,14 +103,14 @@ const MyJobs = () => {
 
       if (response.ok) {
         // Use toast instead of alert
-        toast.success("Job deleted successfully!");
-        // Optionally, re-fetch the list of jobs here
+        toast.success("Blog deleted successfully!");
+        // Optionally, re-fetch the list of blogs here
       } else {
-        throw new Error("Job deletion not acknowledged");
+        throw new Error("Blog deletion not acknowledged");
       }
     } catch (error) {
-      console.error("Error deleting job:", error);
-      toast.error("Error deleting job. Please try again.");
+      console.error("Error deleting blog:", error);
+      toast.error("Error deleting blog. Please try again.");
     }
   };
 
@@ -122,26 +118,26 @@ const MyJobs = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
       {/* Add Helmet for meta tags */}
       <Helmet>
-        <title>My Jobs - JobNirvana</title>
+        <title>My Blogs - BlogNirvana</title>
         <meta
           name="description"
-          content="View and manage your job listings on JobNirvana. Keep track of your posted jobs, edit details, and delete listings as needed."
+          content="View and manage your blog posts on BlogNirvana. Keep track of your posted blogs, edit details, and delete listings as needed."
         />
         <meta
           name="keywords"
-          content="jobs, job listings, manage jobs, JobNirvana"
+          content="blogs, blog posts, manage blogs, BlogNirvana"
         />
         <meta name="robots" content="index, follow" />
       </Helmet>
-      <PageHeader title={"My Jobs"} path={"My jobs"} />
+      <PageHeader title={"My Blogs"} path={"My blogs"} />
       <ToastContainer />
-      <div className="my-jobs-container">
+      <div className="my-blogs-container">
         <div className="search-box p-2 text-center">
           <input
             type="text"
             name="search"
             id="search"
-            placeholder="Ex:React Developer"
+            placeholder="Ex: React Blog"
             onChange={(e) => setSearchText(e.target.value)}
             className="py-2 pl-3 border focus:outline-none lg:w-6/12 mb-4 w-full"
           />
@@ -155,28 +151,28 @@ const MyJobs = () => {
       </div>
 
       {/* Table */}
-      <section className="py-1 bg-blueGray-50 ">
+      <section className="py-1 bg-blueGray-50">
         <motion.div
           className="w-full xl:w-12/12 mb-12 xl:mb-0 px-4 mx-auto mt-5"
           initial={{ opacity: 0, y: -60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeIn" }}
         >
-          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
               <div className="flex flex-wrap items-center w-full">
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                   <h3 className="font-semibold text-base text-blueGray-700">
-                    All Jobs
+                    All Blogs
                   </h3>
                 </div>
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                  <Link to="/post-job">
+                  <Link to="/create-blog">
                     <button
                       className="bg-blue hover:bg-indigo-700 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-2 rounded-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
                     >
-                      POST A NEW JOB
+                      POST A NEW BLOG
                     </button>
                   </Link>
                 </div>
@@ -189,7 +185,7 @@ const MyJobs = () => {
                   <p>Loading...</p>
                 </div>
               ) : (
-                <table className="items-center bg-transparent w-full border-collapse ">
+                <table className="items-center bg-transparent w-full border-collapse">
                   <thead>
                     <tr>
                       <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
@@ -199,10 +195,7 @@ const MyJobs = () => {
                         TITLE
                       </th>
                       <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        COMPANY NAME
-                      </th>
-                      <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                        SALARY
+                        AUTHOR
                       </th>
                       <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                         EDIT
@@ -214,29 +207,26 @@ const MyJobs = () => {
                   </thead>
 
                   <tbody>
-                    {currentJobs.map((job, index) => (
+                    {currentBlogs.map((blog, index) => (
                       <tr key={index}>
                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
                           {index + 1}
                         </th>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          {job.jobTitle}
+                          {blog.title}
                         </td>
                         <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          {job.companyName}
+                          {blog.author}
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          {job.minPrice}k - {job.maxPrice}k
+                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                          <Link to={`/blog/update/${blog.slug}`}>
+                            <button className="text-blue-500">Edit</button>
+                          </Link>
                         </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                            <Link to={`/edit-job/${job?._id}`}>Edit</Link>
-                          </button>
-                        </td>
-                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <button
-                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                            onClick={() => handleDelete(job._id)}
+                            className="text-red-500"
+                            onClick={() => handleDelete(blog.slug)}
                           >
                             Delete
                           </button>
@@ -248,8 +238,6 @@ const MyJobs = () => {
               )}
             </div>
           </div>
-
-          {/* Pagination Controls */}
           <div className="flex justify-center mt-4">
             <button
               className="px-4 py-2 mx-2 bg-gray-200 rounded"
@@ -261,16 +249,15 @@ const MyJobs = () => {
             <button
               className="px-4 py-2 mx-2 bg-gray-200 rounded"
               onClick={nextPage}
-              disabled={indexOfLastItem >= jobs.length}
+              disabled={indexOfLastItem >= blogs.length}
             >
               Next
             </button>
           </div>
-          <MyBlogs />
         </motion.div>
       </section>
     </div>
   );
 };
 
-export default MyJobs;
+export default MyBlogs;

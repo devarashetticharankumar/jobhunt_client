@@ -74,6 +74,11 @@ const Footer = () => {
               </Link>
             </li>
             <li className="py-1">
+              <Link to="/blogs" className="hover:text-blue text-gray-400">
+                Blogs
+              </Link>
+            </li>
+            <li className="py-1">
               <Link
                 to="/privacy-policy"
                 className="hover:text-blue text-gray-400"

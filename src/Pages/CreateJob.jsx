@@ -11,6 +11,7 @@ import "react-quill/dist/quill.snow.css"; // Import the CSS file
 import { Helmet } from "react-helmet"; // Importing React Helmet
 
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import CreateBlog from "./CreateBlog";
 // import { htmlToText } from "html-to-text";
 const CreateJob = () => {
   const [selectedOptions, setSelectedOPtions] = useState(null);
@@ -322,6 +323,7 @@ const CreateJob = () => {
           />
         </form>
       </div>
+      {/* <CreateBlog /> */}
     </motion.div>
   );
 };

@@ -13,6 +13,11 @@ import About from "../Pages/About";
 import Terms from "../Pages/Terms";
 import ContactUs from "../Pages/ContactUs";
 import PrivacyPolicy from "../Pages/PrivacyPolicy";
+import BlogsList from "../Pages/BlogsList";
+import BlogDetails from "../Pages/BlogDetails";
+import CreateBlog from "../Pages/CreateBlog";
+import UpdateBlog from "../Pages/UpdateBlog";
+import MyBlogs from "../Pages/MyBlogs";
 // =============================
 
 const router = createBrowserRouter([
@@ -60,6 +65,26 @@ const router = createBrowserRouter([
       {
         path: "/privacy-policy",
         element: <PrivacyPolicy />,
+      },
+      {
+        path: "/blogs",
+        element: <BlogsList />,
+      },
+      {
+        path: "/blog/:slug",
+        element: <BlogDetails />,
+      },
+      {
+        path: "/create-blog",
+        element: <CreateBlog />,
+      },
+      {
+        path: "/blog/update/:slug",
+        element: <UpdateBlog />,
+      },
+      {
+        path: "/my-blogs",
+        element: <MyBlogs />,
       },
     ],
   },
