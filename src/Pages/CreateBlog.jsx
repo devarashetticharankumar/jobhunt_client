@@ -6,6 +6,7 @@ import ReactQuill from "react-quill";
 import PageHeader from "../components/PageHeader";
 import { Helmet } from "react-helmet";
 import "react-toastify/dist/ReactToastify.css";
+
 import "react-quill/dist/quill.snow.css";
 
 const modules = {
@@ -105,9 +106,9 @@ const CreateBlog = () => {
 
       <ToastContainer />
 
-      <div className="bg-gradient-to-r from-blue-500 to-teal-500 p-8 rounded-xl shadow-xl max-w-7xl mx-auto">
+      <div className="bg-gradient-to-r from-blue-500 to-teal-500 p-4 rounded-xl shadow-xl max-w-7xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="card shadow-md p-6 bg-white rounded-lg">
+          <div className="">
             <label className="text-xl font-semibold text-gray-700">Title</label>
             <input
               type="text"
@@ -119,7 +120,7 @@ const CreateBlog = () => {
             />
           </div>
 
-          <div className="card shadow-md p-6 bg-white rounded-lg">
+          <div className="">
             <label className="text-xl font-semibold text-gray-700">
               Content
             </label>
@@ -129,11 +130,13 @@ const CreateBlog = () => {
               modules={modules}
               formats={formats}
               className="w-full h-30 border rounded-md shadow-sm"
+              placeholder="Enter blog description..."
+              theme="snow"
               required
             />
           </div>
 
-          <div className="card shadow-md p-6 bg-white rounded-lg">
+          <div className="">
             <label className="text-xl font-semibold text-gray-700">
               Thumbnail URL
             </label>
@@ -147,7 +150,7 @@ const CreateBlog = () => {
             />
           </div>
 
-          <div className="card shadow-md p-6 bg-white rounded-lg">
+          <div className="">
             <label className="text-xl font-semibold text-gray-700">
               Category
             </label>
@@ -161,7 +164,7 @@ const CreateBlog = () => {
             />
           </div>
 
-          <div className="card shadow-md p-6 bg-white rounded-lg">
+          <div className="">
             <label className="text-xl font-semibold text-gray-700">
               Tags (comma separated)
             </label>
@@ -174,7 +177,7 @@ const CreateBlog = () => {
             />
           </div>
 
-          <div className="card shadow-md p-6 bg-white rounded-lg">
+          <div className="">
             <label className="text-xl font-semibold text-gray-700">
               Author
             </label>

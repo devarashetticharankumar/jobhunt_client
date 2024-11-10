@@ -131,7 +131,7 @@ const MyBlogs = () => {
       </Helmet>
       <PageHeader title={"My Blogs"} path={"My blogs"} />
       <ToastContainer />
-      <div className="my-blogs-container">
+      <div className="my-jobs-container">
         <div className="search-box p-2 text-center">
           <input
             type="text"
@@ -220,12 +220,14 @@ const MyBlogs = () => {
                         </td>
                         <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <Link to={`/blog/update/${blog.slug}`}>
-                            <button className="text-blue-500">Edit</button>
+                            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                              Edit
+                            </button>
                           </Link>
                         </td>
                         <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <button
-                            className="text-red-500"
+                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                             onClick={() => handleDelete(blog.slug)}
                           >
                             Delete

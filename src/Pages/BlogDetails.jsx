@@ -34,7 +34,7 @@ const BlogDetails = () => {
         </p>
       )}
       {blog && (
-        <div className="bg-white rounded-xl shadow-2xl max-w-7xl mx-auto overflow-hidden">
+        <div className="bg-white rounded-xl shadow-2xl max-w-5xl mx-auto overflow-hidden">
           {/* Blog Thumbnail */}
           {blog.thumbnail && (
             <img
