@@ -70,7 +70,7 @@ const JobDetails = () => {
             <img
               src={job.companyLogo}
               alt={job.jobTitle}
-              className="w-28 h-28 mr-4 rounded-lg"
+              className="w-24 h-24 mr-4 rounded-lg"
             />
 
             <div>
