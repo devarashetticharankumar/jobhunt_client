@@ -131,7 +131,7 @@ const BlogDetails = () => {
   }, [slug]);
 
   return (
-    <div className="bg-white py-16 px-8 min-h-screen">
+    <div className="bg-white py-16 px-4 min-h-screen">
       {message && (
         <p className="text-red-500 text-center text-lg font-semibold">
           {message}
@@ -171,9 +171,9 @@ const BlogDetails = () => {
               />
             )}
 
-            <div className="p-5 lg:p-14">
+            <div className=" lg:p-10">
               {/* Blog Title */}
-              <h1 className="text-center lg:text-4xl text-2xl  font-serif font-semibold text-gray-900 mb-4 leading-snug">
+              <h1 className="text-center lg:text-4xl text-2xl  font-serif font-semibold text-gray-900 mb-4 leading-snug pt-2">
                 {blog.title}
               </h1>
 
