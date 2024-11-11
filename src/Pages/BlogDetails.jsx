@@ -143,10 +143,7 @@ const BlogDetails = () => {
           {/* React Helmet for SEO */}
           <Helmet>
             <title>{blog.title} | My Blog</title>
-            <meta
-              name="description"
-              content={blog.description || blog.content.slice(0, 160)}
-            />
+            <meta name="description" content={blog.content.slice(0, 160)} />
             <meta
               name="keywords"
               content={blog.tags ? blog.tags.join(", ") : "blog, article"}
@@ -154,7 +151,7 @@ const BlogDetails = () => {
             <meta property="og:title" content={blog.title} />
             <meta
               property="og:description"
-              content={blog.description || blog.content.slice(0, 160)}
+              content={blog.content.slice(0, 160)}
             />
             <meta property="og:image" content={blog.thumbnail} />
             <meta property="og:url" content={`${window.location.href}`} />
