@@ -117,7 +117,7 @@ const JobDetails = () => {
           <motion.div className="mb-6">
             <p className="text-lg font-semibold">Description: </p>
             <div
-              className="text-gray-700"
+              className="text-gray-700 ql-editor"
               dangerouslySetInnerHTML={{ __html: job.description }}
             ></div>
           </motion.div>

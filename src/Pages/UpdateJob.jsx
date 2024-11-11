@@ -101,7 +101,7 @@ const UpdateJob = () => {
 
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, false] }],
+      // [{ header: [1, 2, 3, 4, false] }],
       [{ font: [] }],
       [{ size: [] }],
       ["bold", "italic", "underline", "strike"],
@@ -114,7 +114,7 @@ const UpdateJob = () => {
   };
 
   const formats = [
-    "header",
+    // "header",
     "font",
     "size",
     "bold",

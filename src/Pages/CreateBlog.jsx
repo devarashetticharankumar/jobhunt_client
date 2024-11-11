@@ -11,7 +11,7 @@ import "react-quill/dist/quill.snow.css";
 
 const modules = {
   toolbar: [
-    [{ header: [1, 2, 3, 4, false] }],
+    // [{ header: [1, 2, 3, false] }],
     [{ font: [] }],
     [{ size: [] }],
     ["bold", "italic", "underline", "strike"],
@@ -24,7 +24,7 @@ const modules = {
 };
 
 const formats = [
-  "header",
+  // "header",
   "font",
   "size",
   "bold",
@@ -59,6 +59,7 @@ const CreateBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(content);
 
     const blogData = { title, content, category, author, tags, thumbnail };
 
