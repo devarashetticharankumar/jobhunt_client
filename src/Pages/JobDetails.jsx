@@ -74,8 +74,10 @@ const JobDetails = () => {
             />
 
             <div>
-              <h1 className="text-2xl font-bold">{job.jobTitle}</h1>
-              <h4 className="text-lg text-gray-600">{job.companyName}</h4>
+              <h1 className="lg:text-3xl text-xl font-bold">{job.jobTitle}</h1>
+              <h2 className="lg:text-2xl text-lg text-gray-600">
+                {job.companyName}
+              </h2>
             </div>
           </motion.div>
 
