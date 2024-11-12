@@ -43,7 +43,7 @@ const JobDetails = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       <Helmet>
         <title>{jobTitle} - JobNirvana</title>
-        <meta name="description" content={jobDescription} />
+        <meta name="description" content={jobDescription.slice(0, 160)} />
         <meta property="og:title" content={jobTitle} />
         <meta
           name="keywords"
