@@ -77,7 +77,7 @@ const BlogsList = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       {/* SEO Meta Tags */}
       <Helmet>
-        <title>Latest Blogs | JobNirvana</title>
+        <title>jobNirvana-Blogs | JobNirvana</title>
         <meta
           name="description"
           content="Discover the latest job market insights, career tips, and industry trends with JobNirvana's blog. Stay informed and boost your professional growth."
