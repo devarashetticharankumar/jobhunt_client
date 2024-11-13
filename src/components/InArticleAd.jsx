@@ -13,7 +13,7 @@ const InFeedAd = () => {
 
   return (
     <div
-      className="card rounded-lg my-4 mx-5
+      className=" rounded-lg my-4 mx-5
     "
     >
       <ins
