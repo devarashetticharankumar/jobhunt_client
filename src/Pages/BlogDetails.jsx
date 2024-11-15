@@ -105,6 +105,7 @@ import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { API_URL } from "../data/apiPath";
 import "react-quill/dist/quill.snow.css"; // Import Quill CSS here
+import InArticleAd from "../components/InArticleAd"; // Import the InArticleAd component
 
 const BlogDetails = () => {
   const { slug } = useParams();
@@ -205,7 +206,7 @@ const BlogDetails = () => {
                   ))}
                 </div>
               )}
-
+              <InArticleAd />
               {/* Blog Content */}
               <div
                 className="prose prose-lg lg:prose-xl text-gray-800 mx-auto leading-loose ql-editor"
