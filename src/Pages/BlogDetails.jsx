@@ -189,7 +189,7 @@ const BlogDetails = () => {
 
               {/* Category */}
               <p className="text-center text-green-600 font-medium text-sm mb-6 tracking-wider uppercase">
-                Category:{blog.category}
+                Category: {blog.category}
               </p>
 
               {/* Tags */}
