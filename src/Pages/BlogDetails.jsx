@@ -143,7 +143,7 @@ const BlogDetails = () => {
         <>
           {/* React Helmet for SEO */}
           <Helmet>
-            <title>{blog.title} | My Blog</title>
+            <title>{blog.title} | jobNirvana-Blogs</title>
             <meta name="description" content={blog.content.slice(0, 160)} />
             <meta
               name="keywords"
