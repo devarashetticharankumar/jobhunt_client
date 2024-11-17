@@ -228,6 +228,7 @@ import { Helmet } from "react-helmet";
 import { API_URL } from "../data/apiPath";
 import "react-quill/dist/quill.snow.css";
 import InArticleAd from "../components/InArticleAd";
+import InFeedAd from "../components/InArticleAd";
 
 const BlogDetails = () => {
   const { slug } = useParams();
@@ -411,6 +412,8 @@ const BlogDetails = () => {
               </Link>
             ))}
           </div>
+          <InFeedAd />
+          <InFeedAd />
         </div>
       </div>
     </div>
