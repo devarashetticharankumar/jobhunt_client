@@ -283,7 +283,7 @@ const BlogDetails = () => {
                 <meta name="twitter:card" content="summary_large_image" />
               </Helmet>
 
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 {/* Blog Thumbnail */}
                 {blog.thumbnail && (
                   <img
@@ -295,7 +295,7 @@ const BlogDetails = () => {
 
                 <div className="lg:p-8 py-2">
                   {/* Blog Title */}
-                  <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
+                  <h1 className="text-3xl font-bold font-serif text-gray-800 mb-4 text-center">
                     {blog.title}
                   </h1>
 
@@ -308,8 +308,8 @@ const BlogDetails = () => {
                   </div>
 
                   {/* Category */}
-                  <p className="text-center text-sm text-blue-600 uppercase font-medium mb-6">
-                    {blog.category}
+                  <p className="text-center text-sm text-green-500 uppercase font-medium mb-6">
+                    CATEGORY: {blog.category}
                   </p>
 
                   {/* Tags */}
@@ -340,8 +340,8 @@ const BlogDetails = () => {
 
         {/* Latest Blogs Sidebar */}
         <div className="w-full lg:w-1/3">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="bg-white rounded-lg shadow-lg p-4">
+            <h3 className="text-2xl underline font-semibold text-gray-800 mb-4">
               Latest Blogs
             </h3>
             <div className="space-y-4">
@@ -371,6 +371,7 @@ const BlogDetails = () => {
             </div>
           </div>
           <InFeedAd />
+          <InArticleAd />
         </div>
       </div>
     </div>
