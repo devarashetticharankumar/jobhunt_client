@@ -21,7 +21,7 @@ import React from "react";
 
 const PageHeader = ({ title, path }) => {
   return (
-    <div className="py-14 mt-3 bg-gradient-to-r from-blue to-purple-600 flex items-center justify-center rounded-lg shadow-lg">
+    <div className="py-14 mt-3 bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center rounded-lg shadow-lg">
       <div className="text-white text-center">
         <h2 className="text-4xl font-bold mb-2">{title}</h2>
         <p className="text-sm opacity-80">
