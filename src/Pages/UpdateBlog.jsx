@@ -137,7 +137,7 @@ const UpdateBlog = () => {
 
       <ToastContainer />
 
-      <div className="bg-gradient-to-r from-blue-500 to-teal-500 p-8 rounded-xl shadow-xl max-w-7xl mx-auto">
+      <div className=" p-8 rounded-xl shadow-xl max-w-7xl mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="">
             <label className="text-xl font-semibold text-gray-700">Title</label>
