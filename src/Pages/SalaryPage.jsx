@@ -114,14 +114,17 @@ const SalaryPage = () => {
           <React.Fragment key={data._id}>
             <div className="shadow px-4 py-8">
               <h4 className="font-semibold text-xl">{data.jobTitle}</h4>
-              <p className="my-2 font-medium text-blue text-lg">
+              <p className="my-2 font-medium text-blue-600 text-lg">
                 Average Salary: {data.minPrice} - {data.maxPrice}{" "}
                 {data.salaryType === "Monthly" ? "k" : "LPA"} /{" "}
                 {data.salaryType}
               </p>
               <div className="flex flex-wrap gap-4">
                 <p>{data.experienceLevel}</p>
-                <Link to={`/job/${data._id}`} className="underline">
+                <Link
+                  to={`/job/${data._id}`}
+                  className="underline hover:text-blue-600"
+                >
                   View Details
                 </Link>
               </div>
@@ -138,7 +141,7 @@ const SalaryPage = () => {
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
           className={`px-3 py-2 bg-gray-200 text-sm ${
-            currentPage === 1 ? "cursor-not-allowed" : "hover:bg-blue"
+            currentPage === 1 ? "cursor-not-allowed" : "hover:bg-blue-700"
           } rounded-md`}
         >
           Previous
@@ -151,8 +154,8 @@ const SalaryPage = () => {
               onClick={() => paginate(1)}
               className={`px-3 py-2 text-sm rounded-md ${
                 currentPage === 1
-                  ? "bg-blue text-white"
-                  : "bg-gray-200 hover:bg-blue"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 hover:bg-blue-700"
               }`}
             >
               1
@@ -170,8 +173,8 @@ const SalaryPage = () => {
               onClick={() => paginate(page)}
               className={`px-3 py-2 text-sm rounded-md ${
                 currentPage === page
-                  ? "bg-blue text-white"
-                  : "bg-gray-200 hover:bg-blue"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 hover:bg-blue-700"
               }`}
             >
               {page}
@@ -201,7 +204,9 @@ const SalaryPage = () => {
           onClick={() => paginate(currentPage + 1)}
           disabled={currentPage === totalPages}
           className={`px-3 py-2 bg-gray-200 text-sm ${
-            currentPage === totalPages ? "cursor-not-allowed" : "hover:bg-blue"
+            currentPage === totalPages
+              ? "cursor-not-allowed"
+              : "hover:bg-blue-700"
           } rounded-md`}
         >
           Next

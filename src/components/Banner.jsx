@@ -30,7 +30,7 @@ const Banner = ({
             animate="visible"
             transition={{ duration: 0.8 }}
           >
-            Discover <span className="text-blue">Your Dream Job</span> Today
+            Discover <span className="text-blue-600">Your Dream Job</span> Today
           </motion.h1>
           <motion.p
             className="text-lg text-black/70 mb-8"
