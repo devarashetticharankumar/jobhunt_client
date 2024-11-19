@@ -30,7 +30,7 @@ const Footer = () => {
               />
             </svg>
             <span className="logo font-ChakraPetch font-semibold text-white">
-              Job<span className="text-blue">N</span>irvana
+              Job<span className="text-blue-600">N</span>irvana
             </span>
             {/* <img src={logo} alt="" className="w-2/6 " /> */}
           </a>
@@ -54,34 +54,40 @@ const Footer = () => {
           <h3 className="text-xl font-semibold text-white">Quick Link</h3>
           <ul className="mt-2 text-gray-600">
             <li className="py-1">
-              <Link to="/about-us" className="hover:text-blue text-gray-400">
+              <Link
+                to="/about-us"
+                className="hover:text-blue-600 text-gray-400"
+              >
                 About Us
               </Link>
             </li>
             <li className="py-1">
-              <Link to="/terms" className="hover:text-blue text-gray-400">
+              <Link to="/terms" className="hover:text-blue-600 text-gray-400">
                 Terms of use
               </Link>
             </li>
             <li className="py-1">
-              <Link to="/" className="hover:text-blue text-gray-400">
+              <Link to="/" className="hover:text-blue-600 text-gray-400">
                 Recent Jobs
               </Link>
             </li>
             <li className="py-1">
-              <Link to="/contact-us" className="hover:text-blue text-gray-400">
+              <Link
+                to="/contact-us"
+                className="hover:text-blue-600 text-gray-400"
+              >
                 Contact
               </Link>
             </li>
             <li className="py-1">
-              <Link to="/blogs" className="hover:text-blue text-gray-400">
+              <Link to="/blogs" className="hover:text-blue-600 text-gray-400">
                 Blogs
               </Link>
             </li>
             <li className="py-1">
               <Link
                 to="/privacy-policy"
-                className="hover:text-blue text-gray-400"
+                className="hover:text-blue-600 text-gray-400"
               >
                 Privacy
               </Link>
@@ -97,7 +103,7 @@ const Footer = () => {
             >
               <FiInstagram size={22} />
             </Link>
-            <Link to={"#"} className="hover:text-blue">
+            <Link to={"#"} className="hover:text-blue-700">
               <FaSquareFacebook size={22} />
             </Link>
             <Link
@@ -123,7 +129,7 @@ const Footer = () => {
       <div className="border-t border-gray-300 mt-8 pt-4 flex items-center justify-center ">
         <p className="text-center text-gray-400">
           &copy; Copyright 2024. Powered By
-          <span className="font-bold text-blue"> JobNirvana</span>
+          <span className="font-bold text-blue-600"> JobNirvana</span>
         </p>
       </div>
     </footer>

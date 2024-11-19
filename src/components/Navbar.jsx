@@ -405,7 +405,7 @@ const Navbar = () => {
             />
           </svg>
           <span className="logo font-ChakraPetch font-semibold">
-            Job<span className="text-blue">N</span>irvana
+            Job<span className="text-blue-600">N</span>irvana
           </span>
         </a>
 

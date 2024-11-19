@@ -89,7 +89,7 @@ const BlogDetails = () => {
                   <img
                     src={blog.thumbnail}
                     alt={blog.title}
-                    className="w-full h-72 object-cover"
+                    className="w-full lg:h-96  object-cover"
                   />
                 )}
 
