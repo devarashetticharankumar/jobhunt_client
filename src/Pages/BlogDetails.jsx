@@ -39,7 +39,7 @@ const BlogDetails = () => {
               (a, b) => new Date(b.publishedDate) - new Date(a.publishedDate)
             )
             .filter((blog) => blog.slug !== slug)
-            .slice(0, 5);
+            .slice(0, 10);
 
           setLatestBlogs(sortedBlogs);
         }
@@ -53,7 +53,7 @@ const BlogDetails = () => {
   }, [slug]);
 
   return (
-    <div className="bg-gray-50 lg:py-12 py-6 px-6 min-h-screen">
+    <div className="bg-gray-50 lg:py-12 py-6 lg:px-6 md:px-3 px-1 min-h-screen">
       {message && (
         <p className="text-red-500 text-center text-lg font-semibold">
           {message}
@@ -155,7 +155,7 @@ const BlogDetails = () => {
                     <img
                       src={latestBlog.thumbnail}
                       alt={latestBlog.title}
-                      className="w-full h-32 object-cover rounded-lg mb-3"
+                      className="w-full h-44 object-cover rounded-lg mb-3"
                     />
                   )}
                   <h4 className="text-md font-medium text-gray-800 mb-1">

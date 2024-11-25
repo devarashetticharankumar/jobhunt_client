@@ -842,7 +842,7 @@ const BlogsList = () => {
                   <img
                     src={blog.thumbnail}
                     alt={blog.title}
-                    className="w-full h-48 object-cover rounded-xl mb-4 shadow-md transition-all duration-300 ease-in-out transform"
+                    className="w-full h-48 object-cover rounded-lg mb-4 shadow-md transition-all duration-300 ease-in-out transform"
                   />
                 )}
                 <Link to={`/blog/${blog.slug}`}>
