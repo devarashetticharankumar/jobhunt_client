@@ -174,7 +174,7 @@ const Home = () => {
           name="keywords"
           content="jobs, job search, job portal, employment, career opportunities, JobNirvana"
         />
-        <meta name="author" content="JobNirvana" />
+        <meta name="author" content="CharanKumar" />
         <meta property="og:title" content="JobNirvana - Find Your Dream Job" />
         <meta
           property="og:description"
