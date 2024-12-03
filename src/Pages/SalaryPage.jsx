@@ -76,6 +76,7 @@ const SalaryPage = () => {
           property="og:url"
           content="https://jobnirvana.netlify.app/salary"
         />
+        <link rel="canonical" href={`${window.location.href}`} />
       </Helmet>
       <PageHeader title={"Estimated Salary"} path={"Salary"} />
 

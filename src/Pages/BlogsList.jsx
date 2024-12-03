@@ -100,6 +100,7 @@ const BlogsList = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${window.location.href}`} />
+        <link rel="canonical" href={`${window.location.href}`} />
       </Helmet>
 
       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Blogs</h1>

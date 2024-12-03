@@ -412,6 +412,7 @@ const MyJobs = () => {
             content="jobs, job listings, manage jobs, JobNirvana"
           />
           <meta name="robots" content="index, follow" />
+          <link rel="canonical" href={`${window.location.href}`} />
         </Helmet>
         <PageHeader title={"My Jobs"} path={"My jobs"} />
         <ToastContainer />

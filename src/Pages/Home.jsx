@@ -187,6 +187,7 @@ const Home = () => {
           content="https://i.imgur.com/0qGt7qj.png"
         />{" "}
         {/* Replace with your logo URL */}
+        <link rel="canonical" href={`${window.location.href}`} />
       </Helmet>
       <Banner
         query={query}

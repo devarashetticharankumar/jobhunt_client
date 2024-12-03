@@ -81,6 +81,7 @@ const BlogDetails = () => {
                 <meta property="og:image" content={blog.thumbnail} />
                 <meta property="og:url" content={`${window.location.href}`} />
                 <meta name="twitter:card" content="summary_large_image" />
+                <link rel="canonical" href={`${window.location.href}`} />
               </Helmet>
 
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
