@@ -6,7 +6,6 @@ import Sidebar from "../sidebar/Sidebar";
 import NewsLetter from "../components/NewsLetter";
 import { API_URL } from "../data/apiPath";
 import InFeedAd from "../components/InFeedAd"; // Import the InFeedAd component
-import Skeleton from "react-loading-skeleton"; // Import Skeleton
 import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet"; // Import Helmet
 
