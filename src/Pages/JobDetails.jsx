@@ -225,7 +225,7 @@ const JobDetails = () => {
   const jobDescription = job.description || "Latest jobs are posted!!";
 
   // Construct the canonical URL
-  const canonicalUrl = `${window.location.origin}/jobs/${id}`;
+  const canonicalUrl = `${window.location.origin}/job/${id}`;
 
   // Structured Data for Job Posting
   const jobSchema = {
