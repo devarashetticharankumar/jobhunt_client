@@ -367,26 +367,33 @@ const BlogDetails = () => {
 
                   {/* Schema.org JSON-LD for Blog Post */}
                   <script type="application/ld+json">
-                    {`
-                      {
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "${blog.title}",
-                        "description": "${blog.content.slice(0, 160)}",
-                        "image": "${blog.thumbnail}",
-                        "author": {
-                          "@type": "Person",
-                          "name": "${blog.author}"
+                    {JSON.stringify({
+                      "@context": "https://schema.org",
+                      "@type": "BlogPosting",
+                      headline: blog.title || "Default Blog Title",
+                      description:
+                        blog.content?.slice(0, 160).replace(/["<>]/g, "") ||
+                        "Default Blog Description",
+                      image:
+                        blog.thumbnail || "https://i.imgur.com/0qGt7qj.png",
+                      author: {
+                        "@type": "Person",
+                        name: blog.author || "Admin",
+                      },
+                      datePublished:
+                        blog.publishedDate || new Date().toISOString(),
+                      dateModified:
+                        blog.publishedDate || new Date().toISOString(),
+                      mainEntityOfPage: window.location.href,
+                      publisher: {
+                        "@type": "Organization",
+                        name: "JobNirvana",
+                        logo: {
+                          "@type": "ImageObject",
+                          url: "https://i.imgur.com/0qGt7qj.png",
                         },
-                        "datePublished": "${blog.publishedDate}",
-                        "dateModified": "${blog.publishedDate}",
-                        "mainEntityOfPage": "${window.location.href}",
-                        "publisher": {
-                          "@type": "Organization",
-                          "name": "jobNirvana"
-                        }
-                      }
-                    `}
+                      },
+                    })}
                   </script>
                 </Helmet>
 
