@@ -181,3 +181,20 @@ li {
 /* .card-style {
   @apply hover:bg-neutral-50 transition rounded-lg border p-2 flex items-center;
 } */
+
+.ql-editor h1 {
+  font-size: 32px; /* Adjust to your needs */
+}
+
+.ql-editor h2 {
+  font-size: 24px;
+}
+.ql-editor h3 {
+  font-size: 18px;
+}
+.ql-editor h4 {
+  font-size: 16px;
+}
+.ql-editor h6 {
+  font-size: 12px;
+}
