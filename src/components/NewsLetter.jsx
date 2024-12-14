@@ -5,6 +5,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast notifications
+import LatestBlogs from "./LatestBlogs";
 
 const NewsLetter = () => {
   const [email, setEmail] = useState("");
@@ -105,6 +106,7 @@ const NewsLetter = () => {
         </div>
       </motion.div>
       <ToastContainer /> {/* Add the ToastContainer component here */}
+      <LatestBlogs />
     </div>
   );
 };

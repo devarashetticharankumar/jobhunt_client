@@ -123,7 +123,7 @@ const Banner = ({
           </motion.button>
         </div>
       </form>
-      {/* <InFeedAd /> */}
+      <InFeedAd />
     </div>
   );
 };

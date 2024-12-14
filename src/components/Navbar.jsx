@@ -53,10 +53,10 @@ const Navbar = () => {
   }, [isAuthenticated, getAccessTokenSilently]);
 
   const navItems = [
-    { path: "/", title: "Start a search" },
-    { path: "/blogs", title: "Blogs" },
-    { path: "/my-job", title: "My Jobs" },
-    { path: "/salary", title: "Salary Estimate" },
+    { path: "/", title: "HOME" },
+    { path: "/blogs", title: "BLOGS" },
+    { path: "/salary", title: "SALARY ESTIMATE" },
+    { path: "/my-job", title: "MY JOBS" },
     // { path: "/post-job", title: "Post a Job" },
   ];
 
@@ -105,7 +105,7 @@ const Navbar = () => {
             <img
               src={user.picture}
               alt={user.name}
-              className="w-9 h-9 rounded-full border-blue outline outline-offset-2 outline-1 outline-blue"
+              className="w-9 h-9 rounded-full border-blue outline outline-offset-2 outline-2 outline-blue-400"
             />
           )}
 

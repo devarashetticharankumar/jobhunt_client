@@ -118,7 +118,7 @@ const MyBlogs = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
       {/* Add Helmet for meta tags */}
       <Helmet>
-        <title>My Blogs - BlogNirvana</title>
+        <title>My jobs - jobNirvana</title>
         <meta
           name="description"
           content="View and manage your blog posts on BlogNirvana. Keep track of your posted blogs, edit details, and delete listings as needed."

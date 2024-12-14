@@ -283,7 +283,7 @@ const SalaryPage = () => {
       transition={{ duration: 0.6, ease: "easeIn" }}
     >
       <Helmet>
-        <title>Estimated Salary - JobNirvana</title>
+        <title>Estimated Salary | JobNirvana</title>
         <meta
           name="description"
           content="Explore estimated salaries for various job titles in the tech industry. Find out the average salary range for roles such as Software Engineer, Data Analyst, and more."

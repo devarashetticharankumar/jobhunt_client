@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ant-design/react-slick": "^1.1.2",
     "@auth0/auth0-react": "^2.2.4",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
@@ -37,7 +38,8 @@
     "react-use": "^17.5.0",
     "sanitize-html": "^2.13.1",
     "sort-by": "^1.2.0",
-    "sweetalert2": "^11.10.8"
+    "sweetalert2": "^11.10.8",
+    "swiper": "^11.1.15"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

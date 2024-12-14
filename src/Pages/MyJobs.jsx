@@ -123,7 +123,7 @@ const MyJobs = () => {
       <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
         {/* Add Helmet for meta tags */}
         <Helmet>
-          <title>My Jobs - JobNirvana</title>
+          <title>My Jobs | JobNirvana</title>
           <meta
             name="description"
             content="View and manage your job listings on JobNirvana. Keep track of your posted jobs, edit details, and delete listings as needed."

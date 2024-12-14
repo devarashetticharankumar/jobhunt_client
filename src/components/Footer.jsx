@@ -117,19 +117,24 @@ const Footer = () => {
             {/* <Link to={"/"} className="hover:text-blue">
               <FaTwitter size={22} />
             </Link> */}
-            <Link to={"#"} className="hover:text-sky-500">
+            {/* <Link to={"#"} className="hover:text-sky-500">
               <FaTelegram size={22} />
-            </Link>
-            {/* <Link to={"/"} className="hover:text-blue">
-              <FaYoutube size={22} />
             </Link> */}
+            <Link
+              to={"https://www.youtube.com/@jobnirvana"}
+              className="hover:text-red-700"
+            >
+              <FaYoutube size={24} />
+            </Link>
           </div>
         </div>
       </div>
       <div className="border-t border-gray-300 mt-8 pt-4 flex items-center justify-center ">
         <p className="text-center text-gray-400">
-          &copy; Copyright 2024. Powered By
-          <span className="font-bold text-blue-600"> JobNirvana</span>
+          &copy; Copyright 2024. Powered By{" "}
+          <span className="font-bold text-blue-600">
+            <a href="/">JobNirvana</a>{" "}
+          </span>
         </p>
       </div>
     </footer>

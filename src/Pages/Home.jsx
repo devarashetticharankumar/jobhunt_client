@@ -8,6 +8,7 @@ import { API_URL } from "../data/apiPath";
 import InFeedAd from "../components/InFeedAd"; // Import the InFeedAd component
 import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet"; // Import Helmet
+import JobMarquee from "../components/JobMarquee";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -164,7 +165,7 @@ const Home = () => {
   return (
     <div>
       <Helmet>
-        <title>jobNirvana - Find Your Dream Job</title>
+        <title>Home | jobNirvana</title>
         <meta
           name="description"
           content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
