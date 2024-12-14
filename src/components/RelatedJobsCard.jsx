@@ -10,7 +10,6 @@ const Card = ({ data }) => {
 
   return (
     <section className="hover:bg-neutral-100 transition rounded-lg border p-2 flex items-center">
-      #8B94E7
       <Link
         to={`/job/${_id}`}
         className="flex gap-4 flex-col sm:flex-row items-start"
