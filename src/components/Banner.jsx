@@ -19,7 +19,7 @@ const Banner = ({
   handleSuggestionClick,
 }) => {
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-4 md:py-20">
+    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-4 md:py-10">
       <div className="flex flex-col md:flex-row justify-between items-center">
         {/* Left Side Text */}
         <div className="md:w-1/2 w-full">
