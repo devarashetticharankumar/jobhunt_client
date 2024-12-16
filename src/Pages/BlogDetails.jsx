@@ -360,6 +360,8 @@ const BlogDetails = () => {
                     property="og:description"
                     content={blog.content.slice(0, 160)}
                   />
+                  <meta name="robots" content="index, follow" />
+
                   <meta property="og:image" content={blog.thumbnail} />
                   <meta property="og:url" content={`${window.location.href}`} />
                   <meta name="twitter:card" content="summary_large_image" />
