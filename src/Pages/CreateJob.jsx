@@ -67,18 +67,6 @@ const CreateJob = () => {
     { value: "GoLang", label: "GoLang" },
   ];
 
-  // const modules = {
-  //   toolbar: [
-  //     [{ font: [] }],
-  //     [{ size: [] }],
-  //     ["bold", "italic", "underline", "strike"],
-  //     [{ color: [] }, { background: [] }], // Enable color and background formats
-  //     [{ list: "ordered" }, { list: "bullet" }],
-  //     [{ align: [] }],
-  //     ["link", "image"],
-  //     ["clean"],
-  //   ],
-  // };
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }], // Ensure `header` is part of the toolbar
@@ -97,24 +85,6 @@ const CreateJob = () => {
     ],
   };
 
-  // const formats = [
-  //   "font",
-  //   "size",
-  //   "bold",
-  //   "italic",
-  //   "underline",
-  //   "strike",
-  //   "blockquote",
-  //   "list",
-  //   "bullet",
-  //   "indent",
-  //   "link",
-  //   "image",
-  //   "video",
-  //   "color", // Ensure color is included
-  //   "background", // Ensure background is included
-  //   "align",
-  // ];
   const formats = [
     "font",
     "size",

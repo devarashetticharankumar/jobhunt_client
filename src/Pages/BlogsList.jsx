@@ -571,7 +571,9 @@ const BlogsList = () => {
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       {/* SEO Meta Tags */}
       <Helmet>
-        <title>Blogs | JobNirvana</title>
+        <title>
+          Explore Career Insights, Job Tips & Industry Trends - JobNirvana Blogs
+        </title>
         <meta
           name="description"
           content="Discover the latest job market insights, career tips, and industry trends with JobNirvana's blog. Stay informed and boost your professional growth."
@@ -580,6 +582,7 @@ const BlogsList = () => {
           name="keywords"
           content="blogs, job insights, career tips, professional development, industry trends, JobNirvana"
         />
+        <meta name="robots" content="index, follow" />
         <meta property="og:title" content="Latest Blogs | JobNirvana" />
         <meta
           property="og:description"
