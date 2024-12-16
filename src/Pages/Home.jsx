@@ -166,10 +166,10 @@ const Home = () => {
   return (
     <div>
       <Helmet>
-        <title>Home | jobNirvana</title>
+        <title>Explore Jobs & Career Opportunities - JobNirvana</title>
         <meta
           name="description"
-          content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
+          content="Discover a wide range of job opportunities across various industries and locations. Find your perfect job, stay updated with the latest job openings, and build your career with JobNirvana."
         />
         <meta
           name="keywords"
