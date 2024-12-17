@@ -47,12 +47,18 @@ const Card = ({ data }) => {
               {postingDate}
             </span>
           </div>
-          <p
-            dangerouslySetInnerHTML={{ __html: description.slice(0, 150) }}
+          {/* <p
+            dangerouslySetInnerHTML={{ __html: description.slice(0, 250) }}
             className="text-base text-primary/70"
-          >
-            {/* {description.slice(0, 250)}... */}
-          </p>
+          ></p> */}
+          <p
+            dangerouslySetInnerHTML={{
+              __html: `${description.slice(0, 250)}${
+                description.length > 250 ? "..." : ""
+              }`,
+            }}
+            className="text-base text-primary/70"
+          ></p>
         </div>
       </Link>
     </section>

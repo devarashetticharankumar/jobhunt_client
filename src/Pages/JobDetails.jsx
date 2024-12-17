@@ -9,6 +9,7 @@ import InArticleAd from "../components/InArticleAd"; // Import the InArticleAd c
 import { FaRupeeSign } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import sanitizeHtml from "sanitize-html";
+import { GrInstagram } from "react-icons/gr";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -249,6 +250,15 @@ const JobDetails = () => {
                   Apply Now
                 </motion.button>
               </div>
+            </div>
+            <div className="mt-3 flex items-center justify-start gap-2 text-xl">
+              <GrInstagram className="text-pink-600" />
+              <a
+                href="https://www.instagram.com/job_nirvana/"
+                className="text-gray-900 hover:text-blue-800 underline font-bold"
+              >
+                Follow Us on Instagram For Updates
+              </a>
             </div>
             <InArticleAd />
           </motion.div>
