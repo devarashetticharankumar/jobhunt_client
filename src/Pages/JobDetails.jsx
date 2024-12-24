@@ -149,7 +149,7 @@ const JobDetails = () => {
         <div className="flex flex-col md:flex-row justify-between">
           {/* Left Side: Job Details (75%) */}
           <motion.div
-            className="w-full md:w-3/4 bg-white p-3 lg:p-6 rounded-lg shadow-lg"
+            className="w-full md:w-3/4 bg-white p-3 lg:p-6 rounded-lg shadow-sm"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
@@ -265,7 +265,7 @@ const JobDetails = () => {
 
           {/* Right Side: Related Jobs (25%) */}
           <motion.div
-            className="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-lg mt-8 md:mt-0 md:ml-4"
+            className="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-sm mt-8 md:mt-0 md:ml-4"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}

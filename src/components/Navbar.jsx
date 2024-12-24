@@ -55,6 +55,7 @@ const Navbar = () => {
   const navItems = [
     { path: "/", title: "HOME" },
     { path: "/blogs", title: "BLOGS" },
+    // { path: "/resumes", title: "RESUME BUILDER" },
     { path: "/salary", title: "SALARY ESTIMATE" },
     { path: "/my-job", title: "MY JOBS" },
     // { path: "/post-job", title: "Post a Job" },

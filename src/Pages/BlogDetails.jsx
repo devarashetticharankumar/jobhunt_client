@@ -399,7 +399,7 @@ const BlogDetails = () => {
                   </script>
                 </Helmet>
 
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   {/* Blog Thumbnail */}
                   {blog.thumbnail && (
                     <img
@@ -460,7 +460,7 @@ const BlogDetails = () => {
           {loadingLatestBlogs ? (
             <SkeletonLoader type="latestBlogs" />
           ) : (
-            <div className="bg-white rounded-lg shadow-lg p-4">
+            <div className="bg-white rounded-lg shadow-md p-4">
               <h3 className="text-2xl underline font-semibold text-gray-800 mb-4">
                 Latest Blogs
               </h3>

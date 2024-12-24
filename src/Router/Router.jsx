@@ -18,6 +18,7 @@ import BlogDetails from "../Pages/BlogDetails";
 import CreateBlog from "../Pages/CreateBlog";
 import UpdateBlog from "../Pages/UpdateBlog";
 import MyBlogs from "../Pages/MyBlogs";
+import ResumesList from "../Pages/ResumesList";
 // =============================
 
 const router = createBrowserRouter([
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
         path: "/my-blogs",
         element: <MyBlogs />,
       },
+      // {
+      //   path: "/resumes",
+      //   element: <ResumesList />,
+      // },
     ],
   },
   {
