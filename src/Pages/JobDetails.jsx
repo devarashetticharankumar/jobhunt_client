@@ -47,16 +47,31 @@ const JobDetails = () => {
   const canonicalUrl = `${window.location.origin}/job/${id}`;
 
   // Helper function to inject ads
+  // const injectAds = (htmlContent) => {
+  //   const paragraphs = htmlContent.split(/<\/p>/); // Split by paragraph
+  //   return paragraphs.map((paragraph, index) => (
+  //     <React.Fragment key={index}>
+  //       <div
+  //         className="ql-editor"
+  //         dangerouslySetInnerHTML={{ __html: sanitizeHtml(paragraph) + "</p>" }}
+  //       ></div>
+  //       {index > 0 && index % 3 === 0 && <InArticleAd />}{" "}
+  //       {/* Show ad every 2 paragraphs */}
+  //     </React.Fragment>
+  //   ));
+  // };
   const injectAds = (htmlContent) => {
     const paragraphs = htmlContent.split(/<\/p>/); // Split by paragraph
     return paragraphs.map((paragraph, index) => (
       <React.Fragment key={index}>
         <div
-          className="text-gray-700 ql-editor"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(paragraph) + "</p>" }}
+          className="text-gray-900 ql-editor"
+          dangerouslySetInnerHTML={{
+            __html: paragraph + "</p>",
+          }}
         ></div>
         {index > 0 && index % 3 === 0 && <InArticleAd />}{" "}
-        {/* Show ad every 2 paragraphs */}
+        {/* Show ad every 3 paragraphs */}
       </React.Fragment>
     ));
   };
