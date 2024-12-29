@@ -10,6 +10,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet"; // Import Helmet
 import JobMarquee from "../components/JobMarquee";
 import SkeletonLoading from "../components/SkeletonLoading";
+import InArticleAds from "../components/InArticleAd";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -154,7 +155,7 @@ const Home = () => {
     slicedJobs.forEach((data, i) => {
       result.push(<Card key={`job-${i}`} data={data} />);
       if ((i + 1) % adFrequency === 0) {
-        result.push(<InFeedAd key={`ad-${i}`} />);
+        result.push(<InArticleAds key={`ad-${i}`} />);
       }
     });
 
