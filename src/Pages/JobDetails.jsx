@@ -46,6 +46,21 @@ const JobDetails = () => {
   // Construct the canonical URL
   const canonicalUrl = `${window.location.origin}/job/${id}`;
 
+  // Helper function to inject ads
+  const injectAds = (htmlContent) => {
+    const paragraphs = htmlContent.split(/<\/p>/); // Split by paragraph
+    return paragraphs.map((paragraph, index) => (
+      <React.Fragment key={index}>
+        <div
+          className="text-gray-700 ql-editor"
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(paragraph) + "</p>" }}
+        ></div>
+        {index > 0 && index % 3 === 0 && <InArticleAd />}{" "}
+        {/* Show ad every 2 paragraphs */}
+      </React.Fragment>
+    ));
+  };
+
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
       <Helmet>
@@ -206,10 +221,14 @@ const JobDetails = () => {
 
             <motion.div className="mb-6">
               <p className="text-xl font-semibold">Description: </p>
-              <div
+              {/* <div
                 className="text-gray-700 ql-editor"
                 dangerouslySetInnerHTML={{ __html: job?.description }}
-              ></div>
+              ></div> */}
+              <div>
+                {/* Inject ads into job description */}
+                {injectAds(job?.description || "")}
+              </div>
             </motion.div>
 
             {/* Insert In-Article Ad after Description */}

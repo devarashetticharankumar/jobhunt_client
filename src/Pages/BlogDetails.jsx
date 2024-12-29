@@ -444,10 +444,34 @@ const BlogDetails = () => {
                     <InArticleAd />
 
                     {/* Blog Content */}
-                    <div
+                    {/* <div
                       className="prose prose-lg text-gray-700 mx-auto leading-relaxed ql-editor"
                       dangerouslySetInnerHTML={{ __html: blog.content }}
-                    ></div>
+                    ></div> */}
+                    <div className="prose prose-lg text-gray-700 mx-auto leading-relaxed ql-editor">
+                      {(() => {
+                        // Split the blog content into paragraphs or sections
+                        const contentSegments = blog.content.split(/<\/p>/); // Adjust the split regex as needed
+
+                        // Iterate and inject ads between content segments
+                        return contentSegments.map((segment, index) => (
+                          <React.Fragment key={index}>
+                            {/* Render the current segment */}
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: `${segment}</p>`,
+                              }}
+                            />
+
+                            {/* Insert ad after every 3rd segment */}
+                            {(index + 1) % 10 === 0 &&
+                              index < contentSegments.length - 1 && (
+                                <InArticleAd />
+                              )}
+                          </React.Fragment>
+                        ));
+                      })()}
+                    </div>
                   </div>
                 </div>
               </>
