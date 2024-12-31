@@ -247,7 +247,7 @@ const JobDetails = () => {
             </motion.div>
 
             {/* Insert In-Article Ad after Description */}
-            <InArticleAd />
+            {/* <InArticleAd /> */}
 
             <motion.div className="mb-6">
               <p className="text-lg font-semibold">Required Skills: </p>
