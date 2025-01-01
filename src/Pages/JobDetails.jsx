@@ -83,7 +83,8 @@ const JobDetails = () => {
     return paragraphs.map((paragraph, index) => (
       <React.Fragment key={index}>
         <div
-          className="text-gray-900 ql-editor py-0"
+          className="text-gray-900 ql-editor"
+          style={{ paddingTop: "0px", paddingBottom: "0px" }}
           dangerouslySetInnerHTML={{
             __html: paragraph.trim() + "</p>", // Ensure valid closing
           }}
