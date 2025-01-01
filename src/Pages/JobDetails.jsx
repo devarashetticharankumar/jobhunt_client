@@ -60,14 +60,32 @@ const JobDetails = () => {
   //     </React.Fragment>
   //   ));
   // };
+  // const injectAds = (htmlContent) => {
+  //   const paragraphs = htmlContent.split(/<\/p>/); // Split by paragraph
+  //   return paragraphs.map((paragraph, index) => (
+  //     <React.Fragment key={index}>
+  //       <div
+  //         className="text-gray-900 ql-editor"
+  //         dangerouslySetInnerHTML={{
+  //           __html: paragraph + "</p>",
+  //         }}
+  //       ></div>
+  //       {index > 0 && index % 3 === 0 && <InArticleAd />}{" "}
+  //       {/* Show ad every 3 paragraphs */}
+  //     </React.Fragment>
+  //   ));
+  // };
   const injectAds = (htmlContent) => {
-    const paragraphs = htmlContent.split(/<\/p>/); // Split by paragraph
+    // Split paragraphs and handle any leftover <br/> tags
+    const paragraphs = htmlContent
+      .split(/<\/p>/)
+      .filter((para) => para.trim() !== ""); // Remove empty entries
     return paragraphs.map((paragraph, index) => (
       <React.Fragment key={index}>
         <div
-          className="text-gray-900 ql-editor"
+          className="text-gray-900 ql-editor py-0"
           dangerouslySetInnerHTML={{
-            __html: paragraph + "</p>",
+            __html: paragraph.trim() + "</p>", // Ensure valid closing
           }}
         ></div>
         {index > 0 && index % 3 === 0 && <InArticleAd />}{" "}
