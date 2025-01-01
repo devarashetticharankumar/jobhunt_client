@@ -77,7 +77,7 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
+    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5">
       <Helmet>
         <title>{jobTitle.slice(0, 55)} - JobNirvana</title>
         <meta name="description" content={jobDescription.slice(0, 155)} />
@@ -179,7 +179,7 @@ const JobDetails = () => {
         <div className="flex flex-col md:flex-row justify-between">
           {/* Left Side: Job Details (75%) */}
           <motion.div
-            className="w-full md:w-3/4 bg-white p-3 lg:p-6 rounded-lg shadow-sm"
+            className="w-full md:w-3/4 bg-white lg:p-6"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
@@ -235,14 +235,14 @@ const JobDetails = () => {
             </motion.div>
 
             <motion.div className="mb-6">
-              <p className="text-xl font-semibold">Description: </p>
+              {/* <p className="text-xl font-semibold">Description: </p> */}
               {/* <div
                 className="text-gray-700 ql-editor"
                 dangerouslySetInnerHTML={{ __html: job?.description }}
               ></div> */}
               <div>
                 {/* Inject ads into job description */}
-                {injectAds(job?.description || "")}
+                {injectAds(job?.description || " ")}
               </div>
             </motion.div>
 
@@ -263,8 +263,9 @@ const JobDetails = () => {
                 ))}
               </ul>
             </motion.div>
+            <InArticleAd />
 
-            <div className="flex flex-wrap items-center justify-between gap-6 rounded-md p-5 bg-[#d8f3ff] lg:w-3/4  min-w-fit">
+            <div className="flex flex-wrap items-center justify-between gap-6 rounded-sm p-5 bg-[#d8f3ff] lg:w-3/4  min-w-fit">
               <div>
                 <h4 className="text-sky-700 text-xl font-medium">
                   Interested in this job?
@@ -275,7 +276,7 @@ const JobDetails = () => {
               </div>
               <div>
                 <motion.button
-                  className="bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+                  className="bg-blue-800 hover:bg-blue text-white font-bold py-3 px-4 rounded-sm transition duration-300"
                   onClick={applyLink}
                   initial={{ opacity: 0, y: -50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -299,12 +300,14 @@ const JobDetails = () => {
 
           {/* Right Side: Related Jobs (25%) */}
           <motion.div
-            className="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-sm mt-8 md:mt-0 md:ml-4"
+            className="w-full md:w-1/4 bg-white mt-8 md:mt-0 md:ml-4"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            <h2 className="text-2xl font-bold mb-4">Related Jobs</h2>
+            <h2 className="text-2xl font-bold mb-4 bg-blue-600 p-1 text-white">
+              Related Jobs
+            </h2>
             <RelatedJobs currentJob={job} />
           </motion.div>
         </div>

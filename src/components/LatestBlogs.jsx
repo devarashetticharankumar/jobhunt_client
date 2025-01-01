@@ -35,7 +35,7 @@ const LatestBlogs = () => {
           {[...Array(3)].map((_, index) => (
             <div
               key={index}
-              className="bg-gray-200 animate-pulse rounded-lg overflow-hidden"
+              className="bg-gray-200 animate-pulse rounded-sm overflow-hidden"
             >
               <div className="w-full h-48 bg-gray-300"></div>
               <div className="p-6">
@@ -49,25 +49,29 @@ const LatestBlogs = () => {
         <p className="text-center text-lg">No blogs found.</p>
       ) : (
         <div className="flex flex-col space-y-4">
+          <h2 className="text-2xl font-bold mb-4 bg-blue-600 p-1 text-white">
+            Latest Blogs{" "}
+          </h2>
+
           {blogs.slice(0, 4).map((blog) => (
             <Link
               key={blog._id}
               to={`/blog/${blog.slug}`} // Use Link for redirection
-              className="bg-white shadow-lg rounded-md overflow-hidden transform hover:scale-105 transition-all duration-300 cursor-pointer"
+              className="bg-white shadow-lg rounded-sm overflow-hidden transform hover:scale-105 transition-all duration-300 cursor-pointer"
             >
               <img
                 src={blog.thumbnail || "/default-thumbnail.jpg"}
                 alt={blog.title}
                 className="w-full h-40 object-cover"
               />
-              <div className="p-6">
+              <div className="p-3">
                 <h3 className="text-xl font-semibold text-gray-800 mb-1">
                   {blog.title.slice(0, 70)}
                 </h3>
-                <p className="text-gray-600 mb-1">
+                {/* <p className="text-gray-600 mb-1">
                   {blog.author} on <br></br>
                   {new Date(blog.publishedDate).toLocaleDateString()}
-                </p>
+                </p> */}
               </div>
             </Link>
           ))}

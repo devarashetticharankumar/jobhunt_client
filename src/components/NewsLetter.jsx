@@ -92,7 +92,7 @@ const NewsLetter = () => {
           <input
             type="submit"
             value="Subscribe"
-            className="w-full bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
             onClick={handleSubscribe}
           />
           {isValidEmail && (

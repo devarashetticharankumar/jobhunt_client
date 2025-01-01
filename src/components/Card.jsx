@@ -19,7 +19,7 @@ const Card = ({ data }) => {
     description,
   } = data;
   return (
-    <section className="card hover:bg-neutral-100 transition rounded-lg">
+    <section className="card hover:bg-neutral-100 transition rounded-md">
       <Link
         to={`/job/${_id}`}
         className="flex gap-4 flex-col sm:flex-row items-start"

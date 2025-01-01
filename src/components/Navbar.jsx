@@ -62,7 +62,7 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="max-w-screen-2xl container mx-auto xl:px-24 px-3 sticky top-0 left-0 z-10 bg-[#FAFAFA] backdrop-blur-xl border-b-gray-200 border-2">
+    <header className="max-w-screen-2xl container mx-auto xl:px-24 px-3 sticky top-0 left-0 z-10 bg-white backdrop-blur-xl">
       <nav className="flex justify-between items-center py-4">
         <a href="/" className="flex items-center text-2xl text-black-500">
           <svg
@@ -115,14 +115,14 @@ const Navbar = () => {
               onClick={() =>
                 logout({ logoutParams: { returnTo: window.location.origin } })
               }
-              className="w-full bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
             >
               Log Out
             </button>
           ) : (
             <button
               onClick={() => loginWithRedirect()}
-              className="w-full bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+              className="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
             >
               Log In
             </button>

@@ -6,8 +6,8 @@ const About = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5 ">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-center text-center mb-12">
-          <div className="lg:w-full lg:mb-0 mb-12">
+        <div className="flex flex-wrap justify-center text-center lg:mb-12">
+          <div className="lg:w-full lg:mb-0 mb-1">
             <h1 className="text-4xl font-bold leading-tight text-center mb-4">
               About Us
             </h1>
@@ -40,16 +40,16 @@ const About = () => {
             </p>
             <h2 className="text-3xl font-bold mb-4">Our Values</h2>
             <ul className="list-disc list-inside text-gray-600 leading-relaxed mb-4">
-              <li className="flex  gap-1">
+              <li className="flex items-center gap-1">
                 <GoDotFill /> We believe in the power of community and
                 collaboration.
               </li>
-              <li className="flex  gap-1">
+              <li className="flex items-center gap-1">
                 <GoDotFill />
                 {`We're committed to providing high-quality job listings and
                 career resources.`}
               </li>
-              <li className="flex  gap-1">
+              <li className="flex items-center  gap-1">
                 <GoDotFill />
                 {`We're dedicated to helping job seekers achieve their career
                 goals.`}
@@ -57,7 +57,7 @@ const About = () => {
             </ul>
             <p className="text-gray-600 leading-relaxed mb-4">
               Want to learn more about our team and how we can help you?{" "}
-              <Link to="/contact-us" className="text-blue underline">
+              <Link to="/contact-us" className="text-blue-600 underline">
                 Get in touch with us!
               </Link>
             </p>

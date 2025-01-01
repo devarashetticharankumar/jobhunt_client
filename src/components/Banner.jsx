@@ -113,7 +113,7 @@ const Banner = ({
 
           <motion.button
             type="submit"
-            className=" bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md "
+            className=" bg-blue-700 hover:bg-blue text-white font-bold py-3 px-4 rounded-sm "
             variants={fadeIn}
             initial="hidden"
             animate="visible"
@@ -123,7 +123,7 @@ const Banner = ({
           </motion.button>
         </div>
       </form>
-      <InFeedAd />
+      {/* <InFeedAd /> */}
     </div>
   );
 };

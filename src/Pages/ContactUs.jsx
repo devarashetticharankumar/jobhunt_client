@@ -211,7 +211,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 lg:p-6">
       {/* React Helmet for SEO */}
       <Helmet>
         <title>Contact Us | JobNirvana</title>
@@ -234,7 +234,7 @@ const ContactUs = () => {
         <link rel="canonical" href={`${window.location.href}`} />
       </Helmet>
 
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col lg:flex-row w-full max-w-4xl">
+      <div className="bg-white shadow-lg rounded-md overflow-hidden flex flex-col lg:flex-row w-full max-w-4xl">
         {/* Left Side: Image */}
         <div className="hidden lg:block lg:w-1/2">
           <img
@@ -267,7 +267,7 @@ const ContactUs = () => {
               <input
                 type="text"
                 id="firstName"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 p-3 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={firstName}
                 placeholder="John"
                 onChange={(e) => setFirstName(e.target.value)}
@@ -284,7 +284,7 @@ const ContactUs = () => {
               <input
                 type="text"
                 id="lastName"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 p-3 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={lastName}
                 placeholder="Doe"
                 onChange={(e) => setLastName(e.target.value)}
@@ -301,7 +301,7 @@ const ContactUs = () => {
               <input
                 type="email"
                 id="email"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 p-3 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={email}
                 placeholder="example@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
@@ -317,7 +317,7 @@ const ContactUs = () => {
               </label>
               <textarea
                 id="message"
-                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 p-3 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={message}
                 placeholder="Your message here..."
                 onChange={(e) => setMessage(e.target.value)}
@@ -327,7 +327,7 @@ const ContactUs = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue hover:bg-blue text-white font-bold py-3 px-4 rounded-md transition duration-300"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
             >
               Submit
             </button>

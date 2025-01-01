@@ -329,14 +329,14 @@ const BlogDetails = () => {
   }, [slug]);
 
   return (
-    <div className="bg-gray-50 lg:py-12 py-6 lg:px-6 md:px-3 px-1 min-h-screen">
+    <div className="bg-white lg:py-12 py-6 lg:px-6 md:px-3 px-3 min-h-screen">
       {message && (
         <p className="text-red-500 text-center text-lg font-semibold">
           {message}
         </p>
       )}
 
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-10 gap-1">
         {/* Blog Content */}
         <div className="flex-1">
           {loadingBlog ? (
@@ -399,7 +399,7 @@ const BlogDetails = () => {
                   </script>
                 </Helmet>
 
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="bg-white rounded-sm overflow-hidden">
                   {/* Blog Thumbnail */}
                   {blog.thumbnail && (
                     <img
@@ -484,22 +484,22 @@ const BlogDetails = () => {
           {loadingLatestBlogs ? (
             <SkeletonLoader type="latestBlogs" />
           ) : (
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <h3 className="text-2xl underline font-semibold text-gray-800 mb-4">
+            <div className="bg-white rounded-sm p-4">
+              <h2 className="text-2xl font-semibold mb-4 bg-blue-600 p-1 text-white">
                 Latest Blogs
-              </h3>
+              </h2>
               <div className="space-y-4">
                 {latestBlogs.map((latestBlog) => (
                   <Link
                     to={`/blog/${latestBlog.slug}`}
                     key={latestBlog.slug}
-                    className="block bg-gray-50 hover:bg-gray-100 p-4 rounded-lg shadow transition"
+                    className="block bg-gray-50 hover:bg-gray-100 p-4 rounded-sm"
                   >
                     {latestBlog.thumbnail && (
                       <img
                         src={latestBlog.thumbnail}
                         alt={`Thumbnail for ${latestBlog.title}`}
-                        className="w-full h-44 object-cover rounded-lg mb-3"
+                        className="w-full h-44 object-cover rounded-sm mb-3"
                       />
                     )}
                     <h4 className="text-md font-medium text-gray-800 mb-1">
@@ -515,7 +515,7 @@ const BlogDetails = () => {
               </div>
             </div>
           )}
-          <InFeedAd />
+          {/* <InFeedAd /> */}
           <InArticleAd />
         </div>
       </div>

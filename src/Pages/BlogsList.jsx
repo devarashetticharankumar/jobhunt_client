@@ -593,25 +593,28 @@ const BlogsList = () => {
         <link rel="canonical" href={`${window.location.href}`} />
       </Helmet>
 
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">All Blogs</h1>
+      <h1 className="text-2xl text-center font-semibold mb-4 bg-blue-600 p-1 text-white">
+        All Blogs{" "}
+      </h1>
+      <InFeedAd />
 
       {/* Add Google Ad Banner */}
       {/* Layout for Mobile (Column) and Desktop (Row) */}
       <div className="flex flex-col md:flex-row gap-6">
         {/* Categories Sidebar */}
-        <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md order-1 md:order-none">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        <div className="w-full md:w-1/4 bg-white p-4 rounded-sm shadow-sm order-1 md:order-none">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Categories
-          </h3>
+          </h2>
 
           {/* Horizontal scroll on mobile devices */}
           <div className="flex md:flex-col overflow-x-auto md:overflow-visible space-x-2 py-2 md:space-x-0 md:space-y-2">
             <button
-              className={`w-auto px-4  py-2 rounded-lg text-center ${
+              className={`w-auto px-4  py-2 rounded-sm text-center ${
                 !selectedCategory
-                  ? "bg-teal-500 text-white"
+                  ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-800"
-              } hover:bg-teal-600`}
+              } hover:bg-blue-600`}
               onClick={() => handleCategoryClick("")}
             >
               All
@@ -620,11 +623,11 @@ const BlogsList = () => {
             {categories.map((category, index) => (
               <button
                 key={index}
-                className={`w-auto px-4 py-2 rounded-lg text-center ${
+                className={`w-auto px-4 py-2 rounded-sm text-center ${
                   selectedCategory === category
-                    ? "bg-teal-500 text-white"
+                    ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-800"
-                } hover:bg-teal-600`}
+                } hover:bg-blue-600`}
                 onClick={() => handleCategoryClick(category)}
               >
                 {category}
@@ -642,7 +645,7 @@ const BlogsList = () => {
               value={searchQuery}
               onChange={handleSearch}
               placeholder="Search blogs by title"
-              className="w-full p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full p-4 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -654,13 +657,13 @@ const BlogsList = () => {
               {getPaginatedBlogs().map((blog) => (
                 <div
                   key={blog._id}
-                  className="bg-white p-4 rounded-xl shadow-lg hover:shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105"
+                  className="bg-white p-4 rounded-md shadow-lg hover:shadow-xl transform transition-all duration-300 ease-in-out hover:scale-105"
                 >
                   {blog.thumbnail && (
                     <img
                       src={blog.thumbnail}
                       alt={blog.title}
-                      className="w-full h-48 object-cover rounded-lg mb-4 shadow-md transition-all duration-300 ease-in-out transform"
+                      className="w-full h-48 object-cover rounded-sm mb-4 shadow-md transition-all duration-300 ease-in-out transform"
                     />
                   )}
                   <Link to={`/blog/${blog.slug}`}>
@@ -682,7 +685,7 @@ const BlogsList = () => {
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-teal-500 text-white rounded-lg mx-2"
+              className="px-4 py-2 bg-blue-500 text-white rounded-sm mx-2"
             >
               Prev
             </button>
@@ -690,9 +693,9 @@ const BlogsList = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`px-4 py-2 rounded-lg mx-2 ${
+                className={`px-4 py-2 rounded-sm mx-2 ${
                   currentPage === index + 1
-                    ? "bg-teal-500 text-white"
+                    ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-800"
                 }`}
               >
@@ -702,7 +705,7 @@ const BlogsList = () => {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-teal-500 text-white rounded-lg mx-2"
+              className="px-4 py-2 bg-blue-500 text-white rounded-sm mx-2"
             >
               Next
             </button>

@@ -72,8 +72,8 @@ const RelatedJobs = ({ currentJob }) => {
       {relatedJobs.map((job, index) => (
         <React.Fragment key={job._id}>
           <RelatedJobCard data={job} />
-          {/* Display Ad after every 3 jobs */}
-          {(index + 1) % 3 === 0 && <GoogleAds />}
+          {/* Display Ad after every 3 jobs
+          {(index + 1) % 3 === 0 && <GoogleAds />} */}
         </React.Fragment>
       ))}
     </div>
