@@ -19,6 +19,7 @@ import CreateBlog from "../Pages/CreateBlog";
 import UpdateBlog from "../Pages/UpdateBlog";
 import MyBlogs from "../Pages/MyBlogs";
 import ResumesList from "../Pages/ResumesList";
+import YouTubeHome from "../Pages/YouTubeHome";
 // =============================
 
 const router = createBrowserRouter([
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: "/my-blogs",
         element: <MyBlogs />,
+      },
+      {
+        path: "/youtube-videos",
+        element: <YouTubeHome />,
       },
       // {
       //   path: "/resumes",
