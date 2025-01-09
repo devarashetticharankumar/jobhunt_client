@@ -10,6 +10,7 @@ import { FaRupeeSign } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import sanitizeHtml from "sanitize-html";
 import { GrInstagram } from "react-icons/gr";
+import ResumeTips from "./ResumeTips";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -283,7 +284,7 @@ const JobDetails = () => {
               </ul>
             </motion.div>
             <InArticleAd />
-
+            {/* <ResumeTips jobDescription={jobDescription} /> */}
             <div className="flex flex-wrap items-center justify-between gap-6 rounded-sm p-5 bg-[#d8f3ff] lg:w-3/4  min-w-fit">
               <div>
                 <h4 className="text-sky-700 text-xl font-medium">
