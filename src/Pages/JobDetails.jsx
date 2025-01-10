@@ -10,6 +10,7 @@ import { FaRupeeSign } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import sanitizeHtml from "sanitize-html";
 import { GrInstagram } from "react-icons/gr";
+import NewsLetter from "../components/NewsLetter";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -324,6 +325,7 @@ const JobDetails = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
+          <NewsLetter />
             <h2 className="text-2xl font-bold mb-4 bg-blue-600 p-1 text-white">
               Related Jobs
             </h2>
