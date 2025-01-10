@@ -109,7 +109,11 @@ const Banner = ({
 
             <button
               type="submit"
+<<<<<<< HEAD
               className=" bg-blue-600 lg:w-40 hover:bg-blue-700 text-white text-xl font-semibold py-3 px-4 rounded-sm "
+=======
+              className=" bg-blue-600 lg:w-40 hover:bg-blue text-white text-xl font-semibold py-3 px-4 rounded-sm "
+>>>>>>> 24cef8f (changing the banner ui)
             >
               Search
             </button>
