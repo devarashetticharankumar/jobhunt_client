@@ -1,6 +1,4 @@
 User-agent: *
-Disallow:
-
 Allow: /
 
 Sitemap: https://jobnirvana.netlify.app/sitemap.xml
