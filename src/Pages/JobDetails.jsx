@@ -11,6 +11,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import sanitizeHtml from "sanitize-html";
 import { GrInstagram } from "react-icons/gr";
 import NewsLetter from "../components/NewsLetter";
+import ShareButton from "../components/ShareButton";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -304,6 +305,7 @@ const JobDetails = () => {
                 >
                   Apply Now
                 </motion.button>
+                <ShareButton />
               </div>
             </div>
             <div className="mt-3 flex items-center justify-start gap-2 text-xl">
