@@ -295,7 +295,7 @@ const JobDetails = () => {
                   Apply now to get started!
                 </p>
               </div>
-              <div>
+              <div className="flex items-center justify-center gap-3">
                 <motion.button
                   className="bg-blue-800 hover:bg-blue text-white font-bold py-3 px-4 rounded-sm transition duration-300"
                   onClick={applyLink}
