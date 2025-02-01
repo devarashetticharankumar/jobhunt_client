@@ -411,9 +411,13 @@ const BlogDetails = () => {
 
                   <div className="lg:p-8 py-2">
                     {/* Blog Title */}
-                    <h1 className="text-3xl font-bold font-serif text-gray-800 mb-4 text-center">
-                      {blog.title}
-                    </h1>
+                      <div className="flex items-center justify-center">
+                      <h1 className="text-3xl font-bold font-serif text-gray-800 mb-4 text-center">
+                        {blog.title}
+                      </h1>
+                      <BlogShareButton blogTitle={blog.title} />
+                    </div>
+
 
                     {/* Author and Published Date */}
                     <div className="text-center text-sm text-gray-600 mb-4">
