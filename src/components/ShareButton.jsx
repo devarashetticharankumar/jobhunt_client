@@ -7,7 +7,7 @@ const ShareButton = ({ jobTitle }) => {
   return (
     <div>
       <button
-        className="p-4 bg-blue-600 hover:bg-blue-800 text-white rounded-full shadow-md transform transition-all hover:scale-110"
+        className="p-3 bg-blue-600 hover:bg-blue-800 text-white rounded-full shadow-md transform transition-all hover:scale-110"
         onClick={() => {
           if (navigator.share) {
             navigator
