@@ -53,8 +53,8 @@ const Card = ({ data }) => {
           ></p> */}
           <p
             dangerouslySetInnerHTML={{
-              __html: `${description.slice(0, 250)}${
-                description.length > 250 ? "..." : ""
+              __html: `${description.slice(0, 160)}${
+                description.length > 160 ? "..." : ""
               }`,
             }}
             className="text-base text-primary/70"
