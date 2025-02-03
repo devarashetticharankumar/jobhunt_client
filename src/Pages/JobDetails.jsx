@@ -12,6 +12,12 @@ import sanitizeHtml from "sanitize-html";
 import { GrInstagram } from "react-icons/gr";
 import NewsLetter from "../components/NewsLetter";
 import ShareButton from "../components/ShareButton";
+import { GiMoneyStack } from "react-icons/gi";
+import { MdLocationOn } from "react-icons/md";
+import { BsFillCalendarDateFill } from "react-icons/bs";
+import { FcSettings } from "react-icons/fc";
+import { MdWorkHistory } from "react-icons/md";
+
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -212,7 +218,7 @@ const JobDetails = () => {
                 className="w-24 h-24 mr-4 rounded-lg"
               />
               <div>
-                <h1 className="lg:text-3xl text-2xl font-bold">
+                <h1 className="lg:text-3xl text-2xl font-extrabold">
                   {job?.jobTitle}
                 </h1>
                 <h2 className="lg:text-2xl text-lg text-gray-600">
@@ -230,26 +236,31 @@ const JobDetails = () => {
               <div>
                 <p className="flex items-center">
                   <span className="font-semibold">Salary: </span>
+                  <GiMoneyStack className="text-2xl text-green-900" />
                   {job?.minPrice} - {job?.maxPrice}{" "}
                   {job?.salaryType === "Monthly" ? "k" : "LPA"} /{" "}
-                  {job?.salaryType}
+                  {job?.salaryType} / (Estimated)
                 </p>
                 <p className="flex items-center">
                   <span className="font-semibold">Location:</span>{" "}
+                  <MdLocationOn className="text-2xl text-green-900" />
                   {job?.jobLocation}
                 </p>
-                <p>
+                <p className="flex items-center">
                   <span className="font-semibold">Posted On: </span>
+                  <BsFillCalendarDateFill className="text-base text-green-900" />{" "}
                   {formatDate(job?.createdAt)}
                 </p>
               </div>
               <div>
-                <p>
+                <p className="flex items-center">
                   <span className="font-semibold">Experience Level: </span>
+                  <FcSettings className="text-xl text-green-900" />
                   {job?.experienceLevel}
                 </p>
-                <p>
+                <p className="flex items-center">
                   <span className="font-semibold">Employment Type: </span>
+                  <MdWorkHistory className="text-xl text-green-900" />
                   {job?.employmentType}
                 </p>
               </div>
