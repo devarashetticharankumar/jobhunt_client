@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FiCalendar, FiClock, FiMapPin } from "react-icons/fi";
-import { MdOutlineCurrencyRupee } from "react-icons/md";
+// import { MdOutlineCurrencyRupee } from "react-icons/md";
+import { BsCurrencyDollar } from "react-icons/bs";
 
 const Card = ({ data }) => {
   const {
@@ -38,7 +39,7 @@ const Card = ({ data }) => {
               {employmentType}
             </span>
             <span className="flex items-center gap-2">
-              <MdOutlineCurrencyRupee />
+              <BsCurrencyDollar />
               {minPrice}-{maxPrice}
               {salaryType === "Monthly" ? "k" : "LPA"}
             </span>
