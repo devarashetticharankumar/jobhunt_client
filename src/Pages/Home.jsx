@@ -218,7 +218,7 @@ const Home = () => {
             </div>
           ) : error ? (
             <div className="text-center lg:mt-32">
-              <p className="text-red-500">{error}</p>
+              <p className="text-red-500">{error} The server is currently busy. Please try again later.</p>
             </div>
           ) : result.length > 0 ? (
             <Jobs result={result} />
