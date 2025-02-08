@@ -183,6 +183,7 @@ const WorkExperience = ({ handleChange }) => {
           <option value="1-2 years">1-2 years</option>
           <option value="3-4 years">3-4 years</option>
           <option value="above 5 years">More than 5 years</option>
+          <option value="above 5 years">More than 5 years</option>
           <option value="entry-level">Entry-Level</option>
           <option value="mid-level">Mid-Level</option>
           <option value="experienced">Experienced</option>
