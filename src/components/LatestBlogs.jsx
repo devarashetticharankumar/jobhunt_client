@@ -12,7 +12,7 @@ const LatestBlogs = () => {
       try {
         const response = await fetch(`${API_URL}/blogs/all-blogs`);
         if (!response.ok) {
-          throw new Error("Failed to fetch blogs");
+          throw new Error("The server is currently busy. Please try again later.");
         }
         const data = await response.json();
         setBlogs(data); // Store the data (which should be 3 latest blogs)
