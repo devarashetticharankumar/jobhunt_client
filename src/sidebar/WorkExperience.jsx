@@ -168,6 +168,12 @@ const WorkExperience = ({ handleChange }) => {
             title="Work remotely"
             name="experience"
           />
+          <InputField
+            handleChange={handleChange}
+            value="Not Mention"
+            title="Not Mention"
+            name="experience"
+          />
         </div>
       ) : (
         // Render select dropdown for mobile view
