@@ -20,6 +20,8 @@ import UpdateBlog from "../Pages/UpdateBlog";
 import MyBlogs from "../Pages/MyBlogs";
 import ResumesList from "../Pages/ResumesList";
 import YouTubeHome from "../Pages/YouTubeHome";
+import ProfilePage from "../components/ProfilePage";
+
 // =============================
 
 const router = createBrowserRouter([
