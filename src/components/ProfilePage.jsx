@@ -47,19 +47,20 @@ const ProfilePage = () => {
 
       {isAuthenticated ? (
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <div className="flex items-center mb-6">
-            <div className="w-24 h-24 rounded-full overflow-hidden mr-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center mb-6 space-y-4 sm:space-y-0 sm:space-x-6">
+            <div className="w-24 h-24 rounded-full overflow-hidden">
               <img
                 src={formData.profilePicture}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div>
+            <div className="text-center sm:text-left">
               <h3 className="text-xl font-medium">{formData.name}</h3>
               <p className="text-gray-500">{formData.email}</p>
             </div>
           </div>
+
 
           <form onSubmit={handleUpdateProfile}>
             <div className="space-y-4">
