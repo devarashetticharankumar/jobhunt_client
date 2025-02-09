@@ -355,7 +355,7 @@ const Navbar = () => {
           ))}
           {isAuthenticated && (
             <li className="text-white py-1">
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile">PROFILE</Link>
             </li>
           )}
           <li className="text-white py-1">
