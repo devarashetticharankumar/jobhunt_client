@@ -94,10 +94,6 @@ const router = createBrowserRouter([
         path: "/youtube-videos",
         element: <YouTubeHome />,
       },
-      // {
-      //   path: "/resumes",
-      //   element: <ResumesList />,
-      // },
       {
         path: "/profile",
         element: <ProfilePage />,
