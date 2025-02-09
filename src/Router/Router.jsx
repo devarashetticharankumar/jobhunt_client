@@ -96,6 +96,10 @@ const router = createBrowserRouter([
       //   path: "/resumes",
       //   element: <ResumesList />,
       // },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
     ],
   },
   {
