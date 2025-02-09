@@ -271,7 +271,7 @@ const MyJobs = () => {
           </motion.div>
         </section>
       </div>
-      <MyBlogs />
+{/*       <MyBlogs /> */}
     </div>
   );
 };
