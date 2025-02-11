@@ -17,6 +17,7 @@ import { MdLocationOn } from "react-icons/md";
 import { BsFillCalendarDateFill } from "react-icons/bs";
 import { FcSettings } from "react-icons/fc";
 import { MdWorkHistory } from "react-icons/md";
+import AdPopup from "../components/AdPopup";
 
 
 const JobDetails = () => {
@@ -329,6 +330,7 @@ const JobDetails = () => {
               </a>
             </div>
             <InArticleAd />
+            <AdPopup />
           </motion.div>
 
           {/* Right Side: Related Jobs (25%) */}
