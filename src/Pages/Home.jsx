@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet"; // Import Helmet
 import JobMarquee from "../components/JobMarquee";
 import SkeletonLoading from "../components/SkeletonLoading";
 import InArticleAds from "../components/InArticleAd";
+import AdPopup from "../components/AdPopup";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -255,7 +256,7 @@ const Home = () => {
             </div>
           )}
         </div>
-
+        <AdPopup />
         <div className="bg-white p-4 rounded">
           <NewsLetter />
         </div>
