@@ -241,6 +241,7 @@ import "react-quill/dist/quill.snow.css";
 import InArticleAd from "../components/InArticleAd";
 import InFeedAd from "../components/InArticleAd";
 import BlogShareButton from "../components/BlogShareButton";
+import AdPopup from "../components/AdPopup";
 
 // Skeleton loader component
 const SkeletonLoader = ({ type }) => {
@@ -522,6 +523,7 @@ const BlogDetails = () => {
           )}
           {/* <InFeedAd /> */}
           <InArticleAd />
+          <AdPopup />
         </div>
       </div>
     </div>
