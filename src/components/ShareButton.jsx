@@ -34,7 +34,12 @@
 import React, { useState } from "react";
 import { IoShareSocial } from "react-icons/io5";
 
-const ShareButton = ({ jobTitle, jobUrl = window.location.href }) => {
+const ShareButton = ({
+  jobTitle,
+  companyName,
+  jobLocation,
+  jobUrl = window.location.href,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleShare = () => {
@@ -43,7 +48,7 @@ const ShareButton = ({ jobTitle, jobUrl = window.location.href }) => {
       navigator
         .share({
           title: `Check out this job: ${jobTitle}`,
-          text: "Found an exciting job opportunity on JobNirvana!",
+          text: `Exciting job opportunity at ${companyName} in ${jobLocation}! \n\nPosition: ${jobTitle}\n\nFound on JobNirvana.`,
           url: jobUrl,
         })
         .then(() => {
@@ -56,8 +61,8 @@ const ShareButton = ({ jobTitle, jobUrl = window.location.href }) => {
         });
     } else {
       navigator.clipboard
-        .writeText(jobUrl)
-        .then(() => alert("URL copied to clipboard!"))
+        .writeText(`${jobTitle} at ${companyName} in ${location} - ${jobUrl}`)
+        .then(() => alert("Job details copied to clipboard!"))
         .catch(() =>
           alert("Sharing not supported and unable to copy to clipboard.")
         );
