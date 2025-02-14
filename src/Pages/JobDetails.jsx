@@ -379,7 +379,10 @@ const JobDetails = () => {
                 >
                   Apply Now
                 </motion.button>
-                <ShareButton jobTitle={jobTitle} jobUrl={applyLink} />
+                <ShareButton
+                  jobTitle={job.jobTitle}
+                  companyName={job.companyName}
+                  jobLocation={job.jobLocation} />
               </div>
             </div>
             <div className="mt-3 flex items-center justify-start gap-2 text-xl">
