@@ -329,7 +329,7 @@ const JobDetails = () => {
             </div>
 
 
-            <motion.div className="mb-6">
+            <motion.div className="mb-6 mt-6">
               {/* <p className="text-xl font-semibold">Description: </p> */}
               {/* <div
                 className="text-gray-700 ql-editor"
