@@ -212,7 +212,7 @@ const JobDetails = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            <motion.div className="flex flex-wrap items-center justify-center mb-6">
+{/*             <motion.div className="flex flex-wrap items-center justify-center mb-6">
               <img
                 src={job?.companyLogo}
                 alt={job?.jobTitle}
@@ -265,7 +265,69 @@ const JobDetails = () => {
                   {job?.employmentType}
                 </p>
               </div>
-            </motion.div>
+            </motion.div> */}
+
+              <div className="flex flex-wrap items-center justify-center ">
+              <div className="flex flex-wrap items-center justify-center mb-2 lg:gap-6">
+                <img
+                  src={job?.companyLogo}
+                  alt={job?.jobTitle}
+                  className="w-24 h-24 rounded-md mb-4"
+                />
+                <div className="flex flex-col lg:text-left text-center ">
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    {job?.jobTitle}
+                  </h1>
+                  <h2 className="text-lg text-gray-500">{job?.companyName}</h2>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-8  shadow-sm p-4 rounded-md bg-slate-200">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <GiMoneyStack className="text-2xl text-green-700" />
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Salary:</span>{" "}
+                    {job?.minPrice} - {job?.maxPrice}{" "}
+                    {job?.salaryType === "Monthly" ? "k" : "LPA"} /{" "}
+                    {job?.salaryType}{" "}
+                    <span className="text-gray-400">(Estimated)</span>
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MdLocationOn className="text-2xl text-blue-700" />
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Location:</span>{" "}
+                    {job?.jobLocation}
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <BsFillCalendarDateFill className="text-xl text-yellow-700" />
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Posted On:</span>{" "}
+                    {formatDate(job?.createdAt)}
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-3 lg:mt-0 mt-3">
+                <div className="flex items-center space-x-2">
+                  <FcSettings className="text-xl" />
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Experience Level:</span>{" "}
+                    {job?.experienceLevel}
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <MdWorkHistory className="text-xl text-red-700" />
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Employment Type:</span>{" "}
+                    {job?.employmentType}
+                  </p>
+                </div>
+              </div>
+            </div>
+
 
             <motion.div className="mb-6">
               {/* <p className="text-xl font-semibold">Description: </p> */}
