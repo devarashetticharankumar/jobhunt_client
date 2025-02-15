@@ -139,7 +139,7 @@ const Footer = () => {
       </div>
       <div className="border-t border-gray-300 mt-8 pt-4 flex items-center justify-center ">
         <p className="text-center text-gray-400">
-          &copy; Copyright 2024. Powered By{" "}
+          &copy; Copyright 2025. Powered By{" "}
           <span className="font-bold text-blue-600">
             <a href="/">JobNirvana</a>{" "}
           </span>
