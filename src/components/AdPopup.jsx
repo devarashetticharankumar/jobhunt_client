@@ -59,8 +59,8 @@ const AdPopup = () => {
 
           <div>
             {/* In-Feed Ad Component */}
-{/*             <InArticleAd className="w-80 h-52"/> */}
-              <ins
+             <InArticleAd className="w-80 h-52"/> 
+{/*               <ins
               className="adsbygoogle"
               style={{
                 display: "block",
@@ -72,7 +72,7 @@ const AdPopup = () => {
               data-ad-slot="9016216095"
               data-ad-format="auto"
               data-full-width-responsive="true"
-            ></ins>
+            ></ins> */}
           </div>
         </div>
       )}
