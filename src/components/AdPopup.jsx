@@ -28,6 +28,7 @@ const AdPopup = () => {
           style={{
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
             animation: "fadeIn 0.5s",
+            maxHeight: "90vh",
           }}
         >
           <div className="flex justify-between items-center">
@@ -58,7 +59,7 @@ const AdPopup = () => {
 
           <div className="w-80 h-52">
             {/* In-Feed Ad Component */}
-            <InArticleAd />
+            <InArticleAd className="w-80 h-52"/>
           </div>
         </div>
       )}
