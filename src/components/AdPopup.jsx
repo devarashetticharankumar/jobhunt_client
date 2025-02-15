@@ -57,7 +57,15 @@ const AdPopup = () => {
 
           <div className="flex justify-center mt-4">
             {/* In-Feed Ad Component */}
-            <InFeedAd />
+            <ins
+               className="adsbygoogle"
+               style={{ display: "block", textAlign: "center" }}
+               data-ad-client="ca-pub-8430285426081478"
+               data-ad-slot="2195791299"
+               data-ad-format="auto"
+               data-full-width-responsive="true"
+             ></ins>
+{/*             <InFeedAd /> */}
           </div>
         </div>
       )}
