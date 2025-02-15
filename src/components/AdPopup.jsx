@@ -57,7 +57,7 @@ const AdPopup = () => {
             70% of our goal achieved!
           </p>
 
-          <div className="w-80 h-52">
+          <div>
             {/* In-Feed Ad Component */}
 {/*             <InArticleAd className="w-80 h-52"/> */}
               <ins
