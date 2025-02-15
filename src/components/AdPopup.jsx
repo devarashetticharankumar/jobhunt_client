@@ -56,7 +56,7 @@ const AdPopup = () => {
             70% of our goal achieved!
           </p>
 
-          <div className="flex justify-center mt-4">
+          <div>
             {/* In-Feed Ad Component */}
             <InArticleAd />
           </div>
