@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import InFeedAd from "./InFeedAd";
+// import InFeedAd from "./InFeedAd";
+import InArticleAd from "./InArticleAd";
 
 const AdPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -57,15 +58,7 @@ const AdPopup = () => {
 
           <div className="flex justify-center mt-4">
             {/* In-Feed Ad Component */}
-            <ins
-               className="adsbygoogle"
-               style={{ display: "block", textAlign: "center" }}
-               data-ad-client="ca-pub-8430285426081478"
-               data-ad-slot="2195791299"
-               data-ad-format="auto"
-               data-full-width-responsive="true"
-             ></ins>
-{/*             <InFeedAd /> */}
+            <InArticleAd />
           </div>
         </div>
       )}
@@ -133,4 +126,3 @@ export default AdPopup;
 // };
 
 // export default AdPopup;
-
