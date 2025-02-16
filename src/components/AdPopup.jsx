@@ -152,20 +152,15 @@ const AdPopup = () => {
           </p>
           <div className="w-96  block">
             {/* In-Feed Ad Component */}
-            <InArticleAd className="w-96 " /> 
-{/*             <ins
+{/*             <InArticleAd className="w-96 " />  */}
+             <ins
               className="adsbygoogle"
-              style={{
-                display: "block",
-                textAlign: "center",
-                width: "300px",
-                height: "200px",
-              }}
+              style={{display: "block"}}
               data-ad-client="ca-pub-8430285426081478"
-              data-ad-slot="9016216095"
+              data-ad-slot="5336245281"
               data-ad-format="auto"
               data-full-width-responsive="true"
-            ></ins> */}
+            ></ins>
           </div>
 
           {/* Social Proof */}
