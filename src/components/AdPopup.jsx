@@ -150,9 +150,9 @@ const AdPopup = () => {
               ? `Hurry! ${timer} seconds left to claim.`
               : "Time's up! Click the ad to support us."}
           </p>
-          <div className="w-96 h-52 block">
+          <div className="w-96  block">
             {/* In-Feed Ad Component */}
-            <InArticleAd className="w-96 h-52" /> 
+            <InArticleAd className="w-96 " /> 
 {/*             <ins
               className="adsbygoogle"
               style={{
