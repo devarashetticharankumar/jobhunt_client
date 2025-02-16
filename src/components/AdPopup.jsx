@@ -169,7 +169,7 @@ const AdPopup = () => {
           </div>
 
           {/* Social Proof */}
-          <p className="text-gray-500 text-sm mt-3">
+          <p className="text-gray-500 text-sm">
             🔥 Over <span className="font-bold">5,000 users</span> have clicked
             this ad!{" "}
           </p>
