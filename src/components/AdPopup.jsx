@@ -117,7 +117,7 @@ const AdPopup = () => {
     <>
       {isVisible && (
         <div
-          className="fixed bottom-5 right-5 bg-white shadow-lg rounded-2xl p-4 w-80 z-50 animate-fade-in"
+          className="fixed bottom-5 right-5 bg-white shadow-lg rounded-2xl p-4 w-96 z-50 animate-fade-in"
           style={{
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
             animation: "fadeIn 0.5s",
@@ -150,10 +150,10 @@ const AdPopup = () => {
               ? `Hurry! ${timer} seconds left to claim.`
               : "Time's up! Click the ad to support us."}
           </p>
-          <div className="w-80 h-52 mt-4">
+          <div className="w-96 h-52 mt-4">
             {/* In-Feed Ad Component */}
-            {/* <InArticleAd className="w-80 h-52" /> */}
-            <ins
+            <InArticleAd className="w-80 h-52" /> 
+{/*             <ins
               className="adsbygoogle"
               style={{
                 display: "block",
@@ -165,7 +165,7 @@ const AdPopup = () => {
               data-ad-slot="9016216095"
               data-ad-format="auto"
               data-full-width-responsive="true"
-            ></ins>
+            ></ins> */}
           </div>
 
           {/* Social Proof */}
