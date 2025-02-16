@@ -18,7 +18,7 @@ const InFeedAd = () => {
     >
       <ins
         className="adsbygoogle"
-        style={{ display: "block" }}
+        style={{ display: "flex" textAlign: "center" justify-content: "center" }}
         data-ad-client="ca-pub-8430285426081478"
         data-ad-slot="9016216095"
         data-ad-format="auto"
