@@ -233,7 +233,7 @@ const AdPopup = () => {
             </button>
           </div>
           <p className="text-gray-600 text-sm mt-2">
-            Discover exclusive deals! Click below before the timer runs out! 🚀
+            Discover exclusive jobs! Click below before the timer runs out! 🚀
           </p>
           {/* Countdown Timer with Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-3 relative">
