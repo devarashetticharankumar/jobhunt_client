@@ -223,7 +223,7 @@ const AdPopup = () => {
         >
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-800">
-              🎉 Limited Time Offer!
+              🎉 Support us!
             </h3>
             <button
               onClick={handleClose}
