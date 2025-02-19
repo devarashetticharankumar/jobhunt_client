@@ -48,7 +48,13 @@ const ShareButton = ({
       navigator
         .share({
           title: `Check out this job: ${jobTitle}`,
-          text: `Exciting job opportunity at ${companyName} in ${jobLocation}! \n\nPosition: ${jobTitle}\n\nFound on JobNirvana.`,
+          text: `Hi Everyone,\n\nWe’re hiring for ${jobTitle} at ${companyName} in ${jobLocation}.\n\nIf you or someone in your network is interested, check out the details here: ${jobUrl}.\n\nFeel free to share this post.\n\n#hiring #jobopportunity #career #${jobTitle.replace(
+            /\s+/g,
+            ""
+          )} #${companyName.replace(/\s+/g, "")} #${jobLocation.replace(
+            /\s+/g,
+            ""
+          )}`,
           url: jobUrl,
         })
         .then(() => {
