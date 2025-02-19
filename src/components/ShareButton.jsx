@@ -33,6 +33,7 @@
 
 import React, { useState } from "react";
 import { IoShareSocial } from "react-icons/io5";
+import { TbShare3 } from "react-icons/tb";
 
 const ShareButton = ({
   jobTitle,
@@ -89,7 +90,7 @@ const ShareButton = ({
         {isLoading ? (
           <span className="animate-spin">🔄</span>
         ) : (
-          <IoShareSocial size={24} />
+          <TbShare3 size={24} />
         )}
       </button>
     </div>
