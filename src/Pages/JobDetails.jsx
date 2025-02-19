@@ -213,62 +213,8 @@ const JobDetails = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-{/*             <motion.div className="flex flex-wrap items-center justify-center mb-6">
-              <img
-                src={job?.companyLogo}
-                alt={job?.jobTitle}
-                className="w-24 h-24 mr-4 rounded-lg"
-              />
-              <div>
-                <h1 className="lg:text-3xl text-2xl font-extrabold">
-                  {job?.jobTitle}
-                </h1>
-                <h2 className="lg:text-2xl text-lg text-gray-600">
-                  {job?.companyName}
-                </h2>
-              </div>
-            </motion.div>
 
-            <motion.div
-              className="flex flex-wrap justify-between mb-4"
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <div>
-                <p className="flex items-center">
-                  <span className="font-semibold">Salary: </span>
-                  <GiMoneyStack className="text-2xl text-green-900" />
-                  {job?.minPrice} - {job?.maxPrice}{" "}
-                  {job?.salaryType === "Monthly" ? "k" : "LPA"} /{" "}
-                  {job?.salaryType} / (Estimated)
-                </p>
-                <p className="flex items-center">
-                  <span className="font-semibold">Location:</span>{" "}
-                  <MdLocationOn className="text-2xl text-green-900" />
-                  {job?.jobLocation}
-                </p>
-                <p className="flex items-center">
-                  <span className="font-semibold">Posted On: </span>
-                  <BsFillCalendarDateFill className="text-base text-green-900" />{" "}
-                  {formatDate(job?.createdAt)}
-                </p>
-              </div>
-              <div>
-                <p className="flex items-center">
-                  <span className="font-semibold">Experience Level: </span>
-                  <FcSettings className="text-xl text-green-900" />
-                  {job?.experienceLevel}
-                </p>
-                <p className="flex items-center">
-                  <span className="font-semibold">Employment Type: </span>
-                  <MdWorkHistory className="text-xl text-green-900" />
-                  {job?.employmentType}
-                </p>
-              </div>
-            </motion.div> */}
-
-              <div className="flex flex-wrap items-center justify-center bg-cover bg-center p-4 rounded-md"
+{/*               <div className="flex flex-wrap items-center justify-center bg-cover bg-center p-4 rounded-md"
                 style={{ backgroundImage: `url(${jobdetailsimg})` }}>
               <div className="flex flex-wrap items-center justify-center mb-2 lg:gap-6">
                 <img
@@ -283,7 +229,33 @@ const JobDetails = () => {
                   <h2 className="text-lg text-white">{job?.companyName}</h2>
                 </div>
               </div>
+            </div> */}
+                        <div
+              className="relative flex flex-wrap items-center justify-center bg-cover bg-center p-4 rounded-md"
+              style={{ backgroundImage: `url(${jobdetailsimg})` }}
+            >
+              <div className="flex flex-wrap items-center justify-center mb-2 lg:gap-6">
+                <img
+                  src={job?.companyLogo}
+                  alt={job?.jobTitle}
+                  className="w-24 h-24 rounded-md mb-1"
+                />
+                <div className="flex flex-col lg:text-left text-center">
+                  <h1 className="text-3xl font-bold text-white">
+                    {job?.jobTitle}
+                  </h1>
+                  <h2 className="text-lg text-white">{job?.companyName}</h2>
+                </div>
+              </div>
+              <div className="absolute bottom-2 right-2">
+                <ShareButton
+                  jobTitle={job.jobTitle}
+                  companyName={job.companyName}
+                  jobLocation={job.jobLocation}
+                />
+              </div>
             </div>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:gap-8  shadow-sm p-4 rounded-md bg-slate-200">
               <div className="space-y-3">
@@ -381,10 +353,7 @@ const JobDetails = () => {
                 >
                   Apply Now
                 </motion.button>
-                <ShareButton
-                  jobTitle={job.jobTitle}
-                  companyName={job.companyName}
-                  jobLocation={job.jobLocation} />
+              
               </div>
             </div>
             <div className="mt-3 flex items-center justify-start gap-2 text-xl">
