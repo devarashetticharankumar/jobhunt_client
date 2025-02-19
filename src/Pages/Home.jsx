@@ -149,9 +149,9 @@ const Home = () => {
     const { startIndex, endIndex } = calculatePageRange();
     const slicedJobs = filteredJobs.slice(startIndex, endIndex);
 
-    // Add an ad after every 3 job cards
+    // Add an ad after every 2 job cards
     const result = [];
-    const adFrequency = 3; // Adjust this number as needed
+    const adFrequency = 2; // Adjust this number as needed
 
     slicedJobs.forEach((data, i) => {
       result.push(<Card key={`job-${i}`} data={data} />);
