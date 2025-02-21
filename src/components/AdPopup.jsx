@@ -212,7 +212,7 @@ const AdPopup = () => {
     <>
       {isVisible && (
         <div
-          className="fixed bottom-5 right-5 sm:right-2 bg-white shadow-lg rounded-2xl p-4 z-50 fade-in-animation overflow-hidden"
+          className="fixed bottom-5 right-5 bg-white shadow-lg rounded-2xl p-4 z-50 fade-in-animation overflow-hidden"
           style={{
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
             animation: "fadeIn 0.5s",
