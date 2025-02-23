@@ -223,7 +223,7 @@ const AdPopup = () => {
         >
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-800">
-              🎉 Support us!
+              🎉 Support Our Work!
             </h3>
             <button
               onClick={handleClose}
@@ -233,7 +233,7 @@ const AdPopup = () => {
             </button>
           </div>
           <p className="text-gray-600 text-sm mt-2">
-            Discover exclusive jobs! Click below before the timer runs out! 🚀
+            Support us by exploring relevant ads from our partners. 🚀
           </p>
           {/* Countdown Timer with Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-3 relative">
@@ -245,7 +245,7 @@ const AdPopup = () => {
           <p className="text-xs text-gray-500 mt-1">
             {timer > 0
               ? `Hurry! ${timer} seconds left to claim.`
-              : "Time's up! Click the ad to support us."}
+              : "Discover exciting offers and opportunities from our partners."}
           </p>
           <div className="w-full block overflow-hidden">
             {/* In-Feed Ad Component */}
