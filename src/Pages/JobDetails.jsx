@@ -334,7 +334,7 @@ const JobDetails = () => {
             </motion.div>
             <InArticleAd />
 
-            <div className="flex flex-wrap items-center justify-between gap-6 rounded-sm p-5 bg-[#d8f3ff] lg:w-3/4  min-w-fit">
+{/*             <div className="flex flex-wrap items-center justify-between gap-6 rounded-sm p-5 bg-[#d8f3ff] lg:w-3/4  min-w-fit">
               <div>
                 <h4 className="text-sky-700 text-xl font-medium">
                   Interested in this job?
@@ -355,6 +355,15 @@ const JobDetails = () => {
                 </motion.button>
               
               </div>
+            </div> */}
+             <div className="flex items-center">
+              <p>Interested in this job? </p>{" "}
+              <button
+                className=" text-sky-600 font-bold underline"
+                onClick={applyLink}
+              >
+                Apply Now
+              </button>
             </div>
             <div className="mt-3 flex items-center justify-start gap-2 text-xl">
               <GrInstagram className="text-pink-600" />
