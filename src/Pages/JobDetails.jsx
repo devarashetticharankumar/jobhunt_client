@@ -149,7 +149,7 @@ const JobDetails = () => {
             employmentType: job?.employmentType,
             baseSalary: {
               "@type": "MonetaryAmount",
-              currency: "INR",
+              currency: "USD",
               value: {
                 "@type": "QuantitativeValue",
                 minValue: job?.minPrice,
