@@ -118,6 +118,12 @@ const EmploymentType = ({ handleChange }) => {
             title="Temporary"
             name="test"
           />
+          <InputField
+            handleChange={handleChange}
+            value="Contract"
+            title="Contract"
+            name="test"
+          />
         </div>
       ) : (
         // Render select dropdown for mobile view
@@ -128,6 +134,7 @@ const EmploymentType = ({ handleChange }) => {
           <option value="Internship">Internship</option>
           <option value="Freelance">Freelance</option>
           <option value="Temporary">Temporary</option>
+          <option value="Contract">Contract</option>
         </select>
       )}
     </div>
