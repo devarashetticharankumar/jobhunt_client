@@ -226,7 +226,7 @@ const Home = () => {
           ) : (
             <div className="text-center m-auto flex flex-col items-center justify-center">
               <h3 className="text-lg font-bold mb-2">{result.length} jobs</h3>
-              <p>The server is currently busy. Please try again later.</p>
+              <p> No jobs found </p>
             </div>
           )}
 
