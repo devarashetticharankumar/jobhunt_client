@@ -75,29 +75,22 @@ const ShareButton = ({
   jobTitle,
   companyName,
   jobLocation,
-  minPrice,
-  maxPrice,
-  experienceLevel,
-  description,
   jobUrl = window.location.href,
   companyLogo,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleShare = () => {
-    const shareText = `‼️ HIRING ‼️
-${jobTitle}
+    const shareText = `
+Hi Everyone,
 
-📍 Location: ${jobLocation}
-💼 Experience: ${experienceLevel}
-💰 Salary: ₹${minPrice.toLocaleString()} - ₹${maxPrice.toLocaleString()} per month
+🚀 We’re hiring for **${jobTitle}** at **${companyName}**, located in **${jobLocation}**!
 
-We are looking for a ${jobTitle} to join **${companyName}** and assist with:
-${description}
+📌 Job Details: ${jobUrl}
 
-🔗 Job Details: ${jobUrl}
+If you or someone in your network is interested, please check out the details.
 
-📩 DM us for more details.
+Feel free to share this opportunity within your network.
 
 #hiring #jobopportunity #career #${jobTitle.replace(
       /\s+/g,
