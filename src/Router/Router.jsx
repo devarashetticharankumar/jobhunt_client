@@ -21,6 +21,7 @@ import MyBlogs from "../Pages/MyBlogs";
 import ResumesList from "../Pages/ResumesList";
 import YouTubeHome from "../Pages/YouTubeHome";
 import ProfilePage from "../components/ProfilePage";
+import HomePage from "../Pages/HomePage";
 
 // =============================
 
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/jobs",
         element: <Home />,
       },
       {
