@@ -171,7 +171,7 @@ const HomePage = () => {
             gap between talented individuals and top companies across
             industries.
           </p>
-          <div className=" flex gap-3">
+          <div className=" flex gap-3 flex-wrap">
             <div className="bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg max-w-80 text-center text-base">
               Join thousands of satisfied users who found their dream jobs with
               JobNirvana!
