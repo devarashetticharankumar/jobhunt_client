@@ -242,6 +242,7 @@ const Navbar = () => {
 
   const navItems = [
     { path: "/", title: "HOME" },
+    { path: "/jobs", title: "JOBS" },
     { path: "/blogs", title: "BLOGS" },
     { path: "/youtube-videos", title: "YOUTUBE VIDEOS" },
     // { path: "/resume-builder", title: "RESUME BUILDER" },
