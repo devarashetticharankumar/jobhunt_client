@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { API_URL } from "../data/apiPath";
 import {
@@ -307,9 +307,10 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {jobs.map((job) => (
-                <div
+                <Link
+                  to={`/job/${job._id}`}
                   key={job._id}
-                  className="p-4 bg-white shadow rounded-lg border border-gray-200 flex gap-4 items-start"
+                  className="p-4 bg-white shadow rounded-lg border border-gray-200 flex gap-4 items-start hover:shadow-lg transition"
                 >
                   {/* Company Logo */}
                   {job.companyLogo ? (
@@ -333,7 +334,7 @@ const HomePage = () => {
                       {job.companyName} - {job.jobLocation}
                     </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
@@ -348,6 +349,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>{" "}
+
       {/* blogs section */}
       <section className="bg-white py-12">
         <div className="container mx-auto px-6">
