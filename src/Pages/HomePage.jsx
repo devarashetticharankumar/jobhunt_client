@@ -373,9 +373,10 @@ const HomePage = () => {
               ))
             ) : blogs.length > 0 ? (
               blogs.map((blog) => (
-                <div
+                <Link
+                  to={`/blog/${blog.slug}`}
                   key={blog.id}
-                  className="border border-gray-200 rounded-lg overflow-hidden shadow-md"
+                  className="border border-gray-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition"
                 >
                   <img
                     src={blog.thumbnail}
@@ -385,7 +386,7 @@ const HomePage = () => {
                   <div className="p-4">
                     <h3 className="font-bold text-lg mb-2">{blog.title}</h3>
                   </div>
-                </div>
+                </Link>
               ))
             ) : (
               <p className="text-center text-gray-500 col-span-4">
