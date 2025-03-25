@@ -160,10 +160,10 @@ const HomePage = () => {
         </script>
       </Helmet>
       {/* hero section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 items-center px-6 py-16 gap-8 bg-gradient-to-r from-blue-50 via-white to-blue-100">
+      <section className="grid grid-cols-1 md:grid-cols-2 items-center px-6 py-6 md:py-16 gap-8 bg-gradient-to-r from-blue-50 via-white to-blue-100">
         {/* Left Content */}
         <div className="space-y-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-gray-800">
+          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight text-gray-800">
             Connecting Talent with Opportunities
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed">
