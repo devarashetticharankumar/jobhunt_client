@@ -301,7 +301,7 @@ const JobDetails = () => {
                 </div>
               </div>
             </div>
-
+            <InArticleAd />
 
             <motion.div className="mb-6 mt-6">
               {/* <p className="text-xl font-semibold">Description: </p> */}
