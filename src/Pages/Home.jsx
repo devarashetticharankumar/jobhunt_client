@@ -203,14 +203,14 @@ const Home = () => {
         handleSuggestionClick={handleSuggestionClick}
       />
 
-      <div className="bg-[#FAFAFa] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
-        <div className="bg-white p-4 rounded">
+      <div className="bg-[#FAFAFa] md:grid grid-cols-3 gap-8 lg:px-24 px-4 py-12">
+{/*         <div className="bg-white p-4 rounded">
           <Sidebar
             handleChange={handleChange}
             handleClick={handleClick}
             setJobs={jobs}
           />
-        </div>
+        </div> */}
 
         <div className="col-span-2 bg-white" ref={jobsRef}>
           {isLoading ? (
