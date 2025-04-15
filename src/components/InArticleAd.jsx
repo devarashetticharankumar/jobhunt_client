@@ -13,7 +13,7 @@ const InFeedAd = () => {
 
   return (
     <div
-      className=" rounded-lg
+      className=" rounded-lg my-4 mx-5
     "
     >
       <ins
