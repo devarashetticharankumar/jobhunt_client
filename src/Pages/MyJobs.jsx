@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import { useAuth0 } from "@auth0/auth0-react"; // Import the useAuth0 hook
+import { useAuth0 } from "@auth0/auth0-react";
 import { API_URL } from "../data/apiPath";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { motion } from "framer-motion";
-import PageHeader from "../components/PageHeader";
-import InFeedAd from "../components/InFeedAd";
-import InArticleAd from "../components/InArticleAd";
-
-import { ToastContainer } from "react-toastify";
+import { Helmet } from "react-helmet";
+import { MdSearch, MdEdit, MdDelete, MdAdd, MdWorkOutline, MdPeople } from "react-icons/md";
 import "react-toastify/dist/ReactToastify.css";
-import { Helmet } from "react-helmet"; // Import Helmet
-import MyBlogs from "./MyBlogs";
 
 const MyJobs = () => {
-  const { user, getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
-    useAuth0();
+  const { user, getAccessTokenSilently, isAuthenticated, loginWithRedirect } = useAuth0();
   const [jobs, setJobs] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,242 +29,197 @@ const MyJobs = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
+          if (!response.ok) throw new Error("Failed");
           const data = await response.json();
-          // Sort jobs by createdAt date (most recent first)
-          data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
+          // Sort is already done by backend, but ensuring descending createdAt just in case or keep existing order
           setJobs(data);
         } catch (error) {
           console.error("Error fetching jobs:", error);
-          toast.error("Error fetching jobs. Please try again.");
+          toast.error("Failed to fetch jobs.");
         } finally {
           setIsLoading(false);
         }
       };
-
       fetchJobs();
     }
-  }, [
-    isAuthenticated,
-    user,
-    getAccessTokenSilently,
-    loginWithRedirect,
-    navigate,
-  ]);
+  }, [isAuthenticated, user, getAccessTokenSilently, loginWithRedirect]);
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentJobs = jobs.slice(indexOfFirstItem, indexOfLastItem);
+  // Filter logic
+  const filteredJobs = jobs.filter((job) =>
+    job.jobTitle.toLowerCase().includes(searchText.toLowerCase())
+  );
+  const currentJobs = filteredJobs.slice(indexOfFirstItem, indexOfLastItem);
 
   const nextPage = () => {
-    if (indexOfLastItem < jobs.length) {
-      setCurrentPage(currentPage + 1);
-    }
+    if (indexOfLastItem < filteredJobs.length) setCurrentPage(currentPage + 1);
   };
-
   const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleSearch = () => {
-    const filter = jobs.filter((job) =>
-      job.jobTitle.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setJobs(filter);
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const handleDelete = async (id) => {
-    // Confirm deletion with the user
-    if (!window.confirm("Are you sure you want to delete this job?")) {
-      return;
-    }
-
+    if (!window.confirm("Are you sure you want to delete this job?")) return;
     try {
-      const response = await fetch(`${API_URL}/jobs/job/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
+      const response = await fetch(`${API_URL}/jobs/job/${id}`, { method: "DELETE" });
       if (response.ok) {
-        // Use toast instead of alert
         toast.success("Job deleted successfully!");
-        // Optionally, re-fetch the list of jobs here
+        setJobs(jobs.filter((job) => job._id !== id));
       } else {
-        throw new Error("Job deletion not acknowledged");
+        toast.error("Failed to delete.");
       }
     } catch (error) {
-      console.error("Error deleting job:", error);
-      toast.error("Error deleting job. Please try again.");
+      toast.error("Error deleting job.");
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600"></div>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
-        {/* Add Helmet for meta tags */}
-        <Helmet>
-          <title>My Jobs | JobNirvana</title>
-          <meta
-            name="description"
-            content="View and manage your job listings on JobNirvana. Keep track of your posted jobs, edit details, and delete listings as needed."
-          />
-          <meta
-            name="keywords"
-            content="jobs, job listings, manage jobs, JobNirvana"
-          />
-          <meta name="robots" content="index, follow" />
-          <link rel="canonical" href={`${window.location.href}`} />
-        </Helmet>
-        <PageHeader title={"My Jobs"} path={"My jobs"} />
-        <ToastContainer />
-        <div className="my-jobs-container">
-          <div className="search-box p-2 text-center">
-            <input
-              type="text"
-              name="search"
-              id="search"
-              placeholder="Ex:React Developer"
-              onChange={(e) => setSearchText(e.target.value)}
-              className="py-2 pl-3 border focus:outline-none lg:w-6/12 mb-4 w-full"
-            />
-            <button
-              className="bg-blue hover:bg-indigo-700 text-white font-semibold px-8 py-2 rounded-sm mb-4"
-              onClick={handleSearch}
-            >
-              Search
-            </button>
+    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>My Jobs | JobNirvana</title>
+      </Helmet>
+      <ToastContainer />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-6xl mx-auto"
+      >
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">My Jobs</h1>
+            <p className="text-gray-500 mt-1">Manage all your job postings in one place</p>
           </div>
+          <Link to="/post-job">
+            <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-transform hover:scale-105">
+              <MdAdd className="text-xl" /> Post New Job
+            </button>
+          </Link>
         </div>
 
-        {/* Table */}
-        <section className="py-1 bg-blueGray-50 ">
-          <motion.div
-            className="w-full xl:w-12/12 mb-12 xl:mb-0 px-4 mx-auto mt-5"
-            initial={{ opacity: 0, y: -60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeIn" }}
-          >
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
-              <div className="rounded-t mb-0 px-4 py-3 border-0">
-                <div className="flex flex-wrap items-center w-full">
-                  <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                    <h3 className="font-semibold text-base text-blueGray-700">
-                      All Jobs
-                    </h3>
-                  </div>
-                  <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                    <Link to="/post-job">
-                      <button
-                        className="bg-blue hover:bg-indigo-700 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-2 rounded-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                      >
-                        POST A NEW JOB
-                      </button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              <div className="block w-full overflow-x-auto no-scrollbar">
-                {isLoading ? (
-                  <div className="flex items-center justify-center h-20">
-                    <p>Loading...</p>
-                  </div>
-                ) : (
-                  <table className="items-center bg-transparent w-full border-collapse ">
-                    <thead>
-                      <tr>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          NO.
-                        </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          TITLE
-                        </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          COMPANY NAME
-                        </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          SALARY
-                        </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          EDIT
-                        </th>
-                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                          DELETE
-                        </th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {currentJobs.map((job, index) => (
-                        <tr key={index}>
-                          <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
-                            {index + 1}
-                          </th>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            {job.jobTitle}
-                          </td>
-                          <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            {job.companyName}
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            {job.minPrice}k - {job.maxPrice}k
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                              <Link to={`/edit-job/${job?._id}`}>Edit</Link>
-                            </button>
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                            <button
-                              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                              onClick={() => handleDelete(job._id)}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
+        {/* Search & Content Card */}
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+          {/* Search Bar */}
+          <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+            <div className="relative max-w-md">
+              <MdSearch className="absolute left-4 top-3.5 text-gray-400 text-xl" />
+              <input
+                type="text"
+                placeholder="Search by job title..."
+                onChange={(e) => setSearchText(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm"
+              />
             </div>
+          </div>
 
-            {/* Pagination Controls */}
-            <div className="flex justify-center mt-4">
+          {/* Jobs Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50/80 text-gray-600 text-sm uppercase tracking-wider">
+                  <th className="px-6 py-4 font-semibold">No.</th>
+                  <th className="px-6 py-4 font-semibold">Job Title</th>
+                  <th className="px-6 py-4 font-semibold">Company</th>
+                  <th className="px-6 py-4 font-semibold">Salary</th>
+                  <th className="px-6 py-4 font-semibold text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {currentJobs.length > 0 ? (
+                  currentJobs.map((job, index) => (
+                    <motion.tr
+                      key={job._id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="hover:bg-blue-50/50 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-gray-500">
+                        {index + 1 + (currentPage - 1) * itemsPerPage}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-gray-800">{job.jobTitle}</div>
+                        <div className="text-xs text-gray-400">{job.employmentType}</div>
+                      </td>
+                      <td className="px-6 py-4 text-gray-600 flex items-center gap-2">
+                        {/* {job.companyLogo && <img src={job.companyLogo} className="w-6 h-6 rounded-full object-cover" />} */}
+                        {job.companyName}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {job.minPrice}k - {job.maxPrice}k
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <Link to={`/edit-job/${job._id}`}>
+                            <button className="p-2 text-blue-600 bg-blue-100 rounded-lg hover:bg-blue-600 hover:text-white transition-colors" title="Edit">
+                              <MdEdit className="text-lg" />
+                            </button>
+                          </Link>
+                          <Link to={`/job-applicants/${job._id}`}>
+                            <button className="p-2 text-purple-600 bg-purple-100 rounded-lg hover:bg-purple-600 hover:text-white transition-colors" title="View Applicants">
+                              <MdPeople className="text-lg" />
+                            </button>
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(job._id)}
+                            className="p-2 text-red-600 bg-red-100 rounded-lg hover:bg-red-600 hover:text-white transition-colors"
+                            title="Delete"
+                          >
+                            <MdDelete className="text-lg" />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                      <div className="flex flex-col items-center justify-center">
+                        <MdWorkOutline className="text-6xl text-gray-200 mb-4" />
+                        <p className="text-lg">No jobs found.</p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {filteredJobs.length > itemsPerPage && (
+            <div className="p-6 border-t border-gray-100 flex justify-center gap-4 bg-gray-50/50">
               <button
-                className="px-4 py-2 mx-2 bg-gray-200 rounded"
                 onClick={prevPage}
                 disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg font-medium transition ${currentPage === 1 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white border hover:bg-gray-100 shadow-sm text-gray-700'}`}
               >
                 Previous
               </button>
+              <span className="flex items-center text-gray-600">
+                Page {currentPage} of {Math.ceil(filteredJobs.length / itemsPerPage)}
+              </span>
               <button
-                className="px-4 py-2 mx-2 bg-gray-200 rounded"
                 onClick={nextPage}
-                disabled={indexOfLastItem >= jobs.length}
+                disabled={indexOfLastItem >= filteredJobs.length}
+                className={`px-4 py-2 rounded-lg font-medium transition ${indexOfLastItem >= filteredJobs.length ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white border hover:bg-gray-100 shadow-sm text-gray-700'}`}
               >
                 Next
               </button>
             </div>
-          </motion.div>
-        </section>
-      </div>
-      <MyBlogs />
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 };

@@ -5,73 +5,67 @@ import { API_URL } from "../data/apiPath";
 const LatestBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // To handle loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const response = await fetch(`${API_URL}/blogs/all-blogs`);
         if (!response.ok) {
-          throw new Error("Failed to fetch blogs");
+          throw new Error("The server is currently busy. Please try again later.");
         }
         const data = await response.json();
-        setBlogs(data); // Store the data (which should be 3 latest blogs)
+        setBlogs(data);
       } catch (error) {
         setError(error.message);
       } finally {
-        setLoading(false); // Once the data is fetched, stop loading
+        setLoading(false);
       }
     };
 
     fetchBlogs();
   }, []);
 
+  if (error || (blogs.length === 0 && !loading)) return null;
+
   return (
-    <div className="py-8">
-      {error && <p className="text-red-500 text-center">{error}</p>}
+    <div className="mt-8 pt-8 border-t border-gray-100">
+      <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Latest Articles</h3>
+
       {loading ? (
-        // Skeleton loader while loading blogs
-        <div className="flex flex-col space-y-4">
+        <div className="space-y-4">
           {[...Array(3)].map((_, index) => (
-            <div
-              key={index}
-              className="bg-gray-200 animate-pulse rounded-sm overflow-hidden"
-            >
-              <div className="w-full h-48 bg-gray-300"></div>
-              <div className="p-6">
-                <div className="h-6 bg-gray-300 rounded mb-2"></div>
-                <div className="h-4 bg-gray-300 rounded mb-4"></div>
+            <div key={index} className="flex gap-4 animate-pulse">
+              <div className="w-16 h-16 bg-gray-200 rounded-lg"></div>
+              <div className="flex-1 space-y-2 py-1">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
               </div>
             </div>
           ))}
         </div>
-      ) : blogs.length === 0 ? (
-        <p className="text-center text-lg">No blogs found.</p>
       ) : (
-        <div className="flex flex-col space-y-4">
-          <h2 className="text-2xl font-bold mb-4 bg-blue-600 p-1 text-white">
-            Latest Blogs{" "}
-          </h2>
-
-          {blogs.slice(0, 4).map((blog) => (
+        <div className="space-y-4">
+          {blogs.slice(0, 3).map((blog) => (
             <Link
               key={blog._id}
-              to={`/blog/${blog.slug}`} // Use Link for redirection
-              className="bg-white shadow-lg rounded-sm overflow-hidden transform hover:scale-105 transition-all duration-300 cursor-pointer"
+              to={`/blog/${blog.slug}`}
+              className="flex gap-3 group"
             >
-              <img
-                src={blog.thumbnail || "/default-thumbnail.jpg"}
-                alt={blog.title}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-3">
-                <h3 className="text-xl font-semibold text-gray-800 mb-1">
-                  {blog.title.slice(0, 70)}
-                </h3>
-                {/* <p className="text-gray-600 mb-1">
-                  {blog.author} on <br></br>
-                  {new Date(blog.publishedDate).toLocaleDateString()}
-                </p> */}
+              <div className="w-20 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 relative">
+                <img
+                  src={blog.thumbnail || "/default-thumbnail.jpg"}
+                  alt={blog.title}
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight mb-1">
+                  {blog.title}
+                </h4>
+                <p className="text-xs text-gray-400">
+                  {new Date(blog.createdAt || Date.now()).toLocaleDateString()}
+                </p>
               </div>
             </Link>
           ))}

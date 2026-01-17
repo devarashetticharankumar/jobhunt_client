@@ -239,7 +239,9 @@ import { Helmet } from "react-helmet";
 import { API_URL } from "../data/apiPath";
 import "react-quill/dist/quill.snow.css";
 import InArticleAd from "../components/InArticleAd";
-import InFeedAd from "../components/InArticleAd";
+import InFeedAd from "../components/InFeedAd";
+import BlogShareButton from "../components/BlogShareButton";
+import AdPopup from "../components/AdPopup";
 
 // Skeleton loader component
 const SkeletonLoader = ({ type }) => {
@@ -329,14 +331,14 @@ const BlogDetails = () => {
   }, [slug]);
 
   return (
-    <div className="bg-white lg:py-12 py-6 lg:px-6 md:px-3 px-3 min-h-screen">
+    <div className="bg-gray-50 min-h-screen lg:py-12 py-6 px-4">
       {message && (
-        <p className="text-red-500 text-center text-lg font-semibold">
+        <p className="text-red-500 text-center text-lg font-semibold mb-4">
           {message}
         </p>
       )}
 
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-10 gap-1">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-10 gap-8">
         {/* Blog Content */}
         <div className="flex-1">
           {loadingBlog ? (
@@ -346,7 +348,7 @@ const BlogDetails = () => {
               <>
                 {/* React Helmet for SEO */}
                 <Helmet>
-                  <title>{blog.title} | jobNirvana-Blogs</title>
+                  <title>{blog.title} | JobNirvana-Blogs</title>
                   <meta
                     name="description"
                     content={blog.content.slice(0, 160)}
@@ -399,78 +401,69 @@ const BlogDetails = () => {
                   </script>
                 </Helmet>
 
-                <div className="bg-white rounded-sm overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                   {/* Blog Thumbnail */}
                   {blog.thumbnail && (
-                    <img
-                      src={blog.thumbnail}
-                      alt={`Thumbnail for ${blog.title}`}
-                      className="w-full lg:h-96 object-cover"
-                    />
+                    <div className="relative h-64 lg:h-96 w-full">
+                      <img
+                        src={blog.thumbnail}
+                        alt={`Thumbnail for ${blog.title}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full uppercase tracking-wide mb-3 inline-block shadow-lg">{blog.category}</span>
+                        <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight shadow-black drop-shadow-lg">
+                          {blog.title}
+                        </h1>
+                      </div>
+                    </div>
                   )}
 
-                  <div className="lg:p-8 py-2">
-                    {/* Blog Title */}
-                    <h1 className="text-3xl font-bold font-serif text-gray-800 mb-4 text-center">
-                      {blog.title}
-                    </h1>
-
-                    {/* Author and Published Date */}
-                    <div className="text-center text-sm text-gray-600 mb-4">
-                      <span>
-                        By <span className="font-medium">{blog.author}</span> on{" "}
-                        {new Date(blog.publishedDate).toLocaleDateString()}
-                      </span>
+                  <div className="lg:p-10 p-6">
+                    {/* Author and Share */}
+                    <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-8 border-b border-gray-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold uppercase">
+                          {blog.author?.[0] || "A"}
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-bold text-gray-900">{blog.author || "JobNirvana Team"}</p>
+                          <p className="text-gray-500">{new Date(blog.publishedDate).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                      <BlogShareButton blogTitle={blog.title} />
                     </div>
 
-                    {/* Category */}
-                    <p className="text-center text-sm text-green-500 uppercase font-medium mb-6">
-                      CATEGORY: {blog.category}
-                    </p>
-
-                    {/* Tags */}
-                    {blog.tags && blog.tags.length > 0 && (
-                      <div className="flex justify-center flex-wrap gap-2 mb-6">
-                        {blog.tags.map((tag, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <InArticleAd />
-
                     {/* Blog Content */}
-                    {/* <div
-                      className="prose prose-lg text-gray-700 mx-auto leading-relaxed ql-editor"
-                      dangerouslySetInnerHTML={{ __html: blog.content }}
-                    ></div> */}
-                    <div className="prose prose-lg text-gray-700 mx-auto leading-relaxed ql-editor">
+                    <div className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed font-sans ql-editor">
                       {(() => {
-                        // Split the blog content into paragraphs or sections
-                        const contentSegments = blog.content.split(/<\/p>/); // Adjust the split regex as needed
-
-                        // Iterate and inject ads between content segments
+                        const contentSegments = blog.content.split(/<\/p>/);
                         return contentSegments.map((segment, index) => (
                           <React.Fragment key={index}>
-                            {/* Render the current segment */}
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: `${segment}</p>`,
-                              }}
-                            />
-
-                            {/* Insert ad after every 3rd segment */}
-                            {(index + 1) % 10 === 0 &&
-                              index < contentSegments.length - 1 && (
-                                <InArticleAd />
-                              )}
+                            <div dangerouslySetInnerHTML={{ __html: `${segment}</p>` }} />
+                            {(index + 1) % 10 === 0 && index < contentSegments.length - 1 && (<InArticleAd />)}
                           </React.Fragment>
                         ));
                       })()}
+                    </div>
+
+                    {/* Tags */}
+                    {blog.tags && blog.tags.length > 0 && (
+                      <div className="mt-10 pt-8 border-t border-gray-100">
+                        <h4 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wider">Related Tags</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {blog.tags.map((tag, index) => (
+                            <span key={index} className="px-4 py-2 bg-gray-50 text-gray-600 hover:text-blue-600 rounded-lg text-sm font-medium border border-gray-200 transition-colors cursor-pointer">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="mt-8">
+                      <InArticleAd />
                     </div>
                   </div>
                 </div>
@@ -480,43 +473,46 @@ const BlogDetails = () => {
         </div>
 
         {/* Latest Blogs Sidebar */}
-        <div className="w-full lg:w-1/3">
+        <div className="w-full lg:w-1/3 space-y-8">
           {loadingLatestBlogs ? (
             <SkeletonLoader type="latestBlogs" />
           ) : (
-            <div className="bg-white rounded-sm p-4">
-              <h2 className="text-2xl font-semibold mb-4 bg-blue-600 p-1 text-white">
-                Latest Blogs
-              </h2>
-              <div className="space-y-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="p-5 border-b border-gray-100 bg-gray-50">
+                <h3 className="text-lg font-bold text-gray-900">Latest Articles</h3>
+              </div>
+              <div className="p-2">
                 {latestBlogs.map((latestBlog) => (
                   <Link
                     to={`/blog/${latestBlog.slug}`}
                     key={latestBlog.slug}
-                    className="block bg-gray-50 hover:bg-gray-100 p-4 rounded-sm"
+                    className="flex gap-4 p-3 hover:bg-blue-50/50 rounded-xl transition-colors group"
                   >
-                    {latestBlog.thumbnail && (
-                      <img
-                        src={latestBlog.thumbnail}
-                        alt={`Thumbnail for ${latestBlog.title}`}
-                        className="w-full h-44 object-cover rounded-sm mb-3"
-                      />
-                    )}
-                    <h4 className="text-md font-medium text-gray-800 mb-1">
-                      {latestBlog.title.length > 40
-                        ? `${latestBlog.title.slice(0, 40)}...`
-                        : latestBlog.title}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {new Date(latestBlog.publishedDate).toLocaleDateString()}
-                    </p>
+                    <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                      {latestBlog.thumbnail && (
+                        <img
+                          src={latestBlog.thumbnail}
+                          alt={latestBlog.title}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0 py-1">
+                      <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider block mb-1">New</span>
+                      <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-1">
+                        {latestBlog.title}
+                      </h4>
+                      <p className="text-xs text-gray-400">
+                        {new Date(latestBlog.publishedDate).toLocaleDateString()}
+                      </p>
+                    </div>
                   </Link>
                 ))}
               </div>
             </div>
           )}
-          {/* <InFeedAd /> */}
           <InArticleAd />
+          <AdPopup />
         </div>
       </div>
     </div>

@@ -9,4 +9,13 @@ export default defineConfig({
     sourcemap: false,
   },
   plugins: [react()],
+  server: {
+    proxy: {
+      '/sitemap.xml': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 });

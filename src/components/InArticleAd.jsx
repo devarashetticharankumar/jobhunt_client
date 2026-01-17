@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const InFeedAd = () => {
+const InArticleAd = () => {
   useEffect(() => {
     try {
       if (window.adsbygoogle) {
@@ -28,4 +28,4 @@ const InFeedAd = () => {
   );
 };
 
-export default InFeedAd;
+export default InArticleAd;

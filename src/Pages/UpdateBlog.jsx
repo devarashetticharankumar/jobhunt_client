@@ -11,7 +11,7 @@ import "react-quill/dist/quill.snow.css";
 
 const modules = {
   toolbar: [
-    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Ensure `header` is part of the toolbar
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
     [{ font: [] }],
     [{ size: [] }],
     ["bold", "italic", "underline", "strike"],
@@ -120,126 +120,158 @@ const UpdateBlog = () => {
     }
   };
 
-  return loading ? (
-    <div>Loading...</div>
-  ) : (
-    <motion.div
-      className="container mx-auto py-10 px-6"
-      initial={{ opacity: 0, y: -60 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeIn" }}
-    >
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-12 pt-0 mx-auto">
       <Helmet>
-        <title>Update Blog - My Blog Site</title>
+        <title>Update Blog - JobNirvana</title>
         <meta
           name="description"
-          content="Update your blog post and share your knowledge."
+          content="Update your blog post and keep your content fresh."
         />
-        <meta name="keywords" content="blog, update blog, edit blog" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://myblogsite.com/update-blog" />
+        <link rel="canonical" href="https://jobnirvana.netlify.app/update-blog" />
       </Helmet>
 
-      <PageHeader title="Update a Blog" path="Update Blog" />
-
-      <ToastContainer />
-
-      <div className=" p-8 rounded-xl shadow-xl max-w-7xl mx-auto">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="">
-            <label className="text-xl font-semibold text-gray-700">Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="w-full p-4 mt-2 border rounded-md text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Enter the blog title"
-            />
-          </div>
-
-          <div className="">
-            <label className="text-xl font-semibold text-gray-700">
-              Content
-            </label>
-            <ReactQuill
-              value={content}
-              onChange={setContent}
-              modules={modules}
-              formats={formats}
-              className="w-full h-30 border rounded-md shadow-sm"
-              placeholder="Enter blog description..."
-              theme="snow"
-              required
-            />
-          </div>
-
-          <div className="">
-            <label className="text-xl font-semibold text-gray-700">
-              Thumbnail URL
-            </label>
-            <input
-              type="url"
-              value={thumbnail}
-              onChange={(e) => setThumbnail(e.target.value)}
-              required
-              className="w-full p-4 mt-2 border rounded-md text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Enter the image URL"
-            />
-          </div>
-
-          <div className="">
-            <label className="text-xl font-semibold text-gray-700">
-              Category
-            </label>
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-              className="w-full p-4 mt-2 border rounded-md text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Enter the category"
-            />
-          </div>
-
-          <div className="">
-            <label className="text-xl font-semibold text-gray-700">
-              Tags (comma separated)
-            </label>
-            <input
-              type="text"
-              value={tags.join(", ")}
-              onChange={handleTagChange}
-              className="w-full p-4 mt-2 border rounded-md text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Enter tags"
-            />
-          </div>
-
-          <div className="">
-            <label className="text-xl font-semibold text-gray-700">
-              Author
-            </label>
-            <input
-              type="text"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              required
-              className="w-full p-4 mt-2 border rounded-md text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              placeholder="Enter the author's name"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-teal-500 text-white py-3 rounded-md hover:bg-teal-700"
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-teal-600 to-emerald-600 py-16 px-4 mb-10">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl md:text-5xl font-extrabold text-white mb-4"
           >
-            Update Blog
-          </button>
-        </form>
-
-        <p className="mt-3 text-center text-gray-700">{message}</p>
+            Update Article
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-teal-100 text-lg max-w-2xl mx-auto"
+          >
+            Refine your content and keep your audience engaged.
+          </motion.p>
+        </div>
       </div>
-    </motion.div>
+
+      <motion.div
+        className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <ToastContainer position="top-right" autoClose={3000} />
+
+        {/* Main Card */}
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+          <div className="p-8 md:p-12">
+            <h2 className="text-2xl font-bold text-gray-800 mb-8 border-b pb-4 border-gray-100">
+              Edit Blog Details
+            </h2>
+
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Title & Author */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 block">Blog Title</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    placeholder="e.g. The Future of Web Development"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 block">Author Name</label>
+                  <input
+                    type="text"
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                    required
+                    placeholder="e.g. John Doe"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Category & Thumbnail */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 block">Category</label>
+                  <input
+                    type="text"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    required
+                    placeholder="e.g. Technology"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700 block">Thumbnail URL</label>
+                  <input
+                    type="url"
+                    value={thumbnail}
+                    onChange={(e) => setThumbnail(e.target.value)}
+                    required
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 block">Blog Content</label>
+                <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-500/10 transition-all">
+                  <ReactQuill
+                    value={content}
+                    onChange={setContent}
+                    modules={modules}
+                    formats={formats}
+                    className="h-64 mb-12 border-none"
+                    placeholder="Update your article here..."
+                    theme="snow"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 block">Tags (comma separated)</label>
+                <input
+                  type="text"
+                  value={tags.join(", ")}
+                  onChange={handleTagChange}
+                  placeholder="e.g. React, JavaScript, Career"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-8">
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-teal-500/30 transform hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  Update Blog
+                </button>
+              </div>
+            </form>
+            {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

@@ -12,7 +12,7 @@ const Jobs = ({ result }) => {
           {result.length} jobs
         </h3>
       </div>
-      <section>{result}</section>
+      <section className="space-y-6 mt-6">{result}</section>
     </motion.div>
   );
 };

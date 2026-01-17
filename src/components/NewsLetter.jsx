@@ -66,46 +66,48 @@ const NewsLetter = () => {
   return (
     <div>
       <motion.div
-        initial={{ opacity: 0, x: 50 }} // Start 50px to the right
-        animate={{ opacity: 1, x: 0 }} // End at its natural position
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h3 className="text-lg font-bold mb-2 flex items-center gap-2">
-          <FaEnvelopeOpenText />
+        <h3 className="text-lg font-bold mb-3 flex items-center gap-2 text-gray-900">
+          <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+            <FaEnvelopeOpenText />
+          </div>
           Email me for jobs
         </h3>
-        <p className="text-primary/75 text-base mb-4">
-          Subscribe with your email and be the first to hear about new job
-          opportunities, along with helpful tips and resources for your career
-          journey!
+        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+          Subscribe for fresh job opportunities and career tips delivered to your inbox!
         </p>
-        <div className="w-full space-y-4">
+        <div className="w-full space-y-3">
           <input
             type="email"
             name="email"
             id="email"
             value={email}
             onChange={handleChange}
-            placeholder="Example@gmail.com"
-            className="w-full block py-2 pl-3 border focus:outline-none"
+            placeholder="name@example.com"
+            className="w-full block py-3 px-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm"
           />
           <input
             type="submit"
-            value="Subscribe"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
+            value="Subscribe Now"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition duration-300 shadow-md cursor-pointer text-sm"
             onClick={handleSubscribe}
           />
           {isValidEmail && (
             <input
               type="submit"
               value="Unsubscribe"
-              className="w-full block py-2 pl-3 border focus:outline-none bg-red-600 text-white rounded font-semibold cursor-pointer"
+              className="w-full block py-2.5 px-4 border border-red-100 bg-red-50 text-red-600 rounded-xl font-semibold cursor-pointer hover:bg-red-100 transition-colors text-sm"
               onClick={handleUnsubscribe}
             />
           )}
         </div>
       </motion.div>
-      <ToastContainer /> {/* Add the ToastContainer component here */}
+      <ToastContainer position="bottom-right" theme="light" />
+
+      {/* Integrated Latest Blogs */}
       <LatestBlogs />
     </div>
   );

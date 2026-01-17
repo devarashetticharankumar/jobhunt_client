@@ -62,12 +62,14 @@ const JobPostingData = ({ handleChange }) => {
 
   const now = new Date();
   const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const fiveDaysAgo = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000);
+  const fifteenDaysAgo = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000);
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
   // Format these dates to ISO format (e.g., "2024-08-31")
   const twentyFourHoursAgoDate = twentyFourHoursAgo.toISOString().slice(0, 10);
-  const sevenDaysAgoDate = sevenDaysAgo.toISOString().slice(0, 10);
+  const fiveDaysAgoDate = fiveDaysAgo.toISOString().slice(0, 10);
+  const fifteenDaysAgoDate = fifteenDaysAgo.toISOString().slice(0, 10);
   const thirtyDaysAgoDate = thirtyDaysAgo.toISOString().slice(0, 10);
   // Function to check window width
   const checkMobileView = () => {
@@ -105,8 +107,14 @@ const JobPostingData = ({ handleChange }) => {
           />
           <InputField
             handleChange={handleChange}
-            value={sevenDaysAgoDate}
-            title="Last 7 Days"
+            value={fiveDaysAgoDate}
+            title="Last 5 Days"
+            name="jobPostingDate"
+          />
+          <InputField
+            handleChange={handleChange}
+            value={fifteenDaysAgoDate}
+            title="Last 15 Days"
             name="jobPostingDate"
           />
           <InputField
@@ -125,7 +133,8 @@ const JobPostingData = ({ handleChange }) => {
         >
           <option value="">All Time</option>
           <option value={twentyFourHoursAgoDate}>Last 24 Hours</option>
-          <option value={sevenDaysAgoDate}>Last 7 Days</option>
+          <option value={fiveDaysAgoDate}>Last 5 Days</option>
+          <option value={fifteenDaysAgoDate}>Last 15 Days</option>
           <option value={thirtyDaysAgoDate}>Last Month</option>
         </select>
       )}

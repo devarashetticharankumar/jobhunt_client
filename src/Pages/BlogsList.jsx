@@ -593,41 +593,39 @@ const BlogsList = () => {
         <link rel="canonical" href={`${window.location.href}`} />
       </Helmet>
 
-      <h1 className="text-2xl text-center font-semibold mb-4 bg-blue-600 p-1 text-white">
-        All Blogs{" "}
+      <h1 className="text-3xl lg:text-4xl text-center font-bold mb-10 text-gray-900">
+        Job<span className="text-blue-600">Nirvana</span> Blog
       </h1>
       <InFeedAd />
 
       {/* Add Google Ad Banner */}
       {/* Layout for Mobile (Column) and Desktop (Row) */}
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col md:flex-row gap-8">
         {/* Categories Sidebar */}
-        <div className="w-full md:w-1/4 bg-white p-4 rounded-sm shadow-sm order-1 md:order-none">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+        <div className="w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 order-1 md:order-none h-fit">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
             Categories
           </h2>
 
           {/* Horizontal scroll on mobile devices */}
-          <div className="flex md:flex-col overflow-x-auto md:overflow-visible space-x-2 py-2 md:space-x-0 md:space-y-2">
+          <div className="flex md:flex-col overflow-x-auto md:overflow-visible space-x-2 py-2 md:space-x-0 md:space-y-3">
             <button
-              className={`w-auto px-4  py-2 rounded-sm text-center ${
-                !selectedCategory
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800"
-              } hover:bg-blue-600`}
+              className={`w-full px-4 py-3 rounded-xl text-left font-medium transition-all ${!selectedCategory
+                ? "bg-blue-50 text-blue-700 border border-blue-100"
+                : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
+                }`}
               onClick={() => handleCategoryClick("")}
             >
-              All
+              All Articles
             </button>
 
             {categories.map((category, index) => (
               <button
                 key={index}
-                className={`w-auto px-4 py-2 rounded-sm text-center ${
-                  selectedCategory === category
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-800"
-                } hover:bg-blue-600`}
+                className={`w-full px-4 py-3 rounded-xl text-left font-medium transition-all ${selectedCategory === category
+                  ? "bg-blue-50 text-blue-700 border border-blue-100"
+                  : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
+                  }`}
                 onClick={() => handleCategoryClick(category)}
               >
                 {category}
@@ -639,13 +637,13 @@ const BlogsList = () => {
         {/* Main Content (Blogs List) */}
         <div className="w-full md:w-3/4 order-2 md:order-none">
           {/* Search Bar */}
-          <div className="mb-6">
+          <div className="mb-8 relative group">
             <input
               type="text"
               value={searchQuery}
               onChange={handleSearch}
-              placeholder="Search blogs by title"
-              className="w-full p-4 border border-gray-300 rounded-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Search articles..."
+              className="w-full p-4 pl-6 border border-gray-200 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-300 transition-all font-medium"
             />
           </div>
 
@@ -653,39 +651,51 @@ const BlogsList = () => {
           {isLoading ? (
             <SkeletonLoader />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {getPaginatedBlogs().map((blog) => (
-                <div
-                  key={blog._id}
-                  className="bg-white p-4 rounded-md shadow-lg hover:shadow-xl transform transition-all duration-300 ease-in-out hover:scale-105"
-                >
-                  {blog.thumbnail && (
-                    <img
-                      src={blog.thumbnail}
-                      alt={blog.title}
-                      className="w-full h-48 object-cover rounded-sm mb-4 shadow-md transition-all duration-300 ease-in-out transform"
-                    />
-                  )}
-                  <Link to={`/blog/${blog.slug}`}>
-                    <div className="flex flex-col">
-                      <h3 className="text-xl font-semibold text-gray-800 hover:text-indigo-600 transition-all duration-200 mb-2">
-                        {blog.title.length > 50
-                          ? `${blog.title.slice(0, 50)}...`
-                          : blog.title}
-                      </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {getPaginatedBlogs().map((blog, index) => (
+                <React.Fragment key={blog._id}>
+                  <Link to={`/blog/${blog.slug}`} className="group">
+                    <div
+                      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col"
+                    >
+                      {blog.thumbnail && (
+                        <div className="relative overflow-hidden h-48">
+                          <img
+                            src={blog.thumbnail}
+                            alt={blog.title}
+                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                      )}
+                      <div className="p-5 flex-1 flex flex-col">
+                        <span className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">{blog.category}</span>
+                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2">
+                          {blog.title}
+                        </h3>
+                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between text-gray-400 text-sm">
+                          <span>{new Date(blog.createdAt || Date.now()).toLocaleDateString()}</span>
+                          <span className="font-medium text-blue-500 group-hover:translate-x-1 transition-transform">Read &rarr;</span>
+                        </div>
+                      </div>
                     </div>
                   </Link>
-                </div>
+                  {/* Inject Ad after every 6th item */}
+                  {(index + 1) % 6 === 0 && (
+                    <div className="col-span-1 sm:col-span-2 md:col-span-3">
+                      <InFeedAd />
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </div>
           )}
 
           {/* Pagination Controls */}
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-12 gap-2">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-4 py-2 bg-blue-500 text-white rounded-sm mx-2"
+              className="px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl disabled:opacity-50 hover:bg-gray-50 transition-colors"
             >
               Prev
             </button>
@@ -693,11 +703,10 @@ const BlogsList = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`px-4 py-2 rounded-sm mx-2 ${
-                  currentPage === index + 1
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-800"
-                }`}
+                className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === index + 1
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
+                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                  }`}
               >
                 {index + 1}
               </button>
@@ -705,7 +714,7 @@ const BlogsList = () => {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-blue-500 text-white rounded-sm mx-2"
+              className="px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl disabled:opacity-50 hover:bg-gray-50 transition-colors"
             >
               Next
             </button>

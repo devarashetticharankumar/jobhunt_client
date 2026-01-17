@@ -1,0 +1,39 @@
+{
+  "name": "jobNirvana",
+  "short_name": "jobNirvana",
+  "description": "jobNirvana will notify the latest job updates!",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "screenshots-mobile": [
+    {
+      "src": "screenshot-mobile.png",
+      "size": "399x745",
+      "type": "image/png",
+      "form_factor": "mobile"
+    }
+  ],
+
+  "theme_color": "#171717",
+  "background_color": "#f0e7db",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/"
+}

@@ -48,18 +48,21 @@ const RelatedJobs = ({ currentJob }) => {
   const [relatedJobs, setRelatedJobs] = useState([]);
 
   useEffect(() => {
-    if (currentJob) {
-      fetch(`${API_URL}/jobs/all-jobs`)
+    if (currentJob && currentJob._id) {
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (currentJob.jobLocation) params.append("location", currentJob.jobLocation);
+      if (currentJob.experienceLevel) params.append("level", currentJob.experienceLevel);
+      if (currentJob.employmentType) params.append("type", currentJob.employmentType);
+
+      fetch(`${API_URL}/jobs/related-jobs/${currentJob._id}?${params.toString()}`)
         .then((res) => res.json())
         .then((data) => {
-          const filteredJobs = data.filter(
-            (job) =>
-              job._id !== currentJob._id &&
-              (job.companyName === currentJob.companyName ||
-                job.jobLocation === currentJob.jobLocation ||
-                job.experienceLevel === currentJob.experienceLevel)
-          );
-          setRelatedJobs(filteredJobs.slice(0, 10));
+          if (Array.isArray(data)) {
+            setRelatedJobs(data);
+          } else {
+            setRelatedJobs([]);
+          }
         })
         .catch((error) => console.error("Error fetching related jobs:", error));
     }

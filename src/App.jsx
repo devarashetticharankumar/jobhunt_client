@@ -26,7 +26,9 @@ function App() {
     <>
       <Navbar />
       <ScrollToTop />
-      <Outlet />
+      <div className="pt-24 min-h-screen">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );

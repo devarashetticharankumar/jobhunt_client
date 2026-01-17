@@ -1,71 +1,53 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const prevScrollPos = useRef(window.scrollY);
-  const menuRef = useRef(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+
   const {
     loginWithRedirect,
     logout,
     user,
     isAuthenticated,
-    getAccessTokenSilently,
   } = useAuth0();
 
-  const handleMenuToggler = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleScroll = () => {
-    const currentScrollPos = window.scrollY;
-    if (prevScrollPos.current > currentScrollPos) {
-      setIsMenuOpen(false); // Close menu when scrolling up
-    }
-    prevScrollPos.current = currentScrollPos;
-  };
-
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setIsMenuOpen(false); // Close menu when clicking outside
-    }
-  };
-
+  // Handle Scroll Effect
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      document.removeEventListener("mousedown", handleClickOutside);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
     };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close menu on route change
   useEffect(() => {
-    const storeToken = async () => {
-      if (isAuthenticated) {
-        const token = await getAccessTokenSilently();
-        localStorage.setItem("authToken", token);
-      }
-    };
-    storeToken();
-  }, [isAuthenticated, getAccessTokenSilently]);
+    setIsMenuOpen(false);
+  }, [location]);
 
   const navItems = [
-    { path: "/", title: "HOME" },
-    { path: "/blogs", title: "BLOGS" },
-    { path: "/youtube-videos", title: "YOUTUBE VIDEOS" },
-    // { path: "/resumes", title: "RESUME BUILDER" },
-    { path: "/salary", title: "SALARY ESTIMATE" },
-    { path: "/my-job", title: "MY JOBS" },
-    // { path: "/post-job", title: "Post a Job" },
+    { path: "/", title: "Home" },
+    { path: "/jobs", title: "Find Jobs" },
+    { path: "/salary", title: "Salary" },
+    { path: "/blogs", title: "Expert Advice" },
+    { path: "/resume-builder", title: "Resume Builder" },
   ];
 
   return (
-    <header className="max-w-screen-2xl container mx-auto xl:px-24 px-3 sticky top-0 left-0 z-10 bg-white backdrop-blur-xl">
-      <nav className="flex justify-between items-center py-4">
-        <a href="/" className="flex items-center text-2xl text-black-500">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || isMenuOpen
+        ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100 py-3"
+        : "bg-transparent py-5"
+        }`}
+    >
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 text-2xl text-black">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="45"
@@ -85,99 +67,150 @@ const Navbar = () => {
           <span className="logo font-ChakraPetch font-semibold">
             Job<span className="text-blue-600">N</span>irvana
           </span>
-        </a>
+        </Link>
 
-        {/* nav items for large devices */}
-        <ul className="hidden md:flex gap-12">
+        {/* Desktop Navigation */}
+        <ul className="hidden md:flex items-center gap-8">
           {navItems.map(({ path, title }) => (
-            <li key={path} className="text-base text-primary">
+            <li key={path}>
               <NavLink
                 to={path}
-                className={({ isActive }) => (isActive ? "active" : "")}
+                className={({ isActive }) => `
+                  relative text-sm font-bold transition-colors py-2
+                  ${isActive ? "text-blue-600" : "text-gray-600 hover:text-blue-600"}
+                `}
               >
-                {title}
+                {({ isActive }) => (
+                  <>
+                    {title}
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-underline"
+                        className="absolute left-0 right-0 -bottom-1 h-0.5 bg-blue-600 rounded-full"
+                      />
+                    )}
+                  </>
+                )}
               </NavLink>
             </li>
           ))}
         </ul>
 
-        {/* signup and login btn */}
-        <div className="text-base text-primary font-medium space-x-5 hidden lg:flex items-center">
-          {isAuthenticated && (
-            <img
-              src={user.picture}
-              alt={user.name}
-              className="w-9 h-9 rounded-full border-blue outline outline-offset-2 outline-2 outline-blue-400"
-            />
-          )}
-
+        {/* Auth Actions */}
+        <div className="hidden lg:flex items-center gap-4">
           {isAuthenticated ? (
-            <button
-              onClick={() =>
-                logout({ logoutParams: { returnTo: window.location.origin } })
-              }
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
-            >
-              Log Out
-            </button>
+            <div className="flex items-center gap-4">
+              <Link to="/profile" className="flex items-center gap-3 pl-4 border-l border-gray-200">
+                <span className="text-sm font-bold text-gray-700 text-right hidden xl:block">
+                  {user.name} <br />
+                  <span className="text-xs text-gray-400 font-normal">Candidate</span>
+                </span>
+                <motion.img
+                  whileHover={{ scale: 1.05 }}
+                  src={user.picture}
+                  alt={user.name}
+                  className="w-10 h-10 rounded-full border-2 border-white shadow-md cursor-pointer"
+                />
+              </Link>
+              <button
+                onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 transition-colors"
+                title="Log Out"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+              </button>
+            </div>
           ) : (
-            <button
-              onClick={() => loginWithRedirect()}
-              className="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-sm transition duration-300"
-            >
-              Log In
-            </button>
+            <div className="flex items-center gap-3">
+              <button onClick={() => loginWithRedirect()} className="text-gray-600 font-bold text-sm hover:text-blue-600 transition-colors">
+                Log In
+              </button>
+              <button
+                onClick={() => loginWithRedirect()}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-0.5 text-sm"
+              >
+                Sign Up
+              </button>
+            </div>
           )}
         </div>
 
-        {/* mobile menu */}
-        <div className="md:hidden block">
-          <button type="button" onClick={handleMenuToggler}>
-            {isMenuOpen ? (
-              <FaXmark className="w-5 h-5 text-primary" />
-            ) : (
-              <FaBarsStaggered className="w-5 h-5 text-primary" />
-            )}
+        {/* Mobile Menu Toggle */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+          >
+            {isMenuOpen ? <FaXmark className="w-6 h-6" /> : <FaBarsStaggered className="w-6 h-6" />}
           </button>
         </div>
       </nav>
 
-      {/* navItems for mobile */}
-      <div
-        ref={menuRef}
-        className={`px-4 bg-[#1a1a1a] py-5 rounded-sm ${
-          isMenuOpen ? "" : "hidden"
-        } `}
-      >
-        <ul>
-          {navItems.map(({ path, title }) => (
-            <li
-              key={path}
-              className="text-base text-white first:text-white py-1 my-3"
-            >
-              <NavLink
-                to={path}
-                className={({ isActive }) => (isActive ? "active" : "")}
-              >
-                {title}
-              </NavLink>
-            </li>
-          ))}
-          <li className="text-white py-1">
-            {isAuthenticated ? (
-              <button
-                onClick={() =>
-                  logout({ logoutParams: { returnTo: window.location.origin } })
-                }
-              >
-                Log Out
-              </button>
-            ) : (
-              <button onClick={() => loginWithRedirect()}>Log In</button>
-            )}
-          </li>
-        </ul>
-      </div>
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white/95 backdrop-blur-xl border-b border-gray-100 overflow-hidden"
+          >
+            <ul className="px-4 py-6 space-y-2">
+              {navItems.map(({ path, title }) => (
+                <li key={path}>
+                  <NavLink
+                    to={path}
+                    className={({ isActive }) => `
+                      block px-4 py-3 rounded-xl font-bold text-lg transition-colors
+                      ${isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"}
+                    `}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {title}
+                  </NavLink>
+                </li>
+              ))}
+
+              <div className="border-t border-gray-100 my-4 pt-4 px-4 space-y-4">
+                {isAuthenticated ? (
+                  <>
+                    <Link to="/profile" className="flex items-center gap-3 mb-4" onClick={() => setIsMenuOpen(false)}>
+                      <img src={user.picture} alt={user.name} className="w-10 h-10 rounded-full" />
+                      <div>
+                        <p className="font-bold text-gray-900">{user.name}</p>
+                        <p className="text-xs text-gray-500">View Profile</p>
+                      </div>
+                    </Link>
+                    <button
+                      onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                      className="w-full py-3 rounded-xl bg-red-50 text-red-600 font-bold"
+                    >
+                      Log Out
+                    </button>
+                  </>
+                ) : (
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      onClick={() => loginWithRedirect()}
+                      className="py-3 rounded-xl bg-gray-50 text-gray-700 font-bold"
+                    >
+                      Log In
+                    </button>
+                    <button
+                      onClick={() => loginWithRedirect()}
+                      className="py-3 rounded-xl bg-blue-600 text-white font-bold"
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                )}
+              </div>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
