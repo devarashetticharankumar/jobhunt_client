@@ -46,7 +46,7 @@ const Card = ({ data }) => {
             <div className="flex justify-between items-start">
               <div>
                 <h4 className="text-gray-500 text-sm font-medium mb-1">{companyName}</h4>
-                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">{jobTitle}</h3>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">{jobTitle}</h3>
               </div>
               {minPrice && maxPrice && (
                 <div className="text-gray-900 font-bold text-sm bg-green-50 text-green-700 px-3 py-1 rounded-full whitespace-nowrap">

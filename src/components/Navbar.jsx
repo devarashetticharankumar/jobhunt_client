@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
+import { FaBarsStaggered } from "react-icons/fa6";
+import { FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
@@ -25,10 +26,15 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close menu on route change
+  const closeMobileMenu = () => {
+    setIsMenuOpen(false);
+    window.scrollTo(0, 0);
+  };
+
+  // Close menu on route change (backup)
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [location]);
+  }, [location.pathname]);
 
   const navItems = [
     { path: "/", title: "Home" },
@@ -143,74 +149,67 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
           >
-            {isMenuOpen ? <FaXmark className="w-6 h-6" /> : <FaBarsStaggered className="w-6 h-6" />}
+            {isMenuOpen ? <FaTimes className="w-6 h-6" /> : <FaBarsStaggered className="w-6 h-6" />}
           </button>
         </div>
       </nav>
 
+      {/* Mobile Menu Overlay */}
       {/* Mobile Menu Dropdown */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white/95 backdrop-blur-xl border-b border-gray-100 overflow-hidden"
-          >
-            <ul className="px-4 py-6 space-y-2">
-              {navItems.map(({ path, title }) => (
-                <li key={path}>
-                  <NavLink
-                    to={path}
-                    className={({ isActive }) => `
-                      block px-4 py-3 rounded-xl font-bold text-lg transition-colors
-                      ${isActive ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"}
-                    `}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {title}
-                  </NavLink>
-                </li>
-              ))}
+      {isMenuOpen && (
+        <div className="absolute top-full left-0 right-0 bg-white shadow-xl border-t border-gray-100 md:hidden z-50 rounded-b-2xl overflow-hidden">
+          <ul className="flex flex-col p-4 space-y-2 max-h-[80vh] overflow-y-auto">
+            {navItems.map(({ path, title }) => (
+              <li key={path} onClick={closeMobileMenu}>
+                <NavLink
+                  to={path}
+                  className={({ isActive }) => `
+                    block px-4 py-4 rounded-xl font-bold text-xl transition-colors border border-transparent
+                    ${isActive ? "bg-blue-50 text-blue-600 border-blue-100" : "text-gray-600 hover:bg-gray-50 hover:border-gray-100"}
+                  `}
+                >
+                  {title}
+                </NavLink>
+              </li>
+            ))}
 
-              <div className="border-t border-gray-100 my-4 pt-4 px-4 space-y-4">
-                {isAuthenticated ? (
-                  <>
-                    <Link to="/profile" className="flex items-center gap-3 mb-4" onClick={() => setIsMenuOpen(false)}>
-                      <img src={user.picture} alt={user.name} className="w-10 h-10 rounded-full" />
-                      <div>
-                        <p className="font-bold text-gray-900">{user.name}</p>
-                        <p className="text-xs text-gray-500">View Profile</p>
-                      </div>
-                    </Link>
-                    <button
-                      onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-                      className="w-full py-3 rounded-xl bg-red-50 text-red-600 font-bold"
-                    >
-                      Log Out
-                    </button>
-                  </>
-                ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => loginWithRedirect()}
-                      className="py-3 rounded-xl bg-gray-50 text-gray-700 font-bold"
-                    >
-                      Log In
-                    </button>
-                    <button
-                      onClick={() => loginWithRedirect()}
-                      className="py-3 rounded-xl bg-blue-600 text-white font-bold"
-                    >
-                      Sign Up
-                    </button>
-                  </div>
-                )}
-              </div>
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <div className="border-t border-gray-100 my-6 pt-6 px-4 space-y-6">
+              {isAuthenticated ? (
+                <>
+                  <Link to="/profile" className="flex items-center gap-4 p-2 rounded-xl hover:bg-gray-50 transition-colors" onClick={closeMobileMenu}>
+                    <img src={user.picture} alt={user.name} className="w-12 h-12 rounded-full border border-gray-200" />
+                    <div>
+                      <p className="font-bold text-gray-900 text-lg">{user.name}</p>
+                      <p className="text-sm text-gray-500">View Profile</p>
+                    </div>
+                  </Link>
+                  <button
+                    onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                    className="w-full py-4 rounded-xl bg-red-50 text-red-600 font-bold text-lg border border-red-100 hover:bg-red-100 transition-colors"
+                  >
+                    Log Out
+                  </button>
+                </>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  <button
+                    onClick={() => loginWithRedirect()}
+                    className="w-full py-4 rounded-xl bg-gray-50 text-gray-700 font-bold text-lg border border-gray-200"
+                  >
+                    Log In
+                  </button>
+                  <button
+                    onClick={() => loginWithRedirect()}
+                    className="w-full py-4 rounded-xl bg-blue-600 text-white font-bold text-lg shadow-lg shadow-blue-200"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+            </div>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

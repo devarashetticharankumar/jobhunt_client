@@ -71,14 +71,7 @@ const Footer = () => {
                 Recent Jobs
               </Link>
             </li>
-            <li className="py-1">
-              <Link
-                to="/youtube-videos"
-                className="hover:text-blue-600 text-gray-400"
-              >
-                Youtube videos
-              </Link>
-            </li>
+
             <li className="py-1">
               <Link
                 to="/contact-us"

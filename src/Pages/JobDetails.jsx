@@ -74,8 +74,8 @@ const JobDetails = () => {
     return paragraphs.map((paragraph, index) => (
       <React.Fragment key={index}>
         <div
-          className="text-gray-900 ql-editor"
-          style={{ paddingTop: "0px", paddingBottom: "0px" }}
+          className="text-gray-900 ql-editor !px-0"
+          style={{ paddingTop: "0px", paddingBottom: "0px", paddingLeft: "0px", paddingRight: "0px" }}
           dangerouslySetInnerHTML={{
             __html: paragraph.trim() + "</p>",
           }}
@@ -166,26 +166,26 @@ const JobDetails = () => {
               <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 relative">
                 <div className="absolute inset-0 bg-white/10 pattern-grid-lg"></div>
               </div>
-              <div className="px-8 pb-8">
-                <div className="relative -mt-12 mb-6 flex justify-between items-end">
-                  <div className="flex items-end gap-6">
-                    <div className="w-24 h-24 bg-white rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100">
+              <div className="px-1.5 pb-1.5 md:px-8 md:pb-8">
+                <div className="relative -mt-12 mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                  <div className="flex flex-col md:flex-row items-start md:items-end gap-4 md:gap-6 w-full">
+                    <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100 flex-shrink-0">
                       <img src={job?.companyLogo} alt={job?.companyName} className="w-full h-full object-contain" />
                     </div>
-                    <div className="mb-2">
-                      <h1 className="text-3xl font-bold text-gray-900">{job?.jobTitle}</h1>
-                      <Link to={`/company/${encodeURIComponent(job?.companyName)}`} className="text-gray-500 font-medium text-lg hover:text-blue-600 hover:underline transition-colors block w-fit">
+                    <div className="mb-0 md:mb-2 w-full">
+                      <h1 className="text-xl md:text-3xl font-bold text-gray-900 leading-tight mb-1">{job?.jobTitle}</h1>
+                      <Link to={`/company/${encodeURIComponent(job?.companyName)}`} className="text-gray-500 font-medium text-base md:text-lg hover:text-blue-600 hover:underline transition-colors block w-fit">
                         {job?.companyName}
                       </Link>
                     </div>
                   </div>
-                  <div className="hidden md:block">
+                  <div className="hidden md:block flex-shrink-0">
                     <ShareButton jobTitle={job.jobTitle} companyName={job.companyName} jobLocation={job.jobLocation} />
                   </div>
                 </div>
 
                 {/* Quick Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50/50 rounded-xl p-6 border border-blue-100/50">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50/50 rounded-xl p-0 md:p-6 border border-blue-100/50">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-white rounded-lg shadow-sm text-green-600"><GiMoneyStack className="text-xl" /></div>
@@ -223,8 +223,8 @@ const JobDetails = () => {
             </div>
 
             {/* Description */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Job Description</h3>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-0 md:p-8">
+              <h3 className="text-xl font-bold text-gray-900 mb-2 md:mb-6 px-0">Job Description</h3>
               <div className="prose prose-blue max-w-none text-gray-600 leading-relaxed">
                 {injectAds(job?.description || "")}
               </div>
@@ -242,7 +242,7 @@ const JobDetails = () => {
             </div>
 
             {/* Apply Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-center text-white shadow-xl shadow-blue-200">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-0 md:p-8 text-center text-white shadow-xl shadow-blue-200">
               <h3 className="text-2xl font-bold mb-2">Interested in this role?</h3>
               <p className="text-blue-100 mb-6">Take the next step in your career and apply today.</p>
               <button

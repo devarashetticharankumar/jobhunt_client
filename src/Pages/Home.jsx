@@ -476,7 +476,7 @@ const Home = () => {
         handleSuggestionClick={handleSuggestionClick}
       />
 
-      <div className="md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
+      <div className="md:grid grid-cols-4 gap-8 lg:px-24 px-0 py-4 md:py-12 md:px-4">
         <div className="bg-transparent p-0 rounded">
           <Sidebar
             handleChange={handleChange}

@@ -11,8 +11,8 @@ const Banner = ({
   handleSuggestionClick,
 }) => {
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-8 md:py-12">
-      <div className="bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-8 md:p-16 text-center relative overflow-hidden shadow-2xl">
+    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-4 md:py-12">
+      <div className="bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 rounded-3xl p-4 md:p-16 text-center relative overflow-hidden shadow-2xl">
         {/* Background Accents */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full mix-blend-overlay filter blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full mix-blend-overlay filter blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
