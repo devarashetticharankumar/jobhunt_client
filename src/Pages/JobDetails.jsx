@@ -169,9 +169,18 @@ const JobDetails = () => {
               <div className="px-1.5 pb-1.5 md:px-8 md:pb-8">
                 <div className="relative -mt-12 mb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                   <div className="flex flex-col md:flex-row items-start md:items-end gap-4 md:gap-6 w-full">
-                    <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100 flex-shrink-0">
-                      <img src={job?.companyLogo} alt={job?.companyName} className="w-full h-full object-contain" />
+
+                    {/* Logo & Mobile Share Wrapper */}
+                    <div className="flex justify-between items-end w-full md:w-auto">
+                      <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100 flex-shrink-0">
+                        <img src={job?.companyLogo} alt={job?.companyName} className="w-full h-full object-contain" />
+                      </div>
+                      {/* Mobile Share Button */}
+                      <div className="md:hidden pb-1">
+                        <ShareButton jobTitle={job.jobTitle} companyName={job.companyName} jobLocation={job.jobLocation} />
+                      </div>
                     </div>
+
                     <div className="mb-0 md:mb-2 w-full">
                       <h1 className="text-xl md:text-3xl font-bold text-gray-900 leading-tight mb-1">{job?.jobTitle}</h1>
                       <Link to={`/company/${encodeURIComponent(job?.companyName)}`} className="text-gray-500 font-medium text-base md:text-lg hover:text-blue-600 hover:underline transition-colors block w-fit">
@@ -179,6 +188,8 @@ const JobDetails = () => {
                       </Link>
                     </div>
                   </div>
+
+                  {/* Desktop Share Button */}
                   <div className="hidden md:block flex-shrink-0">
                     <ShareButton jobTitle={job.jobTitle} companyName={job.companyName} jobLocation={job.jobLocation} />
                   </div>
@@ -224,7 +235,6 @@ const JobDetails = () => {
 
             {/* Description */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-0 md:p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-2 md:mb-6 px-0">Job Description</h3>
               <div className="prose prose-blue max-w-none text-gray-600 leading-relaxed">
                 {injectAds(job?.description || "")}
               </div>
