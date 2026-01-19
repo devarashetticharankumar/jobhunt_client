@@ -8,7 +8,7 @@ import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the CSS file
-import { Helmet } from "react-helmet"; // Importing React Helmet
+import { Helmet } from "react-helmet-async"; // Importing React Helmet
 
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 // import { htmlToText } from "html-to-text";

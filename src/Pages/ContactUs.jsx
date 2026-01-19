@@ -3,7 +3,7 @@ import { API_URL } from "../data/apiPath";
 import aboutImg from "../assets/contactusimg.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { FiSend, FiUser, FiMail, FiMessageSquare } from "react-icons/fi";
 
 const ContactUs = () => {

@@ -8,7 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import PageHeader from "../components/PageHeader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const UpdateJob = () => {
   const { id } = useParams();

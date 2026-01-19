@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import { MdWork, MdRateReview, MdVerified } from "react-icons/md";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -84,7 +84,12 @@ const CompanyPage = () => {
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
             <Helmet>
-                <title>{data.companyName} Careers & Reviews | JobNirvana</title>
+                <title>{data.companyName} Careers, Reviews & Salaries | JobNirvana</title>
+                <meta name="description" content={`Explore careers at ${data.companyName}. Read employee reviews, view active job openings, and check salary insights on JobNirvana.`} />
+                <meta property="og:title" content={`${data.companyName} Careers & Reviews | JobNirvana`} />
+                <meta property="og:description" content={`See what it's like to work at ${data.companyName}. Browse ${data.activeJobs.length} active jobs and read employee reviews.`} />
+                <meta property="og:image" content={data.companyInfo?.logo || "/default-logo.png"} />
+                <link rel="canonical" href={window.location.href} />
             </Helmet>
             <ToastContainer />
 

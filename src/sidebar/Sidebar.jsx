@@ -33,6 +33,7 @@ import Salary from "./Salary";
 import WorkExperience from "./WorkExperience";
 import EmploymentType from "./EmploymentType";
 import JobPostingData from "./JobPostingData";
+import InArticleAd from "../components/InArticleAd";
 
 const Sidebar = ({ handleChange, handleClick, setJobs }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -117,8 +118,14 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
           <div className="pt-2"><Location handleChange={handleChange} setJobs={setJobs} /></div>
           <div className="pt-6"><Salary handleChange={handleChange} handleClick={handleClick} /></div>
           <div className="pt-6"><JobPostingData handleChange={handleChange} /></div>
-          <div className="pt-6"><WorkExperience handleChange={handleChange} /></div>
           <div className="pt-6"><EmploymentType handleChange={handleChange} /></div>
+          <div className="pt-6"><WorkExperience handleChange={handleChange} /></div>
+
+          {/* Sticky Ad for High Viewability */}
+          <div className="pt-6 sticky top-4">
+            <div className="text-xs text-center text-gray-400 mb-2">Advertisement</div>
+            <InArticleAd />
+          </div>
         </div>
       )}
     </motion.div>

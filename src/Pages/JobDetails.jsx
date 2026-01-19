@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { FaRegStar } from "react-icons/fa";
 import RelatedJobs from "../components/RelatedJobs";
 import InArticleAd from "../components/InArticleAd";
@@ -173,7 +173,7 @@ const JobDetails = () => {
                     {/* Logo & Mobile Share Wrapper */}
                     <div className="flex justify-between items-end w-full md:w-auto">
                       <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100 flex-shrink-0">
-                        <img src={job?.companyLogo} alt={job?.companyName} className="w-full h-full object-contain" />
+                        <img src={job?.companyLogo} alt={job?.companyName} loading="lazy" className="w-full h-full object-contain" />
                       </div>
                       {/* Mobile Share Button */}
                       <div className="md:hidden pb-1">
@@ -232,6 +232,10 @@ const JobDetails = () => {
                 </div>
               </div>
             </div>
+
+
+            {/* High CTR Ad - Above the Fold */}
+            <InArticleAd />
 
             {/* Description */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-0 md:p-8">
@@ -310,7 +314,7 @@ const JobDetails = () => {
 
             <AdPopup />
           </motion.div>
-        </div>
+        </div >
       )}
 
       {/* Modals */}
@@ -333,7 +337,7 @@ const JobDetails = () => {
         jobTitle={job?.jobTitle}
         skills={job?.skills}
       />
-    </div>
+    </div >
   );
 };
 

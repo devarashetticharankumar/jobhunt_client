@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import PageHeader from "../components/PageHeader";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 

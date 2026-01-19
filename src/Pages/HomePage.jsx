@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -82,6 +82,11 @@ const HomePage = () => {
       <Helmet>
         <title>JobNirvana | Find Your Dream Career</title>
         <meta name="description" content="Search and apply for top jobs in IT, software, marketing, and more." />
+        <meta property="og:title" content="JobNirvana | Find Your Dream Career" />
+        <meta property="og:description" content="Search and apply for top jobs in IT, software, marketing, and more. Connect with top-tier companies and boost your career." />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
       {/* Hero Section */}

@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./Router/Router.jsx";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Auth0Provider
@@ -16,6 +17,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       audience: "https://dev-ewfdxrmfirxjj38r.us.auth0.com/api/v2/",
     }}
   >
-    <RouterProvider router={router} />
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   </Auth0Provider>
 );

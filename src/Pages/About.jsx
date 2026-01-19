@@ -2,9 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import aboutImg from "../assets/Designer.png";
 import { GoDotFill } from "react-icons/go";
+import { Helmet } from "react-helmet-async";
+
 const About = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto md:px-24 px-4 py-12">
+      <Helmet>
+        <title>About Us | JobNirvana - Connecting Talent with Opportunity</title>
+        <meta name="description" content="Learn about JobNirvana's mission to empower job seekers and employers. Discover our values, community, and how we help you find your dream career." />
+        <meta property="og:title" content="About Us | JobNirvana" />
+        <meta property="og:description" content="Connect job seekers with their dream jobs and help employers find the best talent." />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
         <div className="md:flex">
           {/* Image Section */}

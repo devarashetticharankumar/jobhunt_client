@@ -1,8 +1,15 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 
 const Terms = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <Helmet>
+        <title>Terms of Use | JobNirvana</title>
+        <meta name="description" content="Read the Terms of Use for JobNirvana. Understand your rights and responsibilities when using our platform for job searching or hiring." />
+        <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-12">
         <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
           Terms of Use

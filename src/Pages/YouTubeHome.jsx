@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns"; // Import for relative time formatting
+import { Helmet } from "react-helmet-async";
 
 const YouTubeHome = () => {
   const [videos, setVideos] = useState([]);
@@ -84,6 +85,13 @@ const YouTubeHome = () => {
 
   return (
     <div className="p-4">
+      <Helmet>
+        <title>Career Advice & Job Tips Videos | JobNirvana</title>
+        <meta name="description" content="Watch the latest career advice, interview tips, and job search strategies videos to boost your professional success." />
+        <meta property="og:title" content="Career Advice Videos | JobNirvana" />
+        <meta name="keywords" content="career videos, interview tips, job search advice, resume tips" />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       {/* Search Bar */}
       <form
         onSubmit={handleSearch}
@@ -115,9 +123,8 @@ const YouTubeHome = () => {
             <iframe
               width="100%"
               height="200"
-              src={`https://www.youtube.com/embed/${
-                video.id.videoId || video.id
-              }`}
+              src={`https://www.youtube.com/embed/${video.id.videoId || video.id
+                }`}
               title={video.snippet.title}
               className="rounded-lg"
               frameBorder="0"

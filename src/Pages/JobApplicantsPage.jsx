@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { API_URL } from "../data/apiPath";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { MdArrowBack, MdDownload, MdCheckCircle, MdCancel, MdPerson, MdEmail, MdDescription } from "react-icons/md";
 import { toast, ToastContainer } from "react-toastify";
@@ -63,6 +63,7 @@ const JobApplicantsPage = () => {
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
             <Helmet>
                 <title>Job Applicants | JobNirvana</title>
+                <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <ToastContainer />
 
@@ -131,8 +132,8 @@ const JobApplicantsPage = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${app.status === 'shortlisted' ? 'bg-green-100 text-green-700' :
-                                                        app.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                                                            'bg-blue-100 text-blue-700'
+                                                    app.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                                        'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {app.status}
                                                 </span>

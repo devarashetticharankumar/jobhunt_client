@@ -853,6 +853,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
+import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -1220,6 +1221,14 @@ const CreateResume = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 pt-28">
+      <Helmet>
+        <title>Free AI Resume Builder - Create & Download CV | JobNirvana</title>
+        <meta name="description" content="Build a professional resume in minutes with JobNirvana's free AI Resume Builder. Choose from modern templates and download your CV as a PDF." />
+        <meta name="keywords" content="resume builder, cv maker, free resume template, ai resume, professional cv" />
+        <meta property="og:title" content="Free AI Resume Builder | JobNirvana" />
+        <meta property="og:description" content="Create a standout resume in minutes with our easy-to-use AI builder." />
+        <link rel="canonical" href={`${window.location.origin}/utils/resume-builder`} />
+      </Helmet>
       <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 items-start">
         {/* Left Side - Editor Form (Wizard Style) */}
         <div className="w-full lg:w-1/2 xl:w-[48%] flex flex-col gap-6">

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast notifications
 import LatestBlogs from "./LatestBlogs";
+import InArticleAd from "./InArticleAd";
 
 const NewsLetter = () => {
   const [email, setEmail] = useState("");
@@ -109,6 +110,13 @@ const NewsLetter = () => {
 
       {/* Integrated Latest Blogs */}
       <LatestBlogs />
+
+      {/* Sticky Ad for Newsletter Column */}
+      <div className="mt-8 sticky top-4">
+        <div className="text-xs text-center text-gray-400 mb-2">Advertisement</div>
+        <InArticleAd />
+      </div>
+
     </div>
   );
 };

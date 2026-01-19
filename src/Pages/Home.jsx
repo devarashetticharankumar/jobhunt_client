@@ -278,7 +278,7 @@ import NewsLetter from "../components/NewsLetter";
 import { API_URL } from "../data/apiPath";
 import InFeedAd from "../components/InFeedAd"; // Import the InFeedAd component
 import "react-loading-skeleton/dist/skeleton.css";
-import { Helmet } from "react-helmet"; // Import Helmet
+import { Helmet } from "react-helmet-async"; // Import Helmet
 import JobMarquee from "../components/JobMarquee";
 import SkeletonLoading from "../components/SkeletonLoading";
 import InArticleAds from "../components/InArticleAd";

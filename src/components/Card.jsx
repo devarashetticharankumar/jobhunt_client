@@ -34,7 +34,7 @@ const Card = ({ data }) => {
         <div className="flex flex-col sm:flex-row gap-4 items-start">
           {companyLogo ? (
             <div className="w-14 h-14 min-w-[3.5rem] rounded-xl bg-gray-50 flex items-center justify-center p-2 border border-gray-100">
-              <img src={companyLogo} alt={companyName} className="w-full h-full object-contain" />
+              <img src={companyLogo} alt={companyName} loading="lazy" className="w-full h-full object-contain" />
             </div>
           ) : (
             <div className="w-14 h-14 min-w-[3.5rem] rounded-xl bg-blue-50 flex items-center justify-center text-blue-500 text-xl border border-blue-100">

@@ -13,12 +13,11 @@ const InFeedAd = () => {
 
   return (
     <div
-      className="my-4 mx-5 rounded-lg
-    "
+      className="w-full overflow-hidden rounded-lg my-2 flex justify-center bg-gray-50/50 min-h-[100px]"
     >
       <ins
         className="adsbygoogle"
-        style={{ display: "block" }}
+        style={{ display: "block", textAlign: "center", width: "100%" }}
         data-ad-client="ca-pub-8430285426081478"
         data-ad-slot="2195791299"
         data-ad-format="auto"

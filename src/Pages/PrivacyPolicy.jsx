@@ -1,9 +1,16 @@
 import React from "react";
 import { GoDotFill } from "react-icons/go";
+import { Helmet } from "react-helmet-async";
 
 const PrivacyPolicy = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <Helmet>
+        <title>Privacy Policy | JobNirvana</title>
+        <meta name="description" content="Our Privacy Policy explains how we collect, use, and protect your personal information when you use JobNirvana services." />
+        <meta name="robots" content="noindex, follow" />
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
       <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
         <header className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-8 px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">

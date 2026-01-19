@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
@@ -6,6 +5,7 @@ import { FaPlus, FaFileAlt, FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import TemplateModern from "../components/resume-templates/TemplateModern";
 import TemplateProfessional from "../components/resume-templates/TemplateProfessional";
 import TemplateCreative from "../components/resume-templates/TemplateCreative";
@@ -27,6 +27,11 @@ const ResumeBuilder = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, user } = useAuth0();
+
+  // ... (rest of the detailed logic, keeping it same)
+  // I will only show the import and return statement changes because replacing full file is too risky/large.
+  // Actually, I should use replace_file_content partial logic for safety.
+
 
   const fetchResumes = async () => {
     try {
@@ -169,6 +174,25 @@ const ResumeBuilder = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-16 font-sans">
+      <Helmet>
+        <title>Free AI Resume Builder - Create CVs Online | JobNirvana</title>
+        <meta
+          name="description"
+          content="Build professional resumes/CVs in minutes with our free AI-powered Resume Builder. Choose from modern templates, customize your profile, and download PDF."
+        />
+        <meta
+          name="keywords"
+          content="resume builder, free resume builder, create cv online, cv maker, resume templates, job nirvana, career tools"
+        />
+        <meta property="og:title" content="Free AI Resume Builder - JobNirvana" />
+        <meta
+          property="og:description"
+          content="Create professional resumes in minutes with our free AI Resume Builder. Multiple templates available."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${window.location.origin}/resume-builder`} />
+        <link rel="canonical" href={`${window.location.origin}/resume-builder`} />
+      </Helmet>
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12">
           <div>

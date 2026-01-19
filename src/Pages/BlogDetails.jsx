@@ -235,7 +235,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { API_URL } from "../data/apiPath";
 import "react-quill/dist/quill.snow.css";
 import InArticleAd from "../components/InArticleAd";

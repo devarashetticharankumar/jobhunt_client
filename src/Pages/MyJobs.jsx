@@ -4,7 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { API_URL } from "../data/apiPath";
 import { toast, ToastContainer } from "react-toastify";
 import { motion } from "framer-motion";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { MdSearch, MdEdit, MdDelete, MdAdd, MdWorkOutline, MdPeople } from "react-icons/md";
 import "react-toastify/dist/ReactToastify.css";
 

@@ -225,7 +225,7 @@ import { motion } from "framer-motion";
 import { API_URL } from "../data/apiPath";
 import { Link } from "react-router-dom";
 import InFeedAd from "../components/InFeedAd";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import Skeleton from "react-loading-skeleton";
 
 const SalaryPage = () => {
@@ -391,8 +391,8 @@ const SalaryPage = () => {
                 <button
                   onClick={() => paginate(page)}
                   className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === page
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                      : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                    : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
                     }`}
                 >
                   {page}
