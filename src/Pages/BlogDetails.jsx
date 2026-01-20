@@ -442,7 +442,7 @@ const BlogDetails = () => {
                         return contentSegments.map((segment, index) => (
                           <React.Fragment key={index}>
                             <div dangerouslySetInnerHTML={{ __html: `${segment}</p>` }} />
-                            {(index + 1) % 10 === 0 && index < contentSegments.length - 1 && (<InArticleAd />)}
+                            {(index + 1) % 5 === 0 && index < contentSegments.length - 1 && (<InArticleAd />)}
                           </React.Fragment>
                         ));
                       })()}

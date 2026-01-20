@@ -94,12 +94,21 @@ const AdPopup = () => {
     // Show the popup after 5 seconds
     const popupTimer = setTimeout(() => {
       setIsVisible(true);
-      // Initialize AdSense ads
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
     }, 5000);
 
     return () => clearTimeout(popupTimer); // Cleanup timer
   }, []);
+
+  // Initialize AdSense after popup is visible
+  useEffect(() => {
+    if (isVisible) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (e) {
+        console.error("AdSense error:", e);
+      }
+    }
+  }, [isVisible]);
 
   useEffect(() => {
     if (isVisible && timer > 0) {

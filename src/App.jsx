@@ -22,6 +22,50 @@ function App() {
 
     trackPageView();
   }, [location]);
+
+  // Handle External Script Blocking (AdSense/Offerwall)
+  useEffect(() => {
+    // Function to clean body attributes
+    const cleanBodyAttributes = () => {
+      const body = document.body;
+      if (body.getAttribute("aria-hidden") === "true") {
+        body.removeAttribute("aria-hidden");
+        // console.log("Removed aria-hidden from body");
+      }
+      if (body.style.overflow === "hidden") {
+        body.style.overflow = "visible"; // Force visible/auto
+        // console.log("Restored body overflow");
+      }
+      if (body.style.position === "fixed") {
+        body.style.position = "static";
+        // console.log("Restored body position");
+      }
+    };
+
+    // Initial clean
+    cleanBodyAttributes();
+
+    // Observer to watch for changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "attributes" &&
+          (mutation.attributeName === "aria-hidden" ||
+            mutation.attributeName === "style")
+        ) {
+          cleanBodyAttributes();
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["aria-hidden", "style"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <Navbar />

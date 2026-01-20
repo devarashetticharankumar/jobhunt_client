@@ -23,6 +23,7 @@ import ResumeAnalyzerModal from "../components/ResumeAnalyzerModal";
 import EasyApplyModal from "../components/EasyApplyModal";
 import JobAlertModal from "../components/JobAlertModal";
 import jobdetailsimg from "../../public/jobdetailsimg.jpg";
+import GoogleAds from "../components/GoogleAds";
 
 const JobDetails = () => {
   const { slug } = useParams();
@@ -310,6 +311,10 @@ const JobDetails = () => {
               <div className="p-4">
                 <RelatedJobs currentJob={job} />
               </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <GoogleAds />
             </div>
 
             <AdPopup />

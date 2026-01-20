@@ -2,3 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Protection against AdSense/Offerwall locking */
+body[aria-hidden="true"] {
+    aria-hidden: "false" !important;
+}
+
+body {
+    overflow: auto !important;
+    position: static !important;
+}
+
+/* Optional: Hide known blocking overlays if class is consistent */
+.fc-ab-root {
+    display: none !important;
+}

@@ -283,6 +283,7 @@ import JobMarquee from "../components/JobMarquee";
 import SkeletonLoading from "../components/SkeletonLoading";
 import InArticleAds from "../components/InArticleAd";
 import AdPopup from "../components/AdPopup";
+import GoogleAds from "../components/GoogleAds";
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -293,13 +294,24 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [suggestions, setSuggestions] = useState([]);
-  const itemsPerPage = 10;
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 12; // Must match backend limit
 
   const jobsRef = useRef(null);
 
+  // Refactored for Server-Side Pagination
   useEffect(() => {
     setIsLoading(true);
-    fetch(`${API_URL}/jobs/all-jobs`)
+
+    // Build query params
+    const params = new URLSearchParams();
+    if (query) params.append("search", query);
+    if (location) params.append("location", location);
+    if (selectedCategory) params.append("filter", selectedCategory);
+    params.append("page", currentPage);
+    params.append("limit", itemsPerPage);
+
+    fetch(`${API_URL}/jobs/all-jobs?${params.toString()}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch jobs");
@@ -307,28 +319,26 @@ const Home = () => {
         return res.json();
       })
       .then((data) => {
-        setJobs(data);
+        // Backend now returns { jobs, totalJobs, totalPages, currentPage }
+        setJobs(data.jobs || []); // Default to empty array if undefined
+        setTotalPages(data.totalPages || 1); // Store total pages from server
         setIsLoading(false);
       })
       .catch((err) => {
         setError(err.message);
         setIsLoading(false);
       });
-  }, []);
+  }, [query, location, selectedCategory, currentPage]); // Re-fetch when any filter changes
 
+  // Handlers now just update state, causing re-fetch via useEffect
   const handleInputChange = (event) => {
-    const value = event.target.value;
-    setQuery(value);
-    if (value) {
-      const filteredSuggestions = jobs
-        .filter((job) =>
-          job.jobTitle.toLowerCase().includes(value.toLowerCase())
-        )
-        .slice(0, 10); // Show up to 10 suggestions
-      setSuggestions(filteredSuggestions);
-    } else {
-      setSuggestions([]);
-    }
+    setQuery(event.target.value);
+    setCurrentPage(1); // Reset to page 1 on new search
+  };
+
+  const handleSearchByLocation = (event) => {
+    setLocation(event.target.value);
+    setCurrentPage(1);
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -336,41 +346,25 @@ const Home = () => {
     setSuggestions([]);
   };
 
-  const filteredItems = jobs.filter((job) =>
-    job.jobTitle.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const handleSearchByLocation = (event) => {
-    setLocation(event.target.value);
-  };
-
   const handleSearch = (e) => {
     e.preventDefault();
-    setCurrentPage(1); // Reset to the first page on search
-    setSuggestions([]); // Clear suggestions when searching
-
-    // Scroll to the jobs section
-    if (jobsRef.current) {
-      jobsRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    // Search is already handled by state change + useEffect, but ensuring cleanup
+    setSuggestions([]);
   };
 
   const handleChange = (event) => {
     setSelectedCategory(event.target.value);
+    setCurrentPage(1);
   };
 
   const handleClick = (event) => {
     setSelectedCategory(event.target.value);
+    setCurrentPage(1);
   };
 
-  const calculatePageRange = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return { startIndex, endIndex };
-  };
-
+  // Pagination Handlers
   const nextPage = () => {
-    if (currentPage < Math.ceil(filteredItems.length / itemsPerPage)) {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -383,60 +377,18 @@ const Home = () => {
     }
   };
 
-  const filteredData = () => {
-    let filteredJobs = jobs;
+  // Rendering logic: jobs state now contains ONLY the current page's jobs
+  const result = [];
+  const adFrequency = 2;
 
-    if (query) {
-      filteredJobs = filteredJobs.filter((job) =>
-        job.jobTitle.toLowerCase().includes(query.toLowerCase())
-      );
-    }
-
-    if (location) {
-      filteredJobs = filteredJobs.filter((job) =>
-        job.jobLocation.toLowerCase().includes(location.toLowerCase())
-      );
-    }
-
-    if (selectedCategory) {
-      filteredJobs = filteredJobs.filter(
-        ({
-          jobLocation,
-          maxPrice,
-          experienceLevel,
-          salaryType,
-          employmentType,
-          postingDate,
-          qualification,
-        }) =>
-          jobLocation.toLowerCase() === selectedCategory.toLowerCase() ||
-          postingDate >= selectedCategory ||
-          parseInt(maxPrice) <= parseInt(selectedCategory) ||
-          salaryType.toLowerCase() === selectedCategory.toLowerCase() ||
-          experienceLevel.toLowerCase() === selectedCategory.toLowerCase() ||
-          employmentType.toLowerCase() === selectedCategory.toLowerCase()
-        // qualification.toLowerCase() === selectedCategory.toLowerCase()
-      );
-    }
-
-    const { startIndex, endIndex } = calculatePageRange();
-    const slicedJobs = filteredJobs.slice(startIndex, endIndex);
-
-    // Add an ad after every 2 job cards
-    const result = [];
-    const adFrequency = 2; // Adjust this number as needed
-
-    slicedJobs.forEach((data, i) => {
+  if (jobs && jobs.length > 0) {
+    jobs.forEach((data, i) => {
       result.push(<Card key={`job-${i}`} data={data} />);
       if ((i + 1) % adFrequency === 0) {
         result.push(<InFeedAd key={`ad-${i}`} />);
       }
     });
-
-    return result;
-  };
-
-  const result = filteredData();
+  }
 
   return (
     <div>
@@ -517,12 +469,12 @@ const Home = () => {
               </button>
               <span className="mx-2">
                 page {currentPage} of{" "}
-                {Math.ceil(filteredItems.length / itemsPerPage)}{" "}
+                {totalPages}{" "}
               </span>
               <button
                 onClick={nextPage}
                 disabled={
-                  currentPage === Math.ceil(filteredItems.length / itemsPerPage)
+                  currentPage === totalPages
                 }
                 className="px-4 py-2 bg-gray-200 rounded"
               >
@@ -532,7 +484,8 @@ const Home = () => {
           )}
         </div>
         <AdPopup />
-        <div className="bg-white p-4 rounded">
+        <div className="bg-white p-4 rounded space-y-4">
+          <GoogleAds />
           <NewsLetter />
         </div>
       </div>
