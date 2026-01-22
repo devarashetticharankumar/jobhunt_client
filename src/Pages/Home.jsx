@@ -428,7 +428,7 @@ const Home = () => {
         handleSuggestionClick={handleSuggestionClick}
       />
 
-      <div className="md:grid grid-cols-4 gap-8 lg:px-24 px-0 py-4 md:py-12 md:px-4">
+      <div className="bg-[#FAFAFa] dark:bg-gray-900 md:grid grid-cols-4 gap-8 lg:px-24 px-0 py-4 md:py-12 md:px-4 transition-colors">
         <div className="bg-transparent p-0 rounded">
           <Sidebar
             handleChange={handleChange}
@@ -452,8 +452,8 @@ const Home = () => {
             <Jobs result={result} />
           ) : (
             <div className="text-center m-auto flex flex-col items-center justify-center">
-              <h3 className="text-lg font-bold mb-2">{result.length} jobs</h3>
-              <p>The server is currently busy. Please try again later.</p>
+              <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-gray-100">{result.length} jobs</h3>
+              <p className="text-gray-600 dark:text-gray-400">The server is currently busy. Please try again later.</p>
             </div>
           )}
 
@@ -463,11 +463,11 @@ const Home = () => {
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-gray-200 rounded"
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
               >
                 Previous
               </button>
-              <span className="mx-2">
+              <span className="mx-2 text-gray-700 dark:text-gray-300">
                 page {currentPage} of{" "}
                 {totalPages}{" "}
               </span>
@@ -476,7 +476,7 @@ const Home = () => {
                 disabled={
                   currentPage === totalPages
                 }
-                className="px-4 py-2 bg-gray-200 rounded"
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
               >
                 Next
               </button>
@@ -484,7 +484,7 @@ const Home = () => {
           )}
         </div>
         <AdPopup />
-        <div className="bg-white p-4 rounded space-y-4">
+        <div className="bg-white dark:bg-gray-800 p-4 rounded space-y-4 transition-colors">
           <GoogleAds />
           <NewsLetter />
         </div>

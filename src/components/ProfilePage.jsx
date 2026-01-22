@@ -144,7 +144,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MdOutlineWorkOutline, MdOutlineArticle, MdLogout, MdEdit, MdSave, MdCancel, MdPerson, MdEmail, MdDescription } from "react-icons/md";
+import { MdOutlineWorkOutline, MdOutlineArticle, MdLogout, MdEdit, MdSave, MdCancel, MdPerson, MdEmail, MdDescription, MdAssignment } from "react-icons/md";
 
 const ProfilePage = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
@@ -204,12 +204,12 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden"
+        className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden transition-colors"
       >
         {/* Banner Section */}
         <div className="h-48 bg-gradient-to-r from-blue-600 to-purple-600 relative">
@@ -228,7 +228,7 @@ const ProfilePage = () => {
           <div className="relative flex flex-col sm:flex-row items-end -mt-16 sm:-mt-20 mb-6 gap-6">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white shadow-lg overflow-hidden bg-gray-200 z-10"
+              className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white dark:border-gray-800 shadow-lg overflow-hidden bg-gray-200 z-10"
             >
               <img
                 src={formData.profilePicture}
@@ -238,16 +238,16 @@ const ProfilePage = () => {
             </motion.div>
 
             <div className="flex-1 sm:mb-4 text-center sm:text-left z-0 mt-4 sm:mt-0">
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{formData.name}</h1>
-              <p className="text-gray-500 font-medium">{formData.email}</p>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{formData.name}</h1>
+              <p className="text-gray-500 dark:text-gray-400 font-medium">{formData.email}</p>
             </div>
 
             <div className="mb-4 z-10">
               <button
                 onClick={() => setEditMode(!editMode)}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold shadow-md transition-all ${editMode
-                    ? "bg-red-50 text-red-600 hover:bg-red-100"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
+                  ? "bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/40 dark:text-red-300"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
                   }`}
               >
                 {editMode ? (
@@ -263,14 +263,14 @@ const ProfilePage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: Personal Info Form */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <MdPerson className="text-blue-600" /> Personal Details
+              <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-600">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+                  <MdPerson className="text-blue-600 dark:text-blue-400" /> Personal Details
                 </h3>
                 <form onSubmit={handleUpdateProfile} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
                       <div className="relative">
                         <MdPerson className="absolute left-3 top-3 text-gray-400" />
                         <input
@@ -279,12 +279,12 @@ const ProfilePage = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           disabled={!editMode}
-                          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${editMode ? 'border-gray-300 bg-white ring-2 ring-transparent focus:ring-blue-500' : 'border-transparent bg-transparent'} transition-all outline-none`}
+                          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${editMode ? 'border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white ring-2 ring-transparent focus:ring-blue-500' : 'border-transparent bg-transparent dark:text-gray-300'} transition-all outline-none`}
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
                       <div className="relative">
                         <MdEmail className="absolute left-3 top-3 text-gray-400" />
                         <input
@@ -292,14 +292,14 @@ const ProfilePage = () => {
                           name="email"
                           value={formData.email}
                           disabled
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-transparent bg-transparent text-gray-500 cursor-not-allowed outline-none"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-transparent bg-transparent text-gray-500 dark:text-gray-400 cursor-not-allowed outline-none"
                         />
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
                     <div className="relative">
                       <MdDescription className="absolute left-3 top-3 text-gray-400" />
                       <textarea
@@ -308,7 +308,7 @@ const ProfilePage = () => {
                         onChange={handleInputChange}
                         disabled={!editMode}
                         rows="4"
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${editMode ? 'border-gray-300 bg-white ring-2 ring-transparent focus:ring-blue-500' : 'border-transparent bg-transparent'} transition-all outline-none resize-none`}
+                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${editMode ? 'border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white ring-2 ring-transparent focus:ring-blue-500' : 'border-transparent bg-transparent dark:text-gray-300'} transition-all outline-none resize-none`}
                         placeholder="Tell us a little about yourself..."
                       />
                     </div>
@@ -334,15 +334,28 @@ const ProfilePage = () => {
 
             {/* Right Column: Dashboard Actions */}
             <div className="space-y-6">
-              <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
-                <h3 className="text-xl font-bold text-blue-800 mb-4">Dashboard</h3>
+              <div className="bg-blue-50 dark:bg-gray-700/50 p-6 rounded-2xl border border-blue-100 dark:border-gray-600">
+                <h3 className="text-xl font-bold text-blue-800 dark:text-blue-300 mb-4">Dashboard</h3>
                 <div className="space-y-3">
                   <button
-                    onClick={() => navigate("/my-job")}
-                    className="w-full flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md hover:bg-blue-600 hover:text-white transition-all group"
+                    onClick={() => navigate("/my-applications")}
+                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
                   >
-                    <div className="flex items-center gap-3 font-semibold">
-                      <div className="p-2 bg-blue-100 text-blue-600 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition">
+                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
+                      <div className="p-2 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-lg group-hover:bg-indigo-500 group-hover:text-white transition">
+                        <MdAssignment />
+                      </div>
+                      My Applications
+                    </div>
+                    <span className="text-gray-400 group-hover:text-indigo-200">→</span>
+                  </button>
+
+                  <button
+                    onClick={() => navigate("/my-job")}
+                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
+                  >
+                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
+                      <div className="p-2 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition">
                         <MdOutlineWorkOutline />
                       </div>
                       My Jobs
@@ -352,10 +365,10 @@ const ProfilePage = () => {
 
                   <button
                     onClick={() => navigate("/my-blogs")}
-                    className="w-full flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md hover:purple-600 hover:bg-purple-600 hover:text-white transition-all group"
+                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:purple-600 dark:hover:bg-purple-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
                   >
-                    <div className="flex items-center gap-3 font-semibold">
-                      <div className="p-2 bg-purple-100 text-purple-600 rounded-lg group-hover:bg-purple-500 group-hover:text-white transition">
+                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
+                      <div className="p-2 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-lg group-hover:bg-purple-500 group-hover:text-white transition">
                         <MdOutlineArticle />
                       </div>
                       My Blogs
@@ -366,10 +379,10 @@ const ProfilePage = () => {
                   {/* Add more quick actions if needed (e.g., Post Job) */}
                   <button
                     onClick={() => navigate("/post-job")}
-                    className="w-full flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md hover:bg-green-600 hover:text-white transition-all group"
+                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:bg-green-600 dark:hover:bg-green-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
                   >
-                    <div className="flex items-center gap-3 font-semibold">
-                      <div className="p-2 bg-green-100 text-green-600 rounded-lg group-hover:bg-green-500 group-hover:text-white transition">
+                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
+                      <div className="p-2 bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 rounded-lg group-hover:bg-green-500 group-hover:text-white transition">
                         <span className="text-lg font-bold">+</span>
                       </div>
                       Post New Job

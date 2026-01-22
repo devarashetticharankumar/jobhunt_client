@@ -25,8 +25,7 @@ const Banner = ({
         </p>
 
         <form onSubmit={handleSearch} className="max-w-4xl mx-auto relative z-10">
-          <div className="bg-white p-2 rounded-2xl shadow-xl flex flex-col md:flex-row gap-2">
-
+          <div className="bg-white dark:bg-gray-800 p-2 rounded-2xl shadow-xl flex flex-col md:flex-row gap-2 transition-colors">
             <div className="flex-1 relative group">
               <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl group-focus-within:text-blue-600 transition-colors" />
               <input
@@ -37,16 +36,16 @@ const Banner = ({
                 onChange={handleInputChange}
                 aria-label="Search Job Title"
                 placeholder="Job title, keywords, or company"
-                className="w-full h-14 pl-12 pr-4 rounded-xl text-gray-700 placeholder-gray-400 focus:bg-blue-50/50 focus:outline-none transition-colors border-none"
+                className="w-full h-14 pl-12 pr-4 rounded-xl text-gray-700 dark:text-gray-200 placeholder-gray-400 bg-transparent focus:bg-blue-50/50 dark:focus:bg-gray-700/50 focus:outline-none transition-colors border-none"
                 autoComplete="off"
               />
               {suggestions.length > 0 && (
-                <ul className="absolute z-20 top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 max-h-60 overflow-auto divide-y divide-gray-50">
+                <ul className="absolute z-20 top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 max-h-60 overflow-auto divide-y divide-gray-50 dark:divide-gray-700">
                   {suggestions.map((suggestion, index) => (
                     <li
                       key={index}
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className="px-6 py-3 hover:bg-blue-50 cursor-pointer text-left text-gray-700 transition-colors flex items-center justify-between group/item"
+                      className="px-6 py-3 hover:bg-blue-50 dark:hover:bg-gray-700 cursor-pointer text-left text-gray-700 dark:text-gray-200 transition-colors flex items-center justify-between group/item"
                     >
                       <span className="font-medium">{suggestion.jobTitle}</span>
                       <span className="text-gray-400 text-sm group-hover/item:text-blue-500">Select</span>
@@ -56,7 +55,7 @@ const Banner = ({
               )}
             </div>
 
-            <div className="h-px md:h-auto md:w-px bg-gray-200 my-2 md:my-0"></div>
+            <div className="h-px md:h-auto md:w-px bg-gray-200 dark:bg-gray-700 my-2 md:my-0"></div>
 
             <div className="flex-1 relative group">
               <FiMapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl group-focus-within:text-blue-600 transition-colors" />
@@ -68,7 +67,7 @@ const Banner = ({
                 onChange={handleSearchByLocation}
                 aria-label="Search Location"
                 placeholder="City, State or Zip"
-                className="w-full h-14 pl-12 pr-4 rounded-xl text-gray-700 placeholder-gray-400 focus:bg-blue-50/50 focus:outline-none transition-colors border-none"
+                className="w-full h-14 pl-12 pr-4 rounded-xl text-gray-700 dark:text-gray-200 placeholder-gray-400 bg-transparent focus:bg-blue-50/50 dark:focus:bg-gray-700/50 focus:outline-none transition-colors border-none"
                 autoComplete="off"
               />
             </div>

@@ -17,6 +17,12 @@ const Navbar = () => {
     isAuthenticated,
   } = useAuth0();
 
+  // Force Light Mode Cleanup
+  useEffect(() => {
+    document.documentElement.classList.remove("dark");
+    localStorage.removeItem("theme");
+  }, []);
+
   // Handle Scroll Effect
   useEffect(() => {
     const handleScroll = () => {
@@ -43,6 +49,10 @@ const Navbar = () => {
     { path: "/blogs", title: "Expert Advice" },
     { path: "/resume-builder", title: "Resume Builder" },
   ];
+
+  if (isAuthenticated) {
+    navItems.splice(2, 0, { path: "/my-applications", title: "My Applications" });
+  }
 
   return (
     <header
@@ -104,6 +114,7 @@ const Navbar = () => {
 
         {/* Auth Actions */}
         <div className="hidden lg:flex items-center gap-4">
+
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
               <Link to="/profile" className="flex items-center gap-3 pl-4 border-l border-gray-200">

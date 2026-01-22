@@ -65,13 +65,13 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
 
   return (
     <motion.div
-      className={`space-y-5 ${isMobile ? "p-4" : "p-6 bg-white shadow-sm border border-gray-100"} rounded-xl text-left`}
+      className={`space-y-5 ${isMobile ? "p-4" : "p-6 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700"} rounded-xl text-left transition-colors`}
       initial={{ opacity: 0, x: -60 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold text-gray-900">Filters</h3>
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Filters</h3>
         {!isMobile && <span className="text-xs text-blue-600 font-semibold cursor-pointer hover:underline" onClick={() => window.location.reload()}>Reset</span>}
       </div>
 
@@ -81,14 +81,14 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
           {Object.keys(openSections).map((section) => (
             <div key={section} className="w-full">
               <button
-                className="w-full p-3 text-left bg-gray-50 text-gray-800 font-medium rounded-lg flex justify-between items-center"
+                className="w-full p-3 text-left bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-lg flex justify-between items-center transition-colors"
                 onClick={() => toggleSection(section)}
               >
                 {section === "jobPostingData" ? "Date Posted" : section.charAt(0).toUpperCase() + section.slice(1).replace(/([A-Z])/g, ' $1').trim()}
                 <span className={`transform transition-transform ${openSections[section] ? "rotate-180" : ""}`}>▼</span>
               </button>
               {openSections[section] && (
-                <div className="p-4 bg-white border border-gray-100 rounded-lg mt-2">
+                <div className="p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg mt-2 transition-colors">
                   {section === "location" && (
                     <Location handleChange={handleChange} setJobs={setJobs} />
                   )}
@@ -114,7 +114,7 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
         </div>
       ) : (
         // Regular layout for desktop view
-        <div className="space-y-6 divide-y divide-gray-100">
+        <div className="space-y-6 divide-y divide-gray-100 dark:divide-gray-700">
           <div className="pt-2"><Location handleChange={handleChange} setJobs={setJobs} /></div>
           <div className="pt-6"><Salary handleChange={handleChange} handleClick={handleClick} /></div>
           <div className="pt-6"><JobPostingData handleChange={handleChange} /></div>

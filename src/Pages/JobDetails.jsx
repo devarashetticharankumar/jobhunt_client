@@ -25,8 +25,11 @@ import JobAlertModal from "../components/JobAlertModal";
 import jobdetailsimg from "../../public/jobdetailsimg.jpg";
 import GoogleAds from "../components/GoogleAds";
 
+import { useAuth0 } from "@auth0/auth0-react";
+
 const JobDetails = () => {
   const { slug } = useParams();
+  const { user, isAuthenticated } = useAuth0();
   const [job, setJob] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
@@ -54,9 +57,31 @@ const JobDetails = () => {
       });
   }, [slug]);
 
-  const applyLink = () => {
-    // Legacy Apply Link fallback if needed
+  const applyLink = async () => {
+    // Open link immediately for better UX
     window.open(job.ApplyLink, "_blank");
+
+    // Track application in background if user is logged in
+    if (isAuthenticated && user) {
+      try {
+        await fetch(`${API_URL}/applications/external-apply`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jobId: job._id,
+            jobTitle: job.jobTitle,
+            companyName: job.companyName,
+            postedBy: job.postedBy,
+            applicantId: user.sub,
+            applicantName: user.name,
+            applicantEmail: user.email,
+            applyUrl: job.ApplyLink
+          })
+        });
+      } catch (error) {
+        console.error("Failed to track application:", error);
+      }
+    }
   };
 
   const formatDate = (dateString) => {
@@ -87,7 +112,7 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5">
+    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-white dark:bg-gray-900 transition-colors">
       <Helmet>
         <title>{jobTitle.slice(0, 55)} - JobNirvana</title>
         <meta name="description" content={jobDescription.slice(0, 155)} />
@@ -163,7 +188,7 @@ const JobDetails = () => {
             transition={{ duration: 0.6 }}
           >
             {/* Header Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
               <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 relative">
                 <div className="absolute inset-0 bg-white/10 pattern-grid-lg"></div>
               </div>
@@ -173,7 +198,7 @@ const JobDetails = () => {
 
                     {/* Logo & Mobile Share Wrapper */}
                     <div className="flex justify-between items-end w-full md:w-auto">
-                      <div className="w-16 h-16 md:w-24 md:h-24 bg-white rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100 flex-shrink-0">
+                      <div className="w-16 h-16 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl shadow-md p-2 flex items-center justify-center border border-gray-100 dark:border-gray-600 flex-shrink-0">
                         <img src={job?.companyLogo} alt={job?.companyName} loading="lazy" className="w-full h-full object-contain" />
                       </div>
                       {/* Mobile Share Button */}
@@ -183,8 +208,8 @@ const JobDetails = () => {
                     </div>
 
                     <div className="mb-0 md:mb-2 w-full">
-                      <h1 className="text-xl md:text-3xl font-bold text-gray-900 leading-tight mb-1">{job?.jobTitle}</h1>
-                      <Link to={`/company/${encodeURIComponent(job?.companyName)}`} className="text-gray-500 font-medium text-base md:text-lg hover:text-blue-600 hover:underline transition-colors block w-fit">
+                      <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-1">{job?.jobTitle}</h1>
+                      <Link to={`/company/${encodeURIComponent(job?.companyName)}`} className="text-gray-500 dark:text-gray-400 font-medium text-base md:text-lg hover:text-blue-600 dark:hover:text-blue-400 hover:underline transition-colors block w-fit">
                         {job?.companyName}
                       </Link>
                     </div>
@@ -197,36 +222,36 @@ const JobDetails = () => {
                 </div>
 
                 {/* Quick Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50/50 rounded-xl p-0 md:p-6 border border-blue-100/50">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50/50 dark:bg-gray-700/50 rounded-xl p-0 md:p-6 border border-blue-100/50 dark:border-gray-600/50">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white rounded-lg shadow-sm text-green-600"><GiMoneyStack className="text-xl" /></div>
+                      <div className="p-2 bg-white dark:bg-gray-600 rounded-lg shadow-sm text-green-600 dark:text-green-400"><GiMoneyStack className="text-xl" /></div>
                       <div>
-                        <p className="text-sm text-gray-500 font-medium">Salary</p>
-                        <p className="font-bold text-gray-900">{job?.minPrice} - {job?.maxPrice} {job?.salaryType === "Monthly" ? "k" : "k"}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Salary</p>
+                        <p className="font-bold text-gray-900 dark:text-gray-100">{job?.minPrice} - {job?.maxPrice} {job?.salaryType === "Monthly" ? "k" : "k"}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white rounded-lg shadow-sm text-blue-600"><MdLocationOn className="text-xl" /></div>
+                      <div className="p-2 bg-white dark:bg-gray-600 rounded-lg shadow-sm text-blue-600 dark:text-blue-400"><MdLocationOn className="text-xl" /></div>
                       <div>
-                        <p className="text-sm text-gray-500 font-medium">Location</p>
-                        <p className="font-bold text-gray-900">{job?.jobLocation}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Location</p>
+                        <p className="font-bold text-gray-900 dark:text-gray-100">{job?.jobLocation}</p>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white rounded-lg shadow-sm text-purple-600"><MdWorkHistory className="text-xl" /></div>
+                      <div className="p-2 bg-white dark:bg-gray-600 rounded-lg shadow-sm text-purple-600 dark:text-purple-400"><MdWorkHistory className="text-xl" /></div>
                       <div>
-                        <p className="text-sm text-gray-500 font-medium">Employment Type</p>
-                        <p className="font-bold text-gray-900">{job?.employmentType}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Employment Type</p>
+                        <p className="font-bold text-gray-900 dark:text-gray-100">{job?.employmentType}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white rounded-lg shadow-sm text-orange-600"><BsFillCalendarDateFill className="text-xl" /></div>
+                      <div className="p-2 bg-white dark:bg-gray-600 rounded-lg shadow-sm text-orange-600 dark:text-orange-400"><BsFillCalendarDateFill className="text-xl" /></div>
                       <div>
-                        <p className="text-sm text-gray-500 font-medium">Posted On</p>
-                        <p className="font-bold text-gray-900">{formatDate(job?.createdAt)}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Posted On</p>
+                        <p className="font-bold text-gray-900 dark:text-gray-100">{formatDate(job?.createdAt)}</p>
                       </div>
                     </div>
                   </div>

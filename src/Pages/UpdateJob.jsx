@@ -124,7 +124,7 @@ const UpdateJob = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12 pt-0 mx-auto">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-12 pt-0 mx-auto transition-colors">
       <Helmet>
         <title>Update Job - JobNirvana</title>
         <meta
@@ -150,9 +150,9 @@ const UpdateJob = () => {
         <ToastContainer position="top-right" autoClose={3000} />
 
         {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors">
           <div className="p-8 md:p-12">
-            <h2 className="text-2xl font-bold text-gray-800 mb-8 border-b pb-4 border-gray-100">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-8 border-b pb-4 border-gray-100 dark:border-gray-700">
               Edit Job Details
             </h2>
 
@@ -160,25 +160,25 @@ const UpdateJob = () => {
               {/* Row 1: Basic Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Job Title</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Title</label>
                   <input
                     type="text"
                     defaultValue={jobTitle}
                     placeholder="e.g. Senior Full Stack Developer"
                     {...register("jobTitle")}
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Company Name</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Company Name</label>
                   <input
                     type="text"
                     defaultValue={companyName}
                     placeholder="e.g. Acme Corp"
                     {...register("companyName")}
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
               </div>
@@ -186,23 +186,23 @@ const UpdateJob = () => {
               {/* Row 2: Salary */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Minimum Salary</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Minimum Salary</label>
                   <input
                     type="text"
                     defaultValue={minPrice}
                     placeholder="e.g. $50k"
                     {...register("minPrice")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Maximum Salary</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Maximum Salary</label>
                   <input
                     type="text"
                     defaultValue={maxPrice}
                     placeholder="e.g. $120k"
                     {...register("maxPrice")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
               </div>
@@ -210,11 +210,11 @@ const UpdateJob = () => {
               {/* Row 3: Salary Type & Location */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Salary Type</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Salary Type</label>
                   <div className="relative">
                     <select
                       {...register("salaryType")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
                     >
                       <option value={salaryType}>{salaryType}</option>
                       <option value="Hourly">Hourly</option>
@@ -227,13 +227,13 @@ const UpdateJob = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Job Location</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Location</label>
                   <input
                     type="text"
                     defaultValue={jobLocation}
                     placeholder="e.g. New York, Remote"
                     {...register("jobLocation")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
               </div>
@@ -241,21 +241,21 @@ const UpdateJob = () => {
               {/* Row 4: Date & Experience */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Posting Date</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Posting Date</label>
                   <input
                     type="date"
                     defaultValue={postingDate}
                     {...register("postingDate")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Experience Level</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Experience Level</label>
                   <div className="relative">
                     <select
                       {...register("experienceLevel")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
                     >
                       <option value={experienceLevel}>{experienceLevel}</option>
                       <option value="Any Experience">Any Experience</option>
@@ -279,7 +279,7 @@ const UpdateJob = () => {
 
               {/* Row 5: Skills */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 block">Required Skills</label>
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Required Skills</label>
                 <CreatableSelect
                   value={selectedOptions}
                   onChange={setSelectedOptions}
@@ -314,22 +314,22 @@ const UpdateJob = () => {
               {/* Row 6: Logo & Employment Type */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Company Logo URL</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Company Logo URL</label>
                   <input
                     type="url"
                     defaultValue={companyLogo}
                     placeholder="https://company.com/logo.png"
                     {...register("companyLogo")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Employment Type</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Employment Type</label>
                   <div className="relative">
                     <select
                       {...register("employmentType")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
                     >
                       <option value={employmentType}>{employmentType}</option>
                       <option value="Full-time">Full-time</option>
@@ -348,8 +348,8 @@ const UpdateJob = () => {
 
               {/* Row 7: Job Description */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 block">Job Description</label>
-                <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Description</label>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
                   <ReactQuill
                     value={jobDescription}
                     onChange={setJobDescription}
@@ -357,7 +357,7 @@ const UpdateJob = () => {
                     formats={formats}
                     placeholder="Describe the role, responsibilities, and requirements..."
                     theme="snow"
-                    className="h-64 mb-12 border-none"
+                    className="h-64 mb-12 border-none dark:text-white"
                   />
                 </div>
               </div>
@@ -365,23 +365,23 @@ const UpdateJob = () => {
               {/* Row 8: Contact & Apply Link */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Job Posted By (Email)</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Posted By (Email)</label>
                   <input
                     type="text"
                     defaultValue={postedBy}
                     placeholder="recruiter@company.com"
                     {...register("postedBy")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 block">Application Link</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Application Link</label>
                   <input
                     type="url"
                     defaultValue={ApplyLink}
                     placeholder="https://company.com/apply"
                     {...register("ApplyLink")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 focus:bg-white"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
                   />
                 </div>
               </div>

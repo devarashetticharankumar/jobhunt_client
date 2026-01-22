@@ -32,18 +32,18 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center h-screen items-center m-auto bg-img-login">
-      <div className="bg-[#FAFAFA] shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-2xl text-center mb-4 flex items-center justify-center text-blue">
-          Login
+    <div className="flex justify-center min-h-screen items-center m-auto bg-gray-50 dark:bg-gray-900 bg-img-login transition-colors">
+      <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl px-8 pt-8 pb-8 mb-4 w-full max-w-md border border-gray-100 dark:border-gray-700 mx-4">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white">
+          Welcome Back
         </h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
             <label
-              className="block text-gray-700 text-sm font-bold mt-2"
+              className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
               htmlFor="email"
             >
-              Email
+              Email Address
             </label>
             <input
               type="email"
@@ -51,12 +51,12 @@ const LoginPage = () => {
               value={email}
               placeholder="example@gmail.com"
               onChange={(event) => setEmail(event.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
             />
           </div>
-          <div className="mb-4">
+          <div>
             <label
-              className="block text-gray-700 text-sm font-bold mt-2"
+              className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
               htmlFor="password"
             >
               Password
@@ -65,29 +65,29 @@ const LoginPage = () => {
               type="password"
               id="password"
               value={password}
-              placeholder="min 6 Chatacters"
+              placeholder="••••••••"
               onChange={(event) => setPassword(event.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
             />
           </div>
           {error && (
-            <div className="text-red-500 text-sm">
-              <strong className="font-sm">{error}</strong>
+            <div className="p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm rounded-lg text-center">
+              <strong>{error}</strong>
             </div>
           )}
           <button
             type="submit"
-            className="bg-blue hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded w-full"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/30 transform hover:-translate-y-0.5 transition-all duration-200"
           >
             Login
           </button>
-          <br></br>
-          <small className="mx-5 my-2 flex items-center justify-center">
-            {`Don't have an Account?`}
-            <Link to={"/sign-up"}>
-              <span className="text-blue underline">Register</span>
+
+          <div className="text-center mt-6">
+            <span className="text-gray-500 dark:text-gray-400 text-sm">Don't have an account? </span>
+            <Link to={"/sign-up"} className="text-blue-600 dark:text-blue-400 font-bold hover:underline transition-colors">
+              Register
             </Link>
-          </small>
+          </div>
         </form>
       </div>
     </div>

@@ -274,7 +274,7 @@ const SalaryPage = () => {
 
   return (
     <motion.div
-      className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-10 bg-[#FAFAFA]"
+      className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-10 bg-[#FAFAFA] dark:bg-gray-900 transition-colors"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
@@ -293,7 +293,7 @@ const SalaryPage = () => {
         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-purple-600">
           Estimated Salary
         </h1>
-        <p className="text-gray-500 max-w-2xl mx-auto">
+        <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
           Discover the competitive salary ranges for top tech roles across the industry.
         </p>
       </div>
@@ -301,10 +301,10 @@ const SalaryPage = () => {
       {/* Styled Search Box */}
       <div className="max-w-3xl mx-auto mb-16 relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-        <div className="relative flex p-2 bg-white rounded-2xl shadow-xl ring-1 ring-gray-900/5">
+        <div className="relative flex p-2 bg-white dark:bg-gray-800 rounded-2xl shadow-xl ring-1 ring-gray-900/5 dark:ring-gray-700">
           <input
             type="text"
-            className="flex-1 p-4 pl-6 text-gray-900 bg-transparent outline-none placeholder:text-gray-400 font-medium"
+            className="flex-1 p-4 pl-6 text-gray-900 dark:text-white bg-transparent outline-none placeholder:text-gray-400 font-medium"
             placeholder="Search role (e.g., 'Software Engineer')"
             onChange={(e) => setSearchText(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -322,7 +322,7 @@ const SalaryPage = () => {
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 mb-12">
         {loading
           ? Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
               <Skeleton height={30} width="60%" className="mb-4" />
               <Skeleton count={2} />
             </div>
@@ -334,29 +334,29 @@ const SalaryPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 border border-gray-100 transition-all duration-300 relative group overflow-hidden"
+                className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 border border-gray-100 dark:border-gray-700 transition-all duration-300 relative group overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <span className="text-6xl font-bold text-blue-900">₹</span>
+                  <span className="text-6xl font-bold text-blue-900 dark:text-blue-100">₹</span>
                 </div>
 
-                <h4 className="font-bold text-xl text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {data.jobTitle}
                 </h4>
                 <div className="mb-6">
-                  <p className="font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">
-                    {data.minPrice} - {data.maxPrice} <span className="text-sm text-gray-500 font-medium">{data.salaryType === "Monthly" ? "k" : "LPA"}</span>
+                  <p className="font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                    {data.minPrice} - {data.maxPrice} <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{data.salaryType === "Monthly" ? "k" : "LPA"}</span>
                   </p>
                   <p className="text-sm text-gray-400 mt-1">Average Salary Range</p>
                 </div>
 
-                <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-700">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
                     {data.experienceLevel}
                   </span>
                   <Link
                     to={`/job/${data.slug || data._id}`}
-                    className="text-sm font-bold text-gray-900 hover:text-blue-600 flex items-center gap-1 transition-colors"
+                    className="text-sm font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 transition-colors"
                   >
                     View Details &rarr;
                   </Link>
@@ -378,7 +378,7 @@ const SalaryPage = () => {
           <button
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
           >
             Prev
           </button>
@@ -391,8 +391,8 @@ const SalaryPage = () => {
                 <button
                   onClick={() => paginate(page)}
                   className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === page
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                    : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200 dark:shadow-blue-900/40"
+                    : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
                     }`}
                 >
                   {page}
@@ -403,7 +403,7 @@ const SalaryPage = () => {
           <button
             onClick={() => paginate(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 transition-colors"
           >
             Next
           </button>

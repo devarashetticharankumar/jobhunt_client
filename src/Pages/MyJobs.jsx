@@ -84,7 +84,7 @@ const MyJobs = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
       <Helmet>
         <title>My Jobs | JobNirvana</title>
       </Helmet>
@@ -98,8 +98,8 @@ const MyJobs = () => {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Jobs</h1>
-            <p className="text-gray-500 mt-1">Manage all your job postings in one place</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Jobs</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">Manage all your job postings in one place</p>
           </div>
           <Link to="/post-job">
             <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-transform hover:scale-105">
@@ -109,16 +109,16 @@ const MyJobs = () => {
         </div>
 
         {/* Search & Content Card */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors">
           {/* Search Bar */}
-          <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+          <div className="p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-700/50">
             <div className="relative max-w-md">
               <MdSearch className="absolute left-4 top-3.5 text-gray-400 text-xl" />
               <input
                 type="text"
                 placeholder="Search by job title..."
                 onChange={(e) => setSearchText(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm"
+                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white transition-shadow shadow-sm placeholder-gray-400"
               />
             </div>
           </div>
@@ -127,7 +127,7 @@ const MyJobs = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50/80 text-gray-600 text-sm uppercase tracking-wider">
+                <tr className="bg-gray-50/80 dark:bg-gray-700/80 text-gray-600 dark:text-gray-300 text-sm uppercase tracking-wider">
                   <th className="px-6 py-4 font-semibold">No.</th>
                   <th className="px-6 py-4 font-semibold">Job Title</th>
                   <th className="px-6 py-4 font-semibold">Company</th>
@@ -135,7 +135,7 @@ const MyJobs = () => {
                   <th className="px-6 py-4 font-semibold text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {currentJobs.length > 0 ? (
                   currentJobs.map((job, index) => (
                     <motion.tr
@@ -143,37 +143,37 @@ const MyJobs = () => {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: index * 0.05 }}
-                      className="hover:bg-blue-50/50 transition-colors"
+                      className="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors"
                     >
-                      <td className="px-6 py-4 text-gray-500">
+                      <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                         {index + 1 + (currentPage - 1) * itemsPerPage}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-semibold text-gray-800">{job.jobTitle}</div>
+                        <div className="font-semibold text-gray-800 dark:text-gray-200">{job.jobTitle}</div>
                         <div className="text-xs text-gray-400">{job.employmentType}</div>
                       </td>
-                      <td className="px-6 py-4 text-gray-600 flex items-center gap-2">
+                      <td className="px-6 py-4 text-gray-600 dark:text-gray-300 flex items-center gap-2">
                         {/* {job.companyLogo && <img src={job.companyLogo} className="w-6 h-6 rounded-full object-cover" />} */}
                         {job.companyName}
                       </td>
-                      <td className="px-6 py-4 text-gray-600">
+                      <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
                         {job.minPrice}k - {job.maxPrice}k
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-center gap-3">
                           <Link to={`/edit-job/${job._id}`}>
-                            <button className="p-2 text-blue-600 bg-blue-100 rounded-lg hover:bg-blue-600 hover:text-white transition-colors" title="Edit">
+                            <button className="p-2 text-blue-600 bg-blue-100 hover:bg-blue-600 hover:text-white dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white rounded-lg transition-colors" title="Edit">
                               <MdEdit className="text-lg" />
                             </button>
                           </Link>
                           <Link to={`/job-applicants/${job._id}`}>
-                            <button className="p-2 text-purple-600 bg-purple-100 rounded-lg hover:bg-purple-600 hover:text-white transition-colors" title="View Applicants">
+                            <button className="p-2 text-purple-600 bg-purple-100 hover:bg-purple-600 hover:text-white dark:bg-purple-900/30 dark:text-purple-400 dark:hover:bg-purple-600 dark:hover:text-white rounded-lg transition-colors" title="View Applicants">
                               <MdPeople className="text-lg" />
                             </button>
                           </Link>
                           <button
                             onClick={() => handleDelete(job._id)}
-                            className="p-2 text-red-600 bg-red-100 rounded-lg hover:bg-red-600 hover:text-white transition-colors"
+                            className="p-2 text-red-600 bg-red-100 hover:bg-red-600 hover:text-white dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white rounded-lg transition-colors"
                             title="Delete"
                           >
                             <MdDelete className="text-lg" />
@@ -184,9 +184,9 @@ const MyJobs = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                       <div className="flex flex-col items-center justify-center">
-                        <MdWorkOutline className="text-6xl text-gray-200 mb-4" />
+                        <MdWorkOutline className="text-6xl text-gray-200 dark:text-gray-600 mb-4" />
                         <p className="text-lg">No jobs found.</p>
                       </div>
                     </td>
@@ -198,21 +198,21 @@ const MyJobs = () => {
 
           {/* Pagination */}
           {filteredJobs.length > itemsPerPage && (
-            <div className="p-6 border-t border-gray-100 flex justify-center gap-4 bg-gray-50/50">
+            <div className="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-center gap-4 bg-gray-50/50 dark:bg-gray-700/50">
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-lg font-medium transition ${currentPage === 1 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white border hover:bg-gray-100 shadow-sm text-gray-700'}`}
+                className={`px-4 py-2 rounded-lg font-medium transition ${currentPage === 1 ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed' : 'bg-white dark:bg-gray-800 border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 shadow-sm text-gray-700 dark:text-gray-300'}`}
               >
                 Previous
               </button>
-              <span className="flex items-center text-gray-600">
+              <span className="flex items-center text-gray-600 dark:text-gray-300">
                 Page {currentPage} of {Math.ceil(filteredJobs.length / itemsPerPage)}
               </span>
               <button
                 onClick={nextPage}
                 disabled={indexOfLastItem >= filteredJobs.length}
-                className={`px-4 py-2 rounded-lg font-medium transition ${indexOfLastItem >= filteredJobs.length ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white border hover:bg-gray-100 shadow-sm text-gray-700'}`}
+                className={`px-4 py-2 rounded-lg font-medium transition ${indexOfLastItem >= filteredJobs.length ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed' : 'bg-white dark:bg-gray-800 border dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 shadow-sm text-gray-700 dark:text-gray-300'}`}
               >
                 Next
               </button>
