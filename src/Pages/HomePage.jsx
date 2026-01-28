@@ -10,6 +10,8 @@ import {
   FaArrowRight, FaRocket, FaRegBuilding, FaGlobeAmericas
 } from "react-icons/fa";
 import { MdOutlineWorkOutline, MdOutlineArticle } from "react-icons/md";
+import InArticleAd from "../components/InArticleAd";
+import AdPopup from "../components/AdPopup";
 
 const HomePage = () => {
   const [companies, setCompanies] = useState([]);
@@ -181,6 +183,9 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Ad Section */}
+      <InArticleAd />
+
       {/* Stats Section */}
       <section className="py-10 border-y border-gray-100 bg-white">
         <div className="container mx-auto px-6 max-w-7xl">
@@ -199,6 +204,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Ad Section */}
+      <InArticleAd />
 
       {/* Latest Jobs Section */}
       <section className="py-20 bg-gray-50">
@@ -273,6 +281,9 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Ad Section */}
+      <InArticleAd />
+
       {/* How It Works (Re-styled) */}
       <section id="how-it-works" className="py-20 bg-white">
         <div className="container mx-auto px-6 max-w-7xl text-center">
@@ -300,6 +311,8 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      <AdPopup />
 
       {/* Latest Blogs Section */}
       <section className="py-20 bg-gray-50 overflow-hidden">

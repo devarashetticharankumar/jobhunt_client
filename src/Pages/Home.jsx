@@ -484,7 +484,7 @@ const Home = () => {
           )}
         </div>
         <AdPopup />
-        <div className="bg-white dark:bg-gray-800 p-4 rounded space-y-4 transition-colors">
+        <div className="items-start sticky top-24 h-fit bg-white dark:bg-gray-800 p-4 rounded space-y-4 transition-colors">
           <GoogleAds />
           <NewsLetter />
         </div>

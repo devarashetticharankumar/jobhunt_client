@@ -282,21 +282,25 @@ const JobDetails = () => {
             </div>
 
             {/* Apply Section */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-0 md:p-8 text-center text-white shadow-xl shadow-blue-200">
-              <h3 className="text-2xl font-bold mb-2">Interested in this role?</h3>
-              <p className="text-blue-100 mb-6">Take the next step in your career and apply today.</p>
-              <button
-                className="bg-blue-600 px-8 py-3 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 flex items-center gap-2 mx-auto"
-                onClick={applyLink}
-              >
-                Apply Now on Company Site
-              </button>
-              <div className="mt-6 flex justify-center items-center gap-2 text-blue-200 text-sm">
-                <GrInstagram /> Follow us for more updates
-              </div>
-            </div>
+            <div className="space-y-4">
+              <InArticleAd />
 
-            <InArticleAd />
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-0 md:p-8 text-center text-white shadow-xl shadow-blue-200">
+                <h3 className="text-2xl font-bold mb-2">Interested in this role?</h3>
+                <p className="text-blue-100 mb-6">Take the next step in your career and apply today.</p>
+                <button
+                  className="bg-blue-600 px-8 py-3 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 flex items-center gap-2 mx-auto"
+                  onClick={applyLink}
+                >
+                  Apply Now on Company Site
+                </button>
+                <div className="mt-6 flex justify-center items-center gap-2 text-blue-200 text-sm">
+                  <GrInstagram /> Follow us for more updates
+                </div>
+              </div>
+
+              <InArticleAd />
+            </div>
           </motion.div>
 
           {/* Right Side: Related Jobs (30%) */}
@@ -306,40 +310,46 @@ const JobDetails = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            {/* AI Resume Scorer Card */}
-
-
-            {/* Job Alert Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
-                <FaRegStar className="text-yellow-500" /> Job Alerts
-              </h3>
-              <p className="text-gray-500 text-sm mb-4">
-                Get notified about similar <strong>{job?.jobTitle}</strong> jobs.
-              </p>
-              <button
-                onClick={() => setIsAlertModalOpen(true)}
-                className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-colors text-sm"
-              >
-                Activate Alerts
-              </button>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <NewsLetter />
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-4 border-b border-gray-100 bg-gray-50">
-                <h3 className="font-bold text-gray-900">Related Jobs</h3>
+            {/* Sidebar Content - No longer sticky wrapper */}
+            <div className="space-y-6">
+              {/* Job Alert Card */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                  <FaRegStar className="text-yellow-500" /> Job Alerts
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
+                  Get notified about similar <strong>{job?.jobTitle}</strong> jobs.
+                </p>
+                <button
+                  onClick={() => setIsAlertModalOpen(true)}
+                  className="w-full py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl transition-colors text-sm"
+                >
+                  Activate Alerts
+                </button>
               </div>
-              <div className="p-4">
-                <RelatedJobs currentJob={job} />
-              </div>
-            </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <GoogleAds />
+              {/* Ad placed high for visibility */}
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+                <GoogleAds />
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+                <NewsLetter />
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                  <h3 className="font-bold text-gray-900 dark:text-white">Related Jobs</h3>
+                </div>
+                <div className="p-4">
+                  <RelatedJobs currentJob={job} />
+                </div>
+              </div>
+
+              {/* Sticky Ad at bottom of sidebar */}
+              <div className="sticky top-24 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+                <GoogleAds />
+              </div>
             </div>
 
             <AdPopup />

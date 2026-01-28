@@ -473,7 +473,11 @@ const BlogDetails = () => {
         </div>
 
         {/* Latest Blogs Sidebar */}
-        <div className="w-full lg:w-1/3 space-y-8">
+        <div className="w-full lg:w-1/3 space-y-8 sticky top-24 h-fit">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+            <InFeedAd />
+          </div>
+
           {loadingLatestBlogs ? (
             <SkeletonLoader type="latestBlogs" />
           ) : (
