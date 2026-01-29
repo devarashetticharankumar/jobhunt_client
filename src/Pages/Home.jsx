@@ -1,368 +1,72 @@
-// import { useEffect, useRef, useState } from "react";
-// import Banner from "../components/Banner";
-// import Card from "../components/Card";
-// import Jobs from "./Jobs";
-// import Sidebar from "../sidebar/Sidebar";
-// import NewsLetter from "../components/NewsLetter";
-// import { API_URL } from "../data/apiPath";
-// import InFeedAd from "../components/InFeedAd"; // Import the InFeedAd component
-// import "react-loading-skeleton/dist/skeleton.css";
-// import { Helmet } from "react-helmet"; // Import Helmet
-// import JobMarquee from "../components/JobMarquee";
-// import SkeletonLoading from "../components/SkeletonLoading";
-// import InArticleAds from "../components/InArticleAd";
-// import AdPopup from "../components/AdPopup";
-
-// const Home = () => {
-//   const [selectedCategory, setSelectedCategory] = useState(null);
-//   const [jobs, setJobs] = useState([]);
-//   const [query, setQuery] = useState("");
-//   const [location, setLocation] = useState("");
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [suggestions, setSuggestions] = useState([]);
-//   const itemsPerPage = 10;
-
-//   const jobsRef = useRef(null);
-
-//   useEffect(() => {
-//     setIsLoading(true);
-//     fetch(`${API_URL}/jobs/all-jobs`)
-//       .then((res) => {
-//         if (!res.ok) {
-//           throw new Error("Failed to fetch jobs");
-//         }
-//         return res.json();
-//       })
-//       .then((data) => {
-//         setJobs(data);
-//         setIsLoading(false);
-//       })
-//       .catch((err) => {
-//         setError(err.message);
-//         setIsLoading(false);
-//       });
-//   }, []);
-
-//   const handleInputChange = (event) => {
-//     const value = event.target.value;
-//     setQuery(value);
-//     if (value) {
-//       const filteredSuggestions = jobs
-//         .filter((job) =>
-//           job.jobTitle.toLowerCase().includes(value.toLowerCase())
-//         )
-//         .slice(0, 10); // Show up to 10 suggestions
-//       setSuggestions(filteredSuggestions);
-//     } else {
-//       setSuggestions([]);
-//     }
-//   };
-
-//   const handleSuggestionClick = (suggestion) => {
-//     setQuery(suggestion.jobTitle);
-//     setSuggestions([]);
-//   };
-
-//   const filteredItems = jobs.filter((job) =>
-//     job.jobTitle.toLowerCase().includes(query.toLowerCase())
-//   );
-
-//   const handleSearchByLocation = (event) => {
-//     setLocation(event.target.value);
-//   };
-
-//   const handleSearch = (e) => {
-//     e.preventDefault();
-//     setCurrentPage(1); // Reset to the first page on search
-//     setSuggestions([]); // Clear suggestions when searching
-
-//     // Scroll to the jobs section
-//     if (jobsRef.current) {
-//       jobsRef.current.scrollIntoView({ behavior: "smooth" });
-//     }
-//   };
-
-//   const handleChange = (event) => {
-//     setSelectedCategory(event.target.value);
-//   };
-
-//   const handleClick = (event) => {
-//     setSelectedCategory(event.target.value);
-//   };
-
-//   const calculatePageRange = () => {
-//     const startIndex = (currentPage - 1) * itemsPerPage;
-//     const endIndex = startIndex + itemsPerPage;
-//     return { startIndex, endIndex };
-//   };
-
-//   const nextPage = () => {
-//     if (currentPage < Math.ceil(filteredItems.length / itemsPerPage)) {
-//       setCurrentPage(currentPage + 1);
-//     }
-//   };
-
-//   const prevPage = () => {
-//     if (currentPage > 1) {
-//       setCurrentPage(currentPage - 1);
-//     }
-//   };
-
-//   const filteredData = () => {
-//     let filteredJobs = jobs;
-
-//     if (query) {
-//       filteredJobs = filteredJobs.filter((job) =>
-//         job.jobTitle.toLowerCase().includes(query.toLowerCase())
-//       );
-//     }
-
-//     if (location) {
-//       filteredJobs = filteredJobs.filter((job) =>
-//         job.jobLocation.toLowerCase().includes(location.toLowerCase())
-//       );
-//     }
-
-//     if (selectedCategory) {
-//       filteredJobs = filteredJobs.filter(
-//         ({
-//           jobLocation,
-//           maxPrice,
-//           experienceLevel,
-//           salaryType,
-//           employmentType,
-//           postingDate,
-//           qualification,
-//         }) =>
-//           jobLocation.toLowerCase() === selectedCategory.toLowerCase() ||
-//           postingDate >= selectedCategory ||
-//           parseInt(maxPrice) <= parseInt(selectedCategory) ||
-//           salaryType.toLowerCase() === selectedCategory.toLowerCase() ||
-//           experienceLevel.toLowerCase() === selectedCategory.toLowerCase() ||
-//           employmentType.toLowerCase() === selectedCategory.toLowerCase()
-//         // qualification.toLowerCase() === selectedCategory.toLowerCase()
-//       );
-//     }
-
-//     const { startIndex, endIndex } = calculatePageRange();
-//     const slicedJobs = filteredJobs.slice(startIndex, endIndex);
-
-//     // Add an ad after every 3 job cards
-//     const result = [];
-//     const adFrequency = 2; // Adjust this number as needed
-
-//     slicedJobs.forEach((data, i) => {
-//       result.push(<Card key={`job-${i}`} data={data} />);
-//       if ((i + 1) % adFrequency === 0) {
-//         result.push(<InArticleAds key={`ad-${i}`} />);
-//       }
-//     });
-
-//     return result;
-//   };
-
-//   const result = filteredData();
-
-//   return (
-//     <div>
-//       <Helmet>
-//         <title>Explore Jobs & Career Opportunities - JobNirvana</title>
-//         <meta
-//           name="description"
-//           content="Discover a wide range of job opportunities across various industries and locations. Find your perfect job, stay updated with the latest job openings, and build your career with JobNirvana."
-//         />
-//         <meta
-//           name="keywords"
-//           content="jobs, job search, job portal, employment, career opportunities, JobNirvana"
-//         />
-//         <meta name="author" content="CharanKumar" />
-//         <meta property="og:title" content="JobNirvana - Find Your Dream Job" />
-//         <meta
-//           property="og:description"
-//           content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
-//         />
-//         <meta property="og:url" content="https://jobnirvana.netlify.app" />
-//         <meta property="og:type" content="website" />
-//         <meta name="robots" content="index, follow" />
-//         <meta
-//           property="og:image"
-//           content="https://i.imgur.com/0qGt7qj.png"
-//         />{" "}
-//         {/* Replace with your logo URL */}
-//         <link rel="canonical" href={`${window.location.href}`} />
-//       </Helmet>
-//       <Banner
-//         query={query}
-//         handleInputChange={handleInputChange}
-//         location={location}
-//         handleSearchByLocation={handleSearchByLocation}
-//         handleSearch={handleSearch}
-//         suggestions={suggestions}
-//         handleSuggestionClick={handleSuggestionClick}
-//       />
-
-//       <div className="bg-[#FAFAFa] md:grid grid-cols-4 gap-8 lg:px-24 px-4 py-12">
-//         <div className="bg-white p-4 rounded">
-//           <Sidebar
-//             handleChange={handleChange}
-//             handleClick={handleClick}
-//             setJobs={jobs}
-//           />
-//         </div>
-
-//         <div className="col-span-2 bg-white" ref={jobsRef}>
-//           {isLoading ? (
-//             <div>
-//               <SkeletonLoading />
-//             </div>
-//           ) : error ? (
-//             <div className="text-center lg:mt-32">
-//               <p className="text-red-500">
-//                 {error} The server is currently busy. Please try again later.
-//               </p>
-//             </div>
-//           ) : result.length > 0 ? (
-//             <Jobs result={result} />
-//           ) : (
-//             <div className="text-center m-auto flex flex-col items-center justify-center">
-//               <h3 className="text-lg font-bold mb-2">{result.length} jobs</h3>
-//               <p>The server is currently busy. Please try again later.</p>
-//             </div>
-//           )}
-
-//           {/* Pagination controls */}
-//           {result.length > 0 && (
-//             <div className="flex items-center justify-center mt-4 space-x-8">
-//               <button
-//                 onClick={prevPage}
-//                 disabled={currentPage === 1}
-//                 className="px-4 py-2 bg-gray-200 rounded"
-//               >
-//                 Previous
-//               </button>
-//               <span className="mx-2">
-//                 page {currentPage} of{" "}
-//                 {Math.ceil(filteredItems.length / itemsPerPage)}{" "}
-//               </span>
-//               <button
-//                 onClick={nextPage}
-//                 disabled={
-//                   currentPage === Math.ceil(filteredItems.length / itemsPerPage)
-//                 }
-//                 className="px-4 py-2 bg-gray-200 rounded"
-//               >
-//                 Next
-//               </button>
-//             </div>
-//           )}
-//         </div>
-//         <AdPopup />
-//         <div className="bg-white p-4 rounded">
-//           <NewsLetter />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;
-
-import { useEffect, useRef, useState } from "react";
-import Banner from "../components/Banner";
-import Card from "../components/Card";
-import Jobs from "./Jobs";
-import Sidebar from "../sidebar/Sidebar";
-import NewsLetter from "../components/NewsLetter";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { useAuth0 } from "@auth0/auth0-react";
+import ProfileCard from "../components/dashboard/ProfileCard";
+import DashboardBanner from "../components/dashboard/DashboardBanner";
+import JobWidget from "../components/dashboard/JobWidget";
+import InArticleAd from "../components/InArticleAd";
+import InFeedAd from "../components/InFeedAd";
 import { API_URL } from "../data/apiPath";
-import InFeedAd from "../components/InFeedAd"; // Import the InFeedAd component
-import "react-loading-skeleton/dist/skeleton.css";
-import { Helmet } from "react-helmet-async"; // Import Helmet
-import JobMarquee from "../components/JobMarquee";
 import SkeletonLoading from "../components/SkeletonLoading";
-import InArticleAds from "../components/InArticleAd";
-import AdPopup from "../components/AdPopup";
-import GoogleAds from "../components/GoogleAds";
+import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight, FaLightbulb, FaRocket } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Home = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [jobs, setJobs] = useState([]);
-  const [query, setQuery] = useState("");
-  const [location, setLocation] = useState("");
+  const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isAuthenticated, user, isLoading: isAuthLoading } = useAuth0();
+
+  // Search & Pagination State
+  const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [suggestions, setSuggestions] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 12; // Must match backend limit
+  const itemsPerPage = 10;
 
-  const jobsRef = useRef(null);
-
-  // Refactored for Server-Side Pagination
+  // Fetch jobs and blogs
   useEffect(() => {
-    setIsLoading(true);
+    const fetchContent = async () => {
+      setIsLoading(true);
+      const params = new URLSearchParams();
+      if (query) params.append("search", query);
+      params.append("page", currentPage);
+      params.append("limit", itemsPerPage);
 
-    // Build query params
-    const params = new URLSearchParams();
-    if (query) params.append("search", query);
-    if (location) params.append("location", location);
-    if (selectedCategory) params.append("filter", selectedCategory);
-    params.append("page", currentPage);
-    params.append("limit", itemsPerPage);
+      try {
+        const [jobsRes, blogsRes] = await Promise.all([
+          fetch(`${API_URL}/jobs/all-jobs?${params.toString()}`),
+          fetch(`${API_URL}/blogs/all-blogs`)
+        ]);
 
-    fetch(`${API_URL}/jobs/all-jobs?${params.toString()}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch jobs");
+        if (jobsRes.ok) {
+          const data = await jobsRes.json();
+          setJobs(data.jobs || []);
+          setTotalPages(data.totalPages || 1);
         }
-        return res.json();
-      })
-      .then((data) => {
-        // Backend now returns { jobs, totalJobs, totalPages, currentPage }
-        setJobs(data.jobs || []); // Default to empty array if undefined
-        setTotalPages(data.totalPages || 1); // Store total pages from server
+
+        if (blogsRes.ok) {
+          const data = await blogsRes.json();
+          const blogList = Array.isArray(data) ? data : [];
+          setBlogs(blogList.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Dashboard fetch error:", err);
+        setError("Failed to load feed");
+      } finally {
         setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setIsLoading(false);
-      });
-  }, [query, location, selectedCategory, currentPage]); // Re-fetch when any filter changes
+      }
+    };
 
-  // Handlers now just update state, causing re-fetch via useEffect
-  const handleInputChange = (event) => {
-    setQuery(event.target.value);
-    setCurrentPage(1); // Reset to page 1 on new search
-  };
-
-  const handleSearchByLocation = (event) => {
-    setLocation(event.target.value);
-    setCurrentPage(1);
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    setQuery(suggestion.jobTitle);
-    setSuggestions([]);
-  };
+    fetchContent();
+  }, [query, currentPage]);
 
   const handleSearch = (e) => {
-    e.preventDefault();
-    // Search is already handled by state change + useEffect, but ensuring cleanup
-    setSuggestions([]);
-  };
-
-  const handleChange = (event) => {
-    setSelectedCategory(event.target.value);
+    setQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleClick = (event) => {
-    setSelectedCategory(event.target.value);
-    setCurrentPage(1);
-  };
-
-  // Pagination Handlers
   const nextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -377,116 +81,168 @@ const Home = () => {
     }
   };
 
-  // Rendering logic: jobs state now contains ONLY the current page's jobs
-  const result = [];
-  const adFrequency = 2;
-
-  if (jobs && jobs.length > 0) {
-    jobs.forEach((data, i) => {
-      result.push(<Card key={`job-${i}`} data={data} />);
-      if ((i + 1) % adFrequency === 0) {
-        result.push(<InFeedAd key={`ad-${i}`} />);
-      }
-    });
-  }
-
   return (
-    <div>
+    <div className="min-h-screen bg-[#F8F9FA] font-sans pb-12">
       <Helmet>
-        <title>Explore Jobs & Career Opportunities - JobNirvana</title>
-        <meta
-          name="description"
-          content="Discover a wide range of job opportunities across various industries and locations. Find your perfect job, stay updated with the latest job openings, and build your career with JobNirvana."
-        />
-        <meta
-          name="keywords"
-          content="jobs, job search, job portal, employment, career opportunities, JobNirvana"
-        />
-        <meta name="author" content="CharanKumar" />
-        <meta property="og:title" content="JobNirvana - Find Your Dream Job" />
-        <meta
-          property="og:description"
-          content="Explore a wide range of job opportunities across various categories. Find your dream job at JobNirvana."
-        />
-        <meta property="og:url" content="https://jobnirvana.netlify.app" />
-        <meta property="og:type" content="website" />
-        <meta name="robots" content="index, follow" />
-        <meta
-          property="og:image"
-          content="https://i.imgur.com/0qGt7qj.png"
-        />{" "}
-        {/* Replace with your logo URL */}
-        <link rel="canonical" href={`${window.location.href}`} />
+        <title>Jobs Feed | JobNirvana</title>
+        <meta name="description" content="Search and apply for the latest job opportunities on JobNirvana." />
       </Helmet>
-      <Banner
-        query={query}
-        handleInputChange={handleInputChange}
-        location={location}
-        handleSearchByLocation={handleSearchByLocation}
-        handleSearch={handleSearch}
-        suggestions={suggestions}
-        handleSuggestionClick={handleSuggestionClick}
-      />
 
-      <div className="bg-[#FAFAFa] dark:bg-gray-900 md:grid grid-cols-4 gap-8 lg:px-24 px-0 py-4 md:py-12 md:px-4 transition-colors">
-        <div className="bg-transparent p-0 rounded">
-          <Sidebar
-            handleChange={handleChange}
-            handleClick={handleClick}
-            setJobs={jobs}
-          />
-        </div>
-
-        <div className="col-span-2 bg-transparent" ref={jobsRef}>
-          {isLoading ? (
-            <div>
-              <SkeletonLoading />
+      {/* Premium Sticky Search Header */}
+      <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm transition-all duration-300">
+        <div className="max-w-[1240px] mx-auto px-4 py-4">
+          <div className="flex items-center gap-6">
+            <div className="flex-1 relative group">
+              <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+                <FaSearch className="text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search jobs by title, skills or companies..."
+                value={query}
+                onChange={handleSearch}
+                className="w-full pl-12 pr-6 py-3.5 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none text-sm transition-all shadow-inner group-hover:bg-gray-100 group-focus-within:shadow-lg group-focus-within:bg-white"
+              />
             </div>
-          ) : error ? (
-            <div className="text-center lg:mt-32">
-              <p className="text-red-500">
-                {error} The server is currently busy. Please try again later.
+            <button className="hidden md:flex items-center gap-2 px-6 py-3.5 bg-[#091e42] text-white rounded-2xl font-bold hover:bg-black transition-all shadow-lg shadow-gray-200">
+              <FaFilter className="text-xs" /> Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-[1240px] mx-auto px-4 pt-10 mt-12">
+        <div className="lg:grid lg:grid-cols-12 gap-8 items-start">
+
+          {/* LEFT COLUMN (25%) - Profile & Quick Insights */}
+          <div className="hidden lg:block lg:col-span-3 sticky top-28">
+            <ProfileCard />
+
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <FaRocket className="text-5xl text-blue-600" />
+              </div>
+              <h4 className="text-[10px] font-extrabold text-blue-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <FaLightbulb /> Growth Tips
+              </h4>
+              <p className="text-xs text-gray-500 font-bold leading-relaxed">
+                Updating your profile daily increases your visibility to recruiters by <span className="text-blue-600 text-sm">40%</span>.
+              </p>
+              <Link to="/profile" className="mt-4 block text-[10px] font-extrabold text-[#091e42] uppercase hover:underline">
+                Update Profile Now
+              </Link>
+            </div>
+          </div>
+
+          {/* CENTER COLUMN (50%) - Jobs Feed */}
+          <div className="col-span-12 lg:col-span-6 space-y-6">
+            <DashboardBanner />
+
+            {/* In-Feed Announcement Ad */}
+            <div className="bg-white rounded-2xl p-2 border border-dashed border-gray-200 shadow-sm">
+              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Sponsored Feed</span>
+              <InFeedAd />
+            </div>
+
+            {isLoading ? (
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-50">
+                <SkeletonLoading />
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 border border-red-100 text-red-600 p-8 rounded-2xl font-bold text-center">
+                {error}
+              </div>
+            ) : (
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-6"
+                >
+                  <JobWidget
+                    title={query ? `Results for "${query}"` : "Recommended for you"}
+                    count={jobs.length}
+                    jobs={jobs}
+                  />
+
+                  {/* High Frequency Ad Injection */}
+                  <div className="py-4">
+                    <InArticleAd />
+                  </div>
+
+                  {/* Pagination */}
+                  {jobs.length > 0 && (
+                    <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                      <button
+                        onClick={prevPage}
+                        disabled={currentPage === 1}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 rounded-xl text-sm font-bold text-gray-600 disabled:opacity-30 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100"
+                      >
+                        <FaChevronLeft className="text-xs" /> Prev
+                      </button>
+                      <span className="text-xs font-extrabold text-gray-400 uppercase tracking-widest">
+                        Page <span className="text-[#091e42]">{currentPage}</span> / {totalPages}
+                      </span>
+                      <button
+                        onClick={nextPage}
+                        disabled={currentPage >= totalPages}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 rounded-xl text-sm font-bold text-gray-600 disabled:opacity-30 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100"
+                      >
+                        Next <FaChevronRight className="text-xs" />
+                      </button>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            )}
+
+            {/* Bottom Ad */}
+            <div className="bg-white rounded-2xl p-2 border border-dashed border-gray-200">
+              <InFeedAd />
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN (25%) - Extras & Sticky Ads */}
+          <div className="hidden lg:block lg:col-span-3 space-y-6 sticky top-28">
+
+            {/* Career Insights Section */}
+            {blogs.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                <div className="p-5 border-b border-gray-50 flex items-center justify-between">
+                  <h4 className="font-extrabold text-[#091e42] text-sm">Career Insights</h4>
+                  <Link to="/blogs" className="text-[10px] font-bold text-blue-600 hover:underline uppercase tracking-wider">View All</Link>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {blogs.map((blog, idx) => (
+                    <Link key={idx} to={`/blog/${blog.slug || blog._id}`} className="block p-4 hover:bg-blue-50/50 transition-colors group">
+                      <h5 className="text-xs font-bold text-gray-700 group-hover:text-blue-600 line-clamp-2 leading-relaxed">
+                        {blog.title}
+                      </h5>
+                      <span className="text-[9px] text-gray-400 font-bold uppercase mt-2 block tracking-widest">
+                        {new Date(blog.createdAt || Date.now()).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Sticky Sidebar Ad */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 overflow-hidden">
+              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
+              <InArticleAd />
+            </div>
+
+            {/* Fraud Protection Widget */}
+            <div className="bg-[#091e42] rounded-2xl p-6 text-white relative overflow-hidden group shadow-xl">
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+              <h4 className="font-bold text-sm mb-2 flex items-center gap-2">🛡️ Trust & Safety</h4>
+              <p className="text-[10px] text-blue-100/70 leading-relaxed font-medium">
+                JobNirvana never asks candidates for money. Beware of fraudsters claiming to represent us.
               </p>
             </div>
-          ) : result.length > 0 ? (
-            <Jobs result={result} />
-          ) : (
-            <div className="text-center m-auto flex flex-col items-center justify-center">
-              <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-gray-100">{result.length} jobs</h3>
-              <p className="text-gray-600 dark:text-gray-400">The server is currently busy. Please try again later.</p>
-            </div>
-          )}
 
-          {/* Pagination controls */}
-          {result.length > 0 && (
-            <div className="flex items-center justify-center mt-4 space-x-8">
-              <button
-                onClick={prevPage}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-              >
-                Previous
-              </button>
-              <span className="mx-2 text-gray-700 dark:text-gray-300">
-                page {currentPage} of{" "}
-                {totalPages}{" "}
-              </span>
-              <button
-                onClick={nextPage}
-                disabled={
-                  currentPage === totalPages
-                }
-                className="px-4 py-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </div>
-        <AdPopup />
-        <div className="items-start sticky top-24 h-fit bg-white dark:bg-gray-800 p-4 rounded space-y-4 transition-colors">
-          <GoogleAds />
-          <NewsLetter />
+          </div>
         </div>
       </div>
     </div>

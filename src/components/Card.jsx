@@ -2,7 +2,33 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FiCalendar, FiClock, FiMapPin } from "react-icons/fi";
 import { MdOutlineCurrencyRupee, MdWorkOutline } from "react-icons/md";
-import { motion } from "framer-motion";
+
+
+
+const extractSkillsFromTitle = (title) => {
+  const commonSkills = [
+    "React", "Node.js", "MongoDB", "Tailwind", "Python", "Java", "Angular", "Vue",
+    "AWS", "Docker", "Kubernetes", "SQL", "Machine Learning", "Data Science",
+    "UI/UX", "Figma", "DevOps", "Cybersecurity", "Blockchain", "Swift", "Flutter",
+    "JavaScript", "TypeScript", "C++", "C#", "PHP", "Laravel", "Ruby", "Rails",
+    "Quality Assurance", "QA", "Scrum", "Agile", "Product Management", "Marketing",
+    "Sales", "HR", "Recruitment", "Finance", "Accounting", "Copywriting", "SEO",
+    "Data Analyst", "Business Analyst", "Mobile App", "Android", "iOS", "Cloud"
+  ];
+
+  if (!title) return ["General", "Professional"];
+
+  const lowerTitle = title.toLowerCase();
+  const found = commonSkills.filter(skill =>
+    lowerTitle.includes(skill.toLowerCase())
+  );
+
+  if (found.length > 0) return found;
+
+  // Dynamic fallback: use words from title if no matches
+  const titleWords = title.split(" ").filter(word => word.length > 3).slice(0, 3);
+  return titleWords.length > 0 ? titleWords : ["Communication", "Problem Solving", "Teamwork"];
+};
 
 const Card = ({ data }) => {
   const {
@@ -18,54 +44,85 @@ const Card = ({ data }) => {
     experienceLevel,
     employmentType,
     description,
-    slug
+    slug,
+    skills
   } = data;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
-      className="group bg-white dark:bg-gray-800 relative rounded-xl p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300"
-    >
+    <div className="group bg-white hover:shadow-[0_0_12px_0_rgba(0,0,0,0.1)] transition-shadow duration-200 p-5 rounded-xl border border-gray-200 mb-3 relative">
       <Link to={`/job/${slug || _id}`} className="block">
-        <div className="flex flex-col sm:flex-row gap-4 items-start">
-          {companyLogo ? (
-            <div className="w-14 h-14 min-w-[3.5rem] rounded-xl bg-gray-50 dark:bg-gray-700 flex items-center justify-center p-2 border border-gray-100 dark:border-gray-600">
-              <img src={companyLogo} alt={companyName} loading="lazy" className="w-full h-full object-contain" />
-            </div>
-          ) : (
-            <div className="w-14 h-14 min-w-[3.5rem] rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 text-xl border border-blue-100 dark:border-blue-800">
-              <MdWorkOutline />
-            </div>
-          )}
 
-          <div className="flex-1">
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">{companyName}</h4>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">{jobTitle}</h3>
-              </div>
-              {minPrice && maxPrice && (
-                <div className="text-gray-900 dark:text-gray-100 font-bold text-sm bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-1 rounded-full whitespace-nowrap">
-                  <span className="flex items-center gap-1"><MdOutlineCurrencyRupee /> {minPrice}-{maxPrice}{salaryType === "Monthly" ? "k" : "k"}</span>
-                </div>
-              )}
-            </div>
+        {/* Header: Title & Company */}
+        <div className="mb-2">
+          <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+            {jobTitle}
+          </h3>
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
+            {companyName}
+            <span className="text-yellow-400 text-xs">★</span>
+            <span className="text-gray-400 text-xs font-normal text-xs">(4.2 Reviews)</span>
+          </div>
+        </div>
 
-            <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-sm text-gray-500 dark:text-gray-400">
-              <span className="flex items-center gap-1.5"><FiMapPin className="text-gray-400 dark:text-gray-500" /> {jobLocation}</span>
-              <span className="flex items-center gap-1.5"><FiClock className="text-gray-400 dark:text-gray-500" /> {employmentType}</span>
-              <span className="flex items-center gap-1.5"><FiCalendar className="text-gray-400 dark:text-gray-500" /> {postingDate || "Recently"}</span>
-            </div>
+        {/* Metadata Row: Experience | Salary | Location */}
+        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-3">
+          <span className="flex items-center gap-1">
+            <MdWorkOutline className="text-gray-400" />
+            {experienceLevel || "0-5 Yrs"}
+          </span>
+          <span className="hidden w-px h-3 bg-gray-300 sm:block"></span>
+          <span className="flex items-center gap-1">
+            <MdOutlineCurrencyRupee className="text-gray-400" />
+            {minPrice && maxPrice ? `${minPrice}k - ${maxPrice}k PA` : "Not Disclosed"}
+          </span>
+          <span className="hidden w-px h-3 bg-gray-300 sm:block"></span>
+          <span className="flex items-center gap-1">
+            <FiMapPin className="text-gray-400" />
+            {jobLocation}
+          </span>
+        </div>
 
-            <p className="mt-4 text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-2" dangerouslySetInnerHTML={{ __html: description?.slice(0, 150) + (description?.length > 150 ? "..." : "") }} />
+        {/* Description */}
+        <div className="flex items-start gap-3 mb-3">
+          <div className="text-sm text-gray-500 line-clamp-2 leading-relaxed font-sans">
+            <span className="font-medium text-gray-400 mr-1">Job description:</span>
+            {description?.replace(/<[^>]*>?/gm, '').substring(0, 180)}...
+          </div>
+        </div>
+
+        {/* Skills / Tags */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {(skills && skills.length > 0 ? skills : extractSkillsFromTitle(jobTitle))
+            .filter(s => s)
+            .slice(0, 4)
+            .map((skill, i) => (
+              <span key={i} className="px-3 py-1 text-[10px] font-bold text-blue-600 bg-blue-50 rounded-lg uppercase tracking-wider">
+                {skill}
+              </span>
+            ))}
+        </div>
+
+        {/* Footer: Date & Actions */}
+        <div className="flex items-center justify-between pt-2 border-t border-dashed border-gray-100 mt-2">
+          <div className="text-xs text-gray-400 font-medium">
+            <span className="text-green-600 font-bold mr-1">History</span>
+            Posted: {postingDate || "Today"}
+          </div>
+
+          {/* CTA is often hidden/subtle on list view until hover, but we'll keep it clean */}
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <span className="text-blue-600 font-bold text-sm">View Job</span>
           </div>
         </div>
       </Link>
-    </motion.div>
+
+      {/* Logos often appear on the right in Naukri detailed view, but simpler here */}
+      {companyLogo && (
+        <div className="absolute top-6 right-6 w-12 h-12 hidden md:block">
+          <img src={companyLogo} alt={companyName} className="w-full h-full object-contain" />
+        </div>
+      )}
+    </div>
   );
 };
 

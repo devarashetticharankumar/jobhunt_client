@@ -1,728 +1,258 @@
-// import React, { useEffect, useState } from "react";
-// import { API_URL } from "../data/apiPath";
-// import { Link } from "react-router-dom";
-// import { Helmet } from "react-helmet";
-// import InFeedAd from "../components/InFeedAd";
-
-// const BlogsList = () => {
-//   const [blogs, setBlogs] = useState([]);
-//   const [filteredBlogs, setFilteredBlogs] = useState([]);
-//   const [categories, setCategories] = useState([]);
-//   const [message, setMessage] = useState("");
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [selectedCategory, setSelectedCategory] = useState("");
-//   const [currentPage, setCurrentPage] = useState(1); // Track current page
-//   const [totalPages, setTotalPages] = useState(1); // Track total pages
-//   const blogsPerPage = 9; // Number of blogs per page
-
-//   // Fetch blogs data
-//   useEffect(() => {
-//     const fetchBlogs = async () => {
-//       try {
-//         const response = await fetch(`${API_URL}/blogs/all-blogs`);
-//         const data = await response.json();
-
-//         if (response.ok) {
-//           setBlogs(data);
-//           setFilteredBlogs(data);
-
-//           // Set unique categories for the filter
-//           const uniqueCategories = [
-//             ...new Set(data.map((blog) => blog.category)),
-//           ];
-//           setCategories(uniqueCategories);
-
-//           // Calculate total pages for pagination
-//           setTotalPages(Math.ceil(data.length / blogsPerPage));
-//         } else {
-//           setMessage(data.message || "Failed to fetch blogs");
-//         }
-//       } catch (error) {
-//         setMessage("Error fetching blogs");
-//       }
-//     };
-
-//     fetchBlogs();
-//   }, []);
-
-//   // Handle search input change
-//   const handleSearch = (e) => {
-//     const query = e.target.value.toLowerCase();
-//     setSearchQuery(query);
-//     filterBlogs(query, selectedCategory, currentPage);
-//   };
-
-//   // Handle category filter click
-//   const handleCategoryClick = (category) => {
-//     setSelectedCategory(category);
-//     filterBlogs(searchQuery, category, currentPage);
-//   };
-
-//   // Filter blogs based on search query, category, and pagination
-//   const filterBlogs = (query, category, page) => {
-//     const filtered = blogs.filter((blog) => {
-//       const matchesQuery = blog.title.toLowerCase().includes(query);
-//       const matchesCategory = category ? blog.category === category : true;
-//       return matchesQuery && matchesCategory;
-//     });
-
-//     // Calculate pagination for the current page
-//     const startIndex = (page - 1) * blogsPerPage;
-//     const endIndex = startIndex + blogsPerPage;
-//     const paginatedBlogs = filtered.slice(startIndex, endIndex);
-
-//     setFilteredBlogs(paginatedBlogs);
-//   };
-
-//   // Handle page change in pagination
-//   const handlePageChange = (pageNumber) => {
-//     setCurrentPage(pageNumber);
-//     filterBlogs(searchQuery, selectedCategory, pageNumber);
-//   };
-
-//   return (
-//     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
-//       {/* SEO Meta Tags */}
-//       <Helmet>
-//         <title>jobNirvana-Blogs | JobNirvana</title>
-//         <meta
-//           name="description"
-//           content="Discover the latest job market insights, career tips, and industry trends with JobNirvana's blog. Stay informed and boost your professional growth."
-//         />
-//         <meta
-//           name="keywords"
-//           content="blogs, job insights, career tips, professional development, industry trends, JobNirvana"
-//         />
-//         <meta property="og:title" content="Latest Blogs | JobNirvana" />
-//         <meta
-//           property="og:description"
-//           content="Stay updated with the latest blogs on JobNirvana. Get insights on job market trends, career advice, and more to help you succeed professionally."
-//         />
-//         <meta property="og:type" content="website" />
-//         <meta property="og:url" content={`${window.location.href}`} />
-//         <link rel="canonical" href={`${window.location.href}`} />
-//       </Helmet>
-
-//       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Blogs</h1>
-
-//       {/* Add Google Ad Banner */}
-//       {/* Layout for Mobile (Column) and Desktop (Row) */}
-//       <div className="flex flex-col md:flex-row gap-6">
-//         {/* Categories Sidebar */}
-//         <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md order-1 md:order-none">
-//           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-//             Categories
-//           </h3>
-
-//           {/* Horizontal scroll on mobile devices */}
-//           <div className="flex md:flex-col overflow-x-auto md:overflow-visible space-x-2 py-2 md:space-x-0 md:space-y-2">
-//             <button
-//               className={`w-auto px-4  py-2 rounded-lg text-center ${
-//                 !selectedCategory
-//                   ? "bg-teal-500 text-white"
-//                   : "bg-gray-200 text-gray-800"
-//               } hover:bg-teal-600`}
-//               onClick={() => handleCategoryClick("")}
-//             >
-//               All
-//             </button>
-
-//             {categories.map((category, index) => (
-//               <button
-//                 key={index}
-//                 className={`w-auto px-4 py-2 rounded-lg text-center ${
-//                   selectedCategory === category
-//                     ? "bg-teal-500 text-white"
-//                     : "bg-gray-200 text-gray-800"
-//                 } hover:bg-teal-600`}
-//                 onClick={() => handleCategoryClick(category)}
-//               >
-//                 {category}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Main Content (Blogs List) */}
-//         <div className="w-full md:w-3/4 order-2 md:order-none">
-//           {/* Search Bar */}
-//           <div className="mb-6">
-//             <input
-//               type="text"
-//               value={searchQuery}
-//               onChange={handleSearch}
-//               placeholder="Search blogs by title"
-//               className="w-full p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-//             />
-//           </div>
-
-//           {/* Grid Layout for Blogs */}
-//           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-//             {filteredBlogs.map((blog, index) => (
-//               <div
-//                 key={blog._id}
-//                 className="bg-white p-4 rounded-xl shadow-lg hover:shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105"
-//               >
-//                 {blog.thumbnail && (
-//                   <img
-//                     src={blog.thumbnail}
-//                     alt={blog.title}
-//                     className="w-full h-48 object-cover rounded-lg mb-4 shadow-md transition-all duration-300 ease-in-out transform"
-//                   />
-//                 )}
-//                 <Link to={`/blog/${blog.slug}`}>
-//                   <div className="flex flex-col">
-//                     <h3 className="text-xl font-semibold text-gray-800 hover:text-indigo-600 transition-all duration-200 mb-2">
-//                       {blog.title.length > 50
-//                         ? `${blog.title.slice(0, 50)}...`
-//                         : blog.title}
-//                     </h3>
-//                   </div>
-//                 </Link>
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* Pagination Controls */}
-//           <div className="flex justify-center mt-6">
-//             <button
-//               onClick={() => handlePageChange(currentPage - 1)}
-//               disabled={currentPage === 1}
-//               className="px-4 py-2 bg-teal-500 text-white rounded-lg mx-2"
-//             >
-//               Prev
-//             </button>
-//             {[...Array(totalPages)].map((_, index) => (
-//               <button
-//                 key={index}
-//                 onClick={() => handlePageChange(index + 1)}
-//                 className={`px-4 py-2 rounded-lg mx-2 ${
-//                   currentPage === index + 1
-//                     ? "bg-teal-500 text-white"
-//                     : "bg-gray-200 text-gray-800"
-//                 }`}
-//               >
-//                 {index + 1}
-//               </button>
-//             ))}
-//             <button
-//               onClick={() => handlePageChange(currentPage + 1)}
-//               disabled={currentPage === totalPages}
-//               className="px-4 py-2 bg-teal-500 text-white rounded-lg mx-2"
-//             >
-//               Next
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//       <div className="w-full mb-6">
-//         <InFeedAd />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default BlogsList;
-
-// import React, { useEffect, useState } from "react";
-// import { API_URL } from "../data/apiPath";
-// import { Link } from "react-router-dom";
-// import { Helmet } from "react-helmet";
-// import InFeedAd from "../components/InFeedAd";
-
-// const BlogsList = () => {
-//   const [blogs, setBlogs] = useState([]);
-//   const [filteredBlogs, setFilteredBlogs] = useState([]);
-//   const [categories, setCategories] = useState([]);
-//   const [message, setMessage] = useState("");
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [selectedCategory, setSelectedCategory] = useState("");
-//   const [currentPage, setCurrentPage] = useState(1); // Track current page
-//   const [totalPages, setTotalPages] = useState(1); // Track total pages
-//   const [isLoading, setIsLoading] = useState(true); // Track loading state
-//   const blogsPerPage = 9; // Number of blogs per page
-
-//   // Fetch blogs data
-//   useEffect(() => {
-//     const fetchBlogs = async () => {
-//       try {
-//         const response = await fetch(`${API_URL}/blogs/all-blogs`);
-//         const data = await response.json();
-
-//         if (response.ok) {
-//           setBlogs(data);
-//           setFilteredBlogs(data);
-
-//           // Set unique categories for the filter
-//           const uniqueCategories = [
-//             ...new Set(data.map((blog) => blog.category)),
-//           ];
-//           setCategories(uniqueCategories);
-
-//           // Calculate total pages for pagination
-//           setTotalPages(Math.ceil(data.length / blogsPerPage));
-//         } else {
-//           setMessage(data.message || "Failed to fetch blogs");
-//         }
-//       } catch (error) {
-//         setMessage("Error fetching blogs");
-//       } finally {
-//         setIsLoading(false); // Set loading to false once data is fetched
-//       }
-//     };
-
-//     fetchBlogs();
-//   }, []);
-
-//   // Handle search input change
-//   const handleSearch = (e) => {
-//     const query = e.target.value.toLowerCase();
-//     setSearchQuery(query);
-//     filterBlogs(query, selectedCategory, currentPage);
-//   };
-
-//   // Handle category filter click
-//   const handleCategoryClick = (category) => {
-//     setSelectedCategory(category);
-//     filterBlogs(searchQuery, category, currentPage);
-//   };
-
-//   // Filter blogs based on search query, category, and pagination
-//   const filterBlogs = (query, category, page) => {
-//     const filtered = blogs.filter((blog) => {
-//       const matchesQuery = blog.title.toLowerCase().includes(query);
-//       const matchesCategory = category ? blog.category === category : true;
-//       return matchesQuery && matchesCategory;
-//     });
-
-//     // Calculate pagination for the current page
-//     const startIndex = (page - 1) * blogsPerPage;
-//     const endIndex = startIndex + blogsPerPage;
-//     const paginatedBlogs = filtered.slice(startIndex, endIndex);
-
-//     setFilteredBlogs(paginatedBlogs);
-//   };
-
-//   // Handle page change in pagination
-//   const handlePageChange = (pageNumber) => {
-//     setCurrentPage(pageNumber);
-//     filterBlogs(searchQuery, selectedCategory, pageNumber);
-//   };
-
-//   // Skeleton Loader for Blogs
-//   const SkeletonLoader = () => (
-//     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-//       {[...Array(blogsPerPage)].map((_, index) => (
-//         <div
-//           key={index}
-//           className="bg-white p-4 rounded-xl shadow-lg animate-pulse"
-//         >
-//           <div className="w-full h-48 bg-gray-300 rounded-lg mb-4" />
-//           <div className="w-full h-6 bg-gray-300 rounded-md mb-2" />
-//           <div className="w-3/4 h-4 bg-gray-300 rounded-md" />
-//         </div>
-//       ))}
-//     </div>
-//   );
-
-//   return (
-//     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
-//       {/* SEO Meta Tags */}
-//       <Helmet>
-//         <title>jobNirvana-Blogs | JobNirvana</title>
-//         <meta
-//           name="description"
-//           content="Discover the latest job market insights, career tips, and industry trends with JobNirvana's blog. Stay informed and boost your professional growth."
-//         />
-//         <meta
-//           name="keywords"
-//           content="blogs, job insights, career tips, professional development, industry trends, JobNirvana"
-//         />
-//         <meta property="og:title" content="Latest Blogs | JobNirvana" />
-//         <meta
-//           property="og:description"
-//           content="Stay updated with the latest blogs on JobNirvana. Get insights on job market trends, career advice, and more to help you succeed professionally."
-//         />
-//         <meta property="og:type" content="website" />
-//         <meta property="og:url" content={`${window.location.href}`} />
-//         <link rel="canonical" href={`${window.location.href}`} />
-//       </Helmet>
-
-//       <h1 className="text-3xl font-bold text-gray-800 mb-6">All Blogs</h1>
-
-//       {/* Add Google Ad Banner */}
-//       {/* Layout for Mobile (Column) and Desktop (Row) */}
-//       <div className="flex flex-col md:flex-row gap-6">
-//         {/* Categories Sidebar */}
-//         <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md order-1 md:order-none">
-//           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-//             Categories
-//           </h3>
-
-//           {/* Horizontal scroll on mobile devices */}
-//           <div className="flex md:flex-col overflow-x-auto md:overflow-visible space-x-2 py-2 md:space-x-0 md:space-y-2">
-//             <button
-//               className={`w-auto px-4  py-2 rounded-lg text-center ${
-//                 !selectedCategory
-//                   ? "bg-teal-500 text-white"
-//                   : "bg-gray-200 text-gray-800"
-//               } hover:bg-teal-600`}
-//               onClick={() => handleCategoryClick("")}
-//             >
-//               All
-//             </button>
-
-//             {categories.map((category, index) => (
-//               <button
-//                 key={index}
-//                 className={`w-auto px-4 py-2 rounded-lg text-center ${
-//                   selectedCategory === category
-//                     ? "bg-teal-500 text-white"
-//                     : "bg-gray-200 text-gray-800"
-//                 } hover:bg-teal-600`}
-//                 onClick={() => handleCategoryClick(category)}
-//               >
-//                 {category}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Main Content (Blogs List) */}
-//         <div className="w-full md:w-3/4 order-2 md:order-none">
-//           {/* Search Bar */}
-//           <div className="mb-6">
-//             <input
-//               type="text"
-//               value={searchQuery}
-//               onChange={handleSearch}
-//               placeholder="Search blogs by title"
-//               className="w-full p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-//             />
-//           </div>
-
-//           {/* Grid Layout for Blogs */}
-//           {isLoading ? (
-//             <SkeletonLoader />
-//           ) : (
-//             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-//               {filteredBlogs.map((blog) => (
-//                 <div
-//                   key={blog._id}
-//                   className="bg-white p-4 rounded-xl shadow-lg hover:shadow-2xl transform transition-all duration-300 ease-in-out hover:scale-105"
-//                 >
-//                   {blog.thumbnail && (
-//                     <img
-//                       src={blog.thumbnail}
-//                       alt={blog.title}
-//                       className="w-full h-48 object-cover rounded-lg mb-4 shadow-md transition-all duration-300 ease-in-out transform"
-//                     />
-//                   )}
-//                   <Link to={`/blog/${blog.slug}`}>
-//                     <div className="flex flex-col">
-//                       <h3 className="text-xl font-semibold text-gray-800 hover:text-indigo-600 transition-all duration-200 mb-2">
-//                         {blog.title.length > 50
-//                           ? `${blog.title.slice(0, 50)}...`
-//                           : blog.title}
-//                       </h3>
-//                     </div>
-//                   </Link>
-//                 </div>
-//               ))}
-//             </div>
-//           )}
-
-//           {/* Pagination Controls */}
-//           <div className="flex justify-center mt-6">
-//             <button
-//               onClick={() => handlePageChange(currentPage - 1)}
-//               disabled={currentPage === 1}
-//               className="px-4 py-2 bg-teal-500 text-white rounded-lg mx-2"
-//             >
-//               Prev
-//             </button>
-//             {[...Array(totalPages)].map((_, index) => (
-//               <button
-//                 key={index}
-//                 onClick={() => handlePageChange(index + 1)}
-//                 className={`px-4 py-2 rounded-lg mx-2 ${
-//                   currentPage === index + 1
-//                     ? "bg-teal-500 text-white"
-//                     : "bg-gray-200 text-gray-800"
-//                 }`}
-//               >
-//                 {index + 1}
-//               </button>
-//             ))}
-//             <button
-//               onClick={() => handlePageChange(currentPage + 1)}
-//               disabled={currentPage === totalPages}
-//               className="px-4 py-2 bg-teal-500 text-white rounded-lg mx-2"
-//             >
-//               Next
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className="w-full mb-6">
-//         <InFeedAd />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default BlogsList;
-
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../data/apiPath";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import InFeedAd from "../components/InFeedAd";
+import InArticleAd from "../components/InArticleAd";
+import ProfileCard from "../components/dashboard/ProfileCard";
+import SkeletonLoading from "../components/SkeletonLoading";
+import { useAuth0 } from "@auth0/auth0-react";
+import { FaSearch, FaRegClock, FaChevronRight } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const BlogsList = () => {
+  const { user } = useAuth0();
   const [blogs, setBlogs] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [message, setMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
-  const [totalPages, setTotalPages] = useState(1); // Track total pages
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
-  const blogsPerPage = 9; // Number of blogs per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const blogsPerPage = 8;
 
-  // Fetch blogs data
+
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const response = await fetch(`${API_URL}/blogs/all-blogs`);
         const data = await response.json();
-
         if (response.ok) {
           setBlogs(data);
-          setCategories([...new Set(data.map((blog) => blog.category))]); // Set unique categories for the filter
-
-          // Calculate total pages for pagination based on original data
-          setTotalPages(Math.ceil(data.length / blogsPerPage));
-        } else {
-          setMessage(data.message || "Failed to fetch blogs");
+          setCategories([...new Set(data.map((blog) => blog.category))]);
         }
       } catch (error) {
-        setMessage("Error fetching blogs");
+        console.error("Error fetching blogs:", error);
       } finally {
-        setIsLoading(false); // Set loading to false once data is fetched
+        setIsLoading(false);
       }
     };
-
     fetchBlogs();
   }, []);
 
-  // Handle search input change
   const handleSearch = (e) => {
     setSearchQuery(e.target.value.toLowerCase());
-    setCurrentPage(1); // Reset to page 1 when search changes
+    setCurrentPage(1);
   };
 
-  // Handle category filter click
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); // Reset to page 1 when category changes
+    setCurrentPage(1);
   };
 
-  // Get paginated blogs based on current page
-  const getPaginatedBlogs = () => {
-    // Filter blogs based on search and category
-    const filteredBlogs = blogs.filter((blog) => {
-      const matchesQuery = blog.title.toLowerCase().includes(searchQuery);
-      const matchesCategory = selectedCategory
-        ? blog.category === selectedCategory
-        : true;
-      return matchesQuery && matchesCategory;
-    });
+  const filteredBlogs = blogs.filter((blog) => {
+    const matchesQuery = blog.title.toLowerCase().includes(searchQuery);
+    const matchesCategory = selectedCategory ? blog.category === selectedCategory : true;
+    return matchesQuery && matchesCategory;
+  });
 
-    // Calculate pagination for the current page
-    const startIndex = (currentPage - 1) * blogsPerPage;
-    const endIndex = startIndex + blogsPerPage;
-    return filteredBlogs.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+  const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * blogsPerPage, currentPage * blogsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  // Handle page change in pagination
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // Skeleton Loader for Blogs
-  const SkeletonLoader = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {[...Array(blogsPerPage)].map((_, index) => (
-        <div
-          key={index}
-          className="bg-white p-4 rounded-xl shadow-lg animate-pulse"
-        >
-          <div className="w-full h-48 bg-gray-300 rounded-lg mb-4" />
-          <div className="w-full h-6 bg-gray-300 rounded-md mb-2" />
-          <div className="w-3/4 h-4 bg-gray-300 rounded-md" />
-        </div>
-      ))}
-    </div>
-  );
 
   return (
-    <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4 py-5 bg-[#FAFAFA] my-5">
-      {/* SEO Meta Tags */}
+    <div className="min-h-screen bg-[#F8F9FA] pb-12">
       <Helmet>
-        <title>
-          Explore Career Insights, Job Tips & Industry Trends - JobNirvana Blogs
-        </title>
-        <meta
-          name="description"
-          content="Discover the latest job market insights, career tips, and industry trends with JobNirvana's blog. Stay informed and boost your professional growth."
-        />
-        <meta
-          name="keywords"
-          content="blogs, job insights, career tips, professional development, industry trends, JobNirvana"
-        />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Latest Blogs | JobNirvana" />
-        <meta
-          property="og:description"
-          content="Stay updated with the latest blogs on JobNirvana. Get insights on job market trends, career advice, and more to help you succeed professionally."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${window.location.href}`} />
-        <link rel="canonical" href={`${window.location.href}`} />
+        <title>Career Insights & Industry Trends | JobNirvana Blog</title>
+        <meta name="description" content="Explore the latest job market insights, career tips, and industry trends." />
+        <link rel="canonical" href={window.location.href} />
       </Helmet>
 
-      <h1 className="text-3xl lg:text-4xl text-center font-bold mb-10 text-gray-900">
-        Job<span className="text-blue-600">Nirvana</span> Blog
-      </h1>
-      <InFeedAd />
+      {/* Header Section */}
+      <div className="bg-white border-b border-gray-200 py-10 mb-8">
+        <div className="max-w-[1240px] mx-auto px-4 text-center">
+          <h1 className="text-4xl font-extrabold text-[#091e42] mb-4">
+            Career Insights & Trends
+          </h1>
+          <p className="text-gray-500 font-medium max-w-2xl mx-auto">
+            Stay ahead in your professional journey with our latest articles and guidance.
+          </p>
 
-      {/* Add Google Ad Banner */}
-      {/* Layout for Mobile (Column) and Desktop (Row) */}
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Categories Sidebar */}
-        <div className="w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 order-1 md:order-none h-fit">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Categories
-          </h2>
-
-          {/* Horizontal scroll on mobile devices */}
-          <div className="flex md:flex-col overflow-x-auto md:overflow-visible space-x-2 py-2 md:space-x-0 md:space-y-3">
-            <button
-              className={`w-full px-4 py-3 rounded-xl text-left font-medium transition-all ${!selectedCategory
-                ? "bg-blue-50 text-blue-700 border border-blue-100"
-                : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
-                }`}
-              onClick={() => handleCategoryClick("")}
-            >
-              All Articles
-            </button>
-
-            {categories.map((category, index) => (
-              <button
-                key={index}
-                className={`w-full px-4 py-3 rounded-xl text-left font-medium transition-all ${selectedCategory === category
-                  ? "bg-blue-50 text-blue-700 border border-blue-100"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border border-transparent"
-                  }`}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Content (Blogs List) */}
-        <div className="w-full md:w-3/4 order-2 md:order-none">
           {/* Search Bar */}
-          <div className="mb-8 relative group">
+          <div className="max-w-2xl mx-auto mt-8 relative group">
             <input
               type="text"
               value={searchQuery}
               onChange={handleSearch}
               placeholder="Search articles..."
-              className="w-full p-4 pl-6 border border-gray-200 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-300 transition-all font-medium"
+              className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-medium"
             />
-          </div>
-
-          {/* Grid Layout for Blogs */}
-          {isLoading ? (
-            <SkeletonLoader />
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {getPaginatedBlogs().map((blog, index) => (
-                <React.Fragment key={blog._id}>
-                  <Link to={`/blog/${blog.slug}`} className="group">
-                    <div
-                      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col"
-                    >
-                      {blog.thumbnail && (
-                        <div className="relative overflow-hidden h-48">
-                          <img
-                            src={blog.thumbnail}
-                            alt={blog.title}
-                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                          />
-                        </div>
-                      )}
-                      <div className="p-5 flex-1 flex flex-col">
-                        <span className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">{blog.category}</span>
-                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2">
-                          {blog.title}
-                        </h3>
-                        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between text-gray-400 text-sm">
-                          <span>{new Date(blog.createdAt || Date.now()).toLocaleDateString()}</span>
-                          <span className="font-medium text-blue-500 group-hover:translate-x-1 transition-transform">Read &rarr;</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                  {/* Inject Ad after every 6th item */}
-                  {(index + 1) % 6 === 0 && (
-                    <div className="col-span-1 sm:col-span-2 md:col-span-3">
-                      <InFeedAd />
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          )}
-
-          {/* Pagination Controls */}
-          <div className="flex justify-center mt-12 gap-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl disabled:opacity-50 hover:bg-gray-50 transition-colors"
-            >
-              Prev
-            </button>
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === index + 1
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-200"
-                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
-                  }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="px-6 py-2 bg-white border border-gray-200 text-gray-600 rounded-xl disabled:opacity-50 hover:bg-gray-50 transition-colors"
-            >
-              Next
-            </button>
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           </div>
         </div>
       </div>
 
-      <div className="w-full mb-6">
+      <div className="max-w-[1240px] mx-auto px-4">
+        <div className="lg:grid lg:grid-cols-12 gap-8 items-start">
+
+          {/* LEFT SIDEBAR (25%) */}
+          <div className="hidden lg:block lg:col-span-3 sticky top-24">
+            <ProfileCard />
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6">
+              <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Categories</h2>
+              <div className="space-y-2">
+                <button
+                  onClick={() => handleCategoryClick("")}
+                  className={`w-full text-left px-4 py-2 rounded-lg text-sm font-bold transition-all ${!selectedCategory ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
+                    }`}
+                >
+                  All Articles
+                </button>
+                {categories.map((cat, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleCategoryClick(cat)}
+                    className={`w-full text-left px-4 py-2 rounded-lg text-sm font-bold transition-all ${selectedCategory === cat ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"
+                      }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* MAIN FEED (50%) */}
+          <div className="col-span-12 lg:col-span-6 space-y-6">
+            {isLoading ? (
+              <div className="bg-white rounded-xl p-8 shadow-sm">
+                <SkeletonLoading />
+              </div>
+            ) : paginatedBlogs.length > 0 ? (
+              <>
+                {paginatedBlogs.map((blog, index) => (
+                  <React.Fragment key={blog._id}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all group"
+                    >
+                      <Link to={`/blog/${blog.slug}`} className="flex flex-col md:flex-row h-full">
+                        {blog.thumbnail && (
+                          <div className="md:w-1/3 relative overflow-hidden h-48 md:h-auto">
+                            <img
+                              src={blog.thumbnail}
+                              alt={blog.title}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                          </div>
+                        )}
+                        <div className="p-6 md:w-2/3 flex flex-col">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-[10px] font-bold text-blue-600 uppercase bg-blue-50 px-2 py-1 rounded">
+                              {blog.category}
+                            </span>
+                            <span className="flex items-center gap-1 text-[11px] text-gray-400">
+                              <FaRegClock /> 5 min read
+                            </span>
+                          </div>
+                          <h3 className="text-xl font-bold text-[#091e42] group-hover:text-blue-600 transition-colors mb-3 line-clamp-2">
+                            {blog.title}
+                          </h3>
+                          <div className="mt-auto flex items-center justify-between text-sm text-gray-500">
+                            <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                            <span className="font-bold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                              Read Full Article <FaChevronRight className="text-[10px]" />
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+
+                    {/* In-Feed Ad every 3 posts */}
+                    {(index + 1) % 3 === 0 && (
+                      <div className="py-2">
+                        <InFeedAd />
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 py-8">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                    >
+                      Prev
+                    </button>
+                    {[...Array(totalPages)].map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handlePageChange(i + 1)}
+                        className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === i + 1 ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                          }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-gray-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">No articles found</h3>
+                <p className="text-gray-500 mb-6">Try a different search term or category.</p>
+                <button onClick={() => { setSearchQuery(""); setSelectedCategory(""); }} className="text-blue-600 font-bold hover:underline">
+                  Clear all filters
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT SIDEBAR (25%) */}
+          <div className="hidden lg:block lg:col-span-3 space-y-6 sticky top-24">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-bold text-[#091e42] mb-4">Newsletter</h3>
+              <p className="text-xs text-gray-500 leading-relaxed mb-4">
+                Get the latest career tips and industry news delivered to your inbox.
+              </p>
+              <input
+                type="email"
+                placeholder="Your email"
+                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500/20 mb-3"
+              />
+              <button className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg text-xs hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+                Subscribe Now
+              </button>
+            </div>
+
+            {/* Sticky Sidebar Ad */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 overflow-hidden">
+              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
+              <InArticleAd />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Bottom Sticky Ad for Mobile */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-2 z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
         <InFeedAd />
       </div>
     </div>

@@ -1,0 +1,1 @@
+import{G as a}from"./index-Dc3DlMvd.js";function r(t){return a({tag:"svg",attr:{viewBox:"0 0 24 24"},child:[{tag:"path",attr:{d:"M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"},child:[]}]})(t)}export{r as G};

@@ -1,150 +1,16 @@
-// import React, { useState } from "react";
-// import { useAuth0 } from "@auth0/auth0-react";
-// import MyJobs from "../Pages/MyJobs";
-
-// const ProfilePage = () => {
-//   const { user, isAuthenticated, isLoading, logout } = useAuth0();
-//   const [editMode, setEditMode] = useState(false);
-//   const [formData, setFormData] = useState({
-//     name: user?.name || "",
-//     email: user?.email || "",
-//     profilePicture: user?.picture || "",
-//     bio: user?.bio || "",
-//   });
-
-//   const handleInputChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleUpdateProfile = (e) => {
-//     e.preventDefault();
-//     // Update user profile logic, if any (e.g., save to Auth0 user metadata or a backend)
-//     setEditMode(false); // After updating, toggle back to view mode
-//   };
-
-//   if (isLoading) return <div>Loading...</div>;
-
-//   return (
-//     <div className="max-w-screen-2xl container mx-auto xl:px-24 px-4">
-//       <h2 className="text-2xl font-semibold mb-4">
-//         {editMode ? "Edit Profile" : "Profile"}
-//       </h2>
-
-//       {isAuthenticated ? (
-//         <div className="bg-white p-6 rounded-lg shadow-md">
-//           <div className="flex items-center mb-6">
-//             <div className="w-24 h-24 rounded-full overflow-hidden mr-6">
-//               <img
-//                 src={formData.profilePicture || "/default-profile.jpg"}
-//                 alt="Profile"
-//                 className="w-full h-full object-cover"
-//               />
-//             </div>
-//             <div>
-//               <h3 className="text-xl font-medium">{formData.name}</h3>
-//               <p className="text-gray-500">{formData.email}</p>
-//             </div>
-//           </div>
-
-//           <form onSubmit={handleUpdateProfile}>
-//             <div className="space-y-4">
-//               <div className="form-group">
-//                 <label
-//                   htmlFor="name"
-//                   className="block text-sm font-medium text-gray-700"
-//                 >
-//                   Name
-//                 </label>
-//                 <input
-//                   type="text"
-//                   id="name"
-//                   name="name"
-//                   value={formData.name}
-//                   onChange={handleInputChange}
-//                   disabled={!editMode}
-//                   className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                 />
-//               </div>
-
-//               <div className="form-group">
-//                 <label
-//                   htmlFor="email"
-//                   className="block text-sm font-medium text-gray-700"
-//                 >
-//                   Email
-//                 </label>
-//                 <input
-//                   type="email"
-//                   id="email"
-//                   name="email"
-//                   value={formData.email}
-//                   onChange={handleInputChange}
-//                   disabled
-//                   className="mt-1 block w-full px-4 py-2 border bg-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                 />
-//               </div>
-
-//               <div className="form-group">
-//                 <label
-//                   htmlFor="bio"
-//                   className="block text-sm font-medium text-gray-700"
-//                 >
-//                   Bio
-//                 </label>
-//                 <textarea
-//                   id="bio"
-//                   name="bio"
-//                   value={formData.bio}
-//                   onChange={handleInputChange}
-//                   disabled={!editMode}
-//                   className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-//                 />
-//               </div>
-//             </div>
-
-//             <div className="mt-4 flex items-center space-x-4">
-//               {editMode && (
-//                 <button
-//                   type="submit"
-//                   className="px-6 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//                 >
-//                   Save Changes
-//                 </button>
-//               )}
-//               <button
-//                 type="button"
-//                 onClick={() => setEditMode(!editMode)}
-//                 className="px-6 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
-//               >
-//                 {editMode ? "Cancel" : "Edit Profile"}
-//               </button>
-//             </div>
-//           </form>
-
-//           <div className="mt-6">
-//             <button
-//               onClick={() => logout({ returnTo: window.location.origin })}
-//               className="w-full px-6 py-2 text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-//             >
-//               Log Out
-//             </button>
-//           </div>
-//         </div>
-//       ) : (
-//         <p>You need to log in to view your profile.</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ProfilePage;
-
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { MdOutlineWorkOutline, MdOutlineArticle, MdLogout, MdEdit, MdSave, MdCancel, MdPerson, MdEmail, MdDescription, MdAssignment } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
+import {
+  MdOutlineWorkOutline, MdOutlineArticle, MdLogout, MdEdit, MdSave, MdCancel,
+  MdPerson, MdEmail, MdDescription, MdAssignment, MdVerified, MdAnalytics, MdRocketLaunch
+} from "react-icons/md";
+import { FaCheckCircle, FaStar, FaLightbulb } from "react-icons/fa";
+import InArticleAd from "../components/InArticleAd";
+import InFeedAd from "../components/InFeedAd";
+import SkeletonLoading from "./SkeletonLoading";
 
 const ProfilePage = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
@@ -164,7 +30,7 @@ const ProfilePage = () => {
         name: user.name || "",
         email: user.email || "",
         profilePicture: user.picture || "/default-profile.jpg",
-        bio: user.bio || "",
+        bio: user.bio || "Crafting a professional journey with passion and purpose.",
       });
     }
   }, [user]);
@@ -176,228 +42,332 @@ const ProfilePage = () => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    // Simulate API call
     console.log("Profile updated:", formData);
     setEditMode(false);
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-[#F8F9FA]">
+        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 text-center px-4">
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">Profile Access</h2>
-        <p className="text-gray-600 text-lg mb-8">Please log in to view and manage your profile.</p>
-        <button
-          onClick={() => logout({ returnTo: window.location.origin })} // Actually this should be login logic, but let's assume redirect
-          className="px-8 py-3 bg-blue-600 text-white rounded-full font-semibold shadow-lg hover:bg-blue-700 transition"
-        >
-          Go to Login
-        </button>
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F9FA] px-4">
+        <div className="max-w-md w-full text-center p-12 bg-white rounded-[40px] shadow-2xl border border-gray-100">
+          <div className="w-24 h-24 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+            <MdPerson className="text-5xl" />
+          </div>
+          <h2 className="text-3xl font-black text-[#091e42] mb-4">Member Access</h2>
+          <p className="text-gray-500 font-medium mb-10 leading-relaxed">Join JobNirvana to unlock your personalized career dashboard and track your success.</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="w-full py-4 bg-[#091e42] text-white font-black rounded-2xl hover:bg-black transition-all shadow-xl shadow-gray-200"
+          >
+            Go to Login
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden transition-colors"
-      >
-        {/* Banner Section */}
-        <div className="h-48 bg-gradient-to-r from-blue-600 to-purple-600 relative">
-          <div className="absolute top-4 right-4">
+    <div className="min-h-screen bg-[#F8F9FA] pb-24">
+      <Helmet>
+        <title>{formData.name} | Professional Profile | JobNirvana</title>
+        <meta name="description" content="Manage your professional profile, track applications, and optimize your carrier on JobNirvana." />
+      </Helmet>
+
+      {/* ULTRA-PREMIUM BANNER HEADER */}
+      <div className="relative h-64 lg:h-80 bg-gradient-to-br from-[#091e42] via-blue-900 to-indigo-900 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-[120px] -mr-48 -mt-48 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-400 rounded-full blur-[100px] -ml-24 -mb-24"></div>
+        </div>
+
+        <div className="max-w-[1240px] mx-auto px-6 h-full relative flex items-end pb-12 lg:pb-16">
+          <div className="absolute top-6 right-6 flex gap-4">
             <button
               onClick={() => logout({ returnTo: window.location.origin })}
-              className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md text-white rounded-full hover:bg-white/30 transition text-sm font-medium"
+              className="flex items-center gap-2 px-6 py-2.5 bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-full hover:bg-red-500/80 transition-all text-xs font-black uppercase tracking-widest shadow-lg"
             >
               <MdLogout className="text-lg" /> Logout
             </button>
           </div>
-        </div>
 
-        <div className="px-8 pb-8">
-          {/* Header Section (Avatar & Actions) */}
-          <div className="relative flex flex-col sm:flex-row items-end -mt-16 sm:-mt-20 mb-6 gap-6">
+          {/* Profile Avatar Overlay */}
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-8 w-full">
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white dark:border-gray-800 shadow-lg overflow-hidden bg-gray-200 z-10"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="relative group"
             >
-              <img
-                src={formData.profilePicture}
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
+              <div className="w-32 h-32 md:w-48 md:h-48 rounded-[40px] border-8 border-white shadow-2xl overflow-hidden bg-gray-100 flex-shrink-0 relative">
+                <img src={formData.profilePicture} alt="User avatar" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                {editMode && (
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white text-xs font-black uppercase tracking-widest">Change</span>
+                  </div>
+                )}
+              </div>
+              <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-green-500 border-4 border-white rounded-full flex items-center justify-center shadow-lg text-white" title="Verified Professional">
+                <MdVerified />
+              </div>
             </motion.div>
 
-            <div className="flex-1 sm:mb-4 text-center sm:text-left z-0 mt-4 sm:mt-0">
-              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{formData.name}</h1>
-              <p className="text-gray-500 dark:text-gray-400 font-medium">{formData.email}</p>
+            <div className="flex-1 text-center md:text-left text-white mb-2">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-2 drop-shadow-md">
+                {formData.name}
+              </h1>
+              <p className="text-blue-100/70 font-bold flex items-center justify-center md:justify-start gap-2">
+                <MdEmail className="text-blue-300" /> {formData.email}
+              </p>
             </div>
 
-            <div className="mb-4 z-10">
+            <div className="mb-2">
               <button
                 onClick={() => setEditMode(!editMode)}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold shadow-md transition-all ${editMode
-                  ? "bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/40 dark:text-red-300"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                className={`flex items-center gap-3 px-8 py-3.5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl transition-all active:scale-95 ${editMode
+                    ? "bg-red-500 text-white hover:bg-red-600"
+                    : "bg-white text-[#091e42] hover:bg-blue-50"
                   }`}
               >
-                {editMode ? (
-                  <><MdCancel /> Cancel</>
-                ) : (
-                  <><MdEdit /> Edit Profile</>
-                )}
+                {editMode ? <><MdCancel /> Cancel</> : <><MdEdit /> Edit Profile</>}
               </button>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column: Personal Info Form */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-600">
-                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
-                  <MdPerson className="text-blue-600 dark:text-blue-400" /> Personal Details
-                </h3>
-                <form onSubmit={handleUpdateProfile} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
-                      <div className="relative">
-                        <MdPerson className="absolute left-3 top-3 text-gray-400" />
+      <div className="max-w-[1240px] mx-auto px-6 mt-12">
+        <div className="lg:grid lg:grid-cols-12 gap-8 items-start">
+
+          {/* MAIN CONTENT (66%) */}
+          <div className="col-span-12 lg:col-span-8 space-y-8">
+
+            {/* Dynamic Intro Card */}
+            <motion.div
+              layout
+              className="bg-white rounded-[40px] p-10 shadow-sm border border-gray-100 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 p-10 opacity-5">
+                <MdDescription className="text-[120px] text-[#091e42]" />
+              </div>
+
+              <h3 className="text-xl font-black text-[#091e42] mb-6 flex items-center gap-3">
+                <div className="p-2 bg-blue-50 text-blue-600 rounded-xl"><MdPerson /></div>
+                Professional Summary
+              </h3>
+
+              <AnimatePresence mode="wait">
+                {editMode ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="space-y-6"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Full Name</label>
                         <input
                           type="text"
                           name="name"
                           value={formData.name}
                           onChange={handleInputChange}
-                          disabled={!editMode}
-                          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${editMode ? 'border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white ring-2 ring-transparent focus:ring-blue-500' : 'border-transparent bg-transparent dark:text-gray-300'} transition-all outline-none`}
+                          className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none font-bold transition-all"
                         />
                       </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
-                      <div className="relative">
-                        <MdEmail className="absolute left-3 top-3 text-gray-400" />
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          disabled
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-transparent bg-transparent text-gray-500 dark:text-gray-400 cursor-not-allowed outline-none"
-                        />
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Job Category</label>
+                        <select className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none font-bold">
+                          <option>Full Stack Developer</option>
+                          <option>UI/UX Designer</option>
+                          <option>Product Manager</option>
+                        </select>
                       </div>
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Bio</label>
-                    <div className="relative">
-                      <MdDescription className="absolute left-3 top-3 text-gray-400" />
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Short Bio</label>
                       <textarea
                         name="bio"
                         value={formData.bio}
                         onChange={handleInputChange}
-                        disabled={!editMode}
                         rows="4"
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl border ${editMode ? 'border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white ring-2 ring-transparent focus:ring-blue-500' : 'border-transparent bg-transparent dark:text-gray-300'} transition-all outline-none resize-none`}
-                        placeholder="Tell us a little about yourself..."
+                        className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-gray-100 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 outline-none font-bold transition-all resize-none"
                       />
                     </div>
-                  </div>
-
-                  {editMode && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      className="flex justify-end pt-2"
-                    >
+                    <div className="flex justify-end pt-4">
                       <button
-                        type="submit"
-                        className="flex items-center gap-2 px-8 py-2.5 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition shadow-lg"
+                        onClick={handleUpdateProfile}
+                        className="px-10 py-4 bg-blue-600 text-white font-black rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 flex items-center gap-3"
                       >
                         <MdSave /> Save Changes
                       </button>
-                    </motion.div>
-                  )}
-                </form>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <p className="text-gray-600 font-medium leading-[1.8] text-lg">
+                      {formData.bio}
+                    </p>
+
+                    <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+                      <div className="p-6 bg-[#F8F9FA] rounded-[32px] text-center">
+                        <h4 className="text-2xl font-black text-[#091e42]">12</h4>
+                        <span className="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest">Active Apps</span>
+                      </div>
+                      <div className="p-6 bg-blue-50/50 rounded-[32px] text-center">
+                        <h4 className="text-2xl font-black text-blue-600">85%</h4>
+                        <span className="text-[9px] font-extrabold text-blue-400 uppercase tracking-widest">Profile Score</span>
+                      </div>
+                      <div className="p-6 bg-[#F8F9FA] rounded-[32px] text-center">
+                        <h4 className="text-2xl font-black text-[#091e42]">24</h4>
+                        <span className="text-[9px] font-extrabold text-gray-400 uppercase tracking-widest">Shortlists</span>
+                      </div>
+                      <div className="p-6 bg-green-50 text-green-700 rounded-[32px] text-center">
+                        <h4 className="text-2xl font-black">2</h4>
+                        <span className="text-[9px] font-extrabold uppercase tracking-widest">Offers</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+            {/* In-Feed Mid Page Ad */}
+            <div className="bg-white rounded-[40px] p-4 border border-dashed border-gray-200">
+              <InFeedAd />
+            </div>
+
+            {/* Quick Actions / Link Tiles */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-[#091e42] text-white p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
+                <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                <MdAssignment className="text-5xl text-blue-400 mb-8" />
+                <h3 className="text-2xl font-black mb-4">Track Applications</h3>
+                <p className="text-blue-100/70 text-sm font-medium mb-10 leading-relaxed">View all your job submissions and their current real-time status.</p>
+                <button
+                  onClick={() => navigate("/my-applications")}
+                  className="w-full py-4 bg-white text-[#091e42] font-black rounded-2xl hover:bg-blue-50 transition-all shadow-lg"
+                >
+                  View Status Board
+                </button>
+              </div>
+
+              <div className="bg-blue-600 text-white p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
+                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                <MdOutlineWorkOutline className="text-5xl text-blue-200 mb-8" />
+                <h3 className="text-2xl font-black mb-4">Saved Opportunities</h3>
+                <p className="text-blue-100/70 text-sm font-medium mb-10 leading-relaxed">You have 15 unsaved jobs in your search history. Don't miss out!</p>
+                <button
+                  onClick={() => navigate("/jobs")}
+                  className="w-full py-4 bg-[#091e42] text-white font-black rounded-2xl hover:bg-black transition-all shadow-lg"
+                >
+                  Explore Jobs
+                </button>
               </div>
             </div>
 
-            {/* Right Column: Dashboard Actions */}
-            <div className="space-y-6">
-              <div className="bg-blue-50 dark:bg-gray-700/50 p-6 rounded-2xl border border-blue-100 dark:border-gray-600">
-                <h3 className="text-xl font-bold text-blue-800 dark:text-blue-300 mb-4">Dashboard</h3>
-                <div className="space-y-3">
-                  <button
-                    onClick={() => navigate("/my-applications")}
-                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
-                  >
-                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
-                      <div className="p-2 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-lg group-hover:bg-indigo-500 group-hover:text-white transition">
-                        <MdAssignment />
-                      </div>
-                      My Applications
-                    </div>
-                    <span className="text-gray-400 group-hover:text-indigo-200">→</span>
-                  </button>
+          </div>
 
-                  <button
-                    onClick={() => navigate("/my-job")}
-                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
-                  >
-                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
-                      <div className="p-2 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition">
-                        <MdOutlineWorkOutline />
-                      </div>
-                      My Jobs
-                    </div>
-                    <span className="text-gray-400 group-hover:text-blue-200">→</span>
-                  </button>
+          {/* SIDEBAR (33%) */}
+          <div className="col-span-12 lg:col-span-4 space-y-8 sticky top-28">
 
-                  <button
-                    onClick={() => navigate("/my-blogs")}
-                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:purple-600 dark:hover:bg-purple-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
-                  >
-                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
-                      <div className="p-2 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-lg group-hover:bg-purple-500 group-hover:text-white transition">
-                        <MdOutlineArticle />
-                      </div>
-                      My Blogs
-                    </div>
-                    <span className="text-gray-400 group-hover:text-purple-200">→</span>
-                  </button>
+            {/* Career Readiness Score */}
+            <div className="bg-white rounded-[40px] p-8 shadow-sm border border-gray-100">
+              <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-8 flex items-center justify-between">
+                Job Readiness <MdAnalytics className="text-lg text-blue-600" />
+              </h4>
 
-                  {/* Add more quick actions if needed (e.g., Post Job) */}
-                  <button
-                    onClick={() => navigate("/post-job")}
-                    className="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:bg-green-600 dark:hover:bg-green-600 hover:text-white transition-all group border border-transparent dark:border-gray-600"
-                  >
-                    <div className="flex items-center gap-3 font-semibold text-gray-800 dark:text-gray-200 group-hover:text-white">
-                      <div className="p-2 bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 rounded-lg group-hover:bg-green-500 group-hover:text-white transition">
-                        <span className="text-lg font-bold">+</span>
-                      </div>
-                      Post New Job
-                    </div>
-                    <span className="text-gray-400 group-hover:text-green-200">→</span>
-                  </button>
+              <div className="relative w-40 h-40 mx-auto flex items-center justify-center mb-8">
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle cx="80" cy="80" r="70" className="stroke-current text-gray-100" strokeWidth="12" fill="transparent" />
+                  <motion.circle
+                    cx="80" cy="80" r="70"
+                    className="stroke-current text-blue-600"
+                    strokeWidth="12" fill="transparent"
+                    strokeDasharray="440"
+                    initial={{ strokeDashoffset: 440 }}
+                    animate={{ strokeDashoffset: 440 - (440 * 0.85) }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                  />
+                </svg>
+                <div className="absolute text-center">
+                  <span className="text-4xl font-black text-[#091e42]">85%</span>
+                  <span className="block text-[9px] font-bold text-gray-400 uppercase">Strong</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-xs font-bold text-gray-600">
+                  <span>Profile Integrity</span>
+                  <span className="text-blue-600">95/100</span>
+                </div>
+                <div className="w-full h-2 bg-gray-50 rounded-full overflow-hidden">
+                  <div className="w-[95%] h-full bg-blue-600 rounded-full"></div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-6 text-orange-400">
+                  <FaLightbulb className="text-xl" />
+                  <p className="text-[11px] font-bold leading-relaxed text-gray-500">
+                    Adding a professional video pitch can boost your readiness to <span className="text-[#091e42] font-black">98%</span>.
+                  </p>
                 </div>
               </div>
             </div>
+
+            {/* Sticky Sidebar Ad */}
+            <div className="bg-white rounded-[40px] shadow-sm border border-gray-100 p-2 overflow-hidden">
+              <span className="text-[10px] text-gray-300 uppercase block mb-2 text-center font-bold tracking-widest">Network Featured</span>
+              <InArticleAd />
+            </div>
+
+            {/* Quick Links Menu */}
+            <div className="bg-white rounded-[40px] p-6 shadow-sm border border-gray-100">
+              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6 px-4">Navigation Hub</h4>
+              <div className="space-y-2">
+                {[
+                  { icon: <MdAssignment />, label: "Applications", link: "/my-applications" },
+                  { icon: <MdOutlineArticle />, label: "Resume Builder", link: "/resume-builder" },
+                  { icon: <FaStar />, label: "Premium Services", link: "/salary" },
+                  { icon: <MdRocketLaunch />, label: "Hiring Webinars", link: "/blogs" }
+                ].map((link, i) => (
+                  <Link
+                    key={i}
+                    to={link.link}
+                    className="flex items-center justify-between p-4 hover:bg-blue-50 rounded-3xl transition-all group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="p-2.5 bg-gray-50 text-gray-400 rounded-2xl group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
+                        {link.icon}
+                      </div>
+                      <span className="text-sm font-black text-gray-600 group-hover:text-[#091e42] transition-colors">{link.label}</span>
+                    </div>
+                    <span className="text-gray-300 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-all">→</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Ad Unit */}
+            <div className="bg-white rounded-[40px] p-2 border border-dashed border-gray-200">
+              <InFeedAd />
+            </div>
+
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
-
 
 export default ProfilePage;

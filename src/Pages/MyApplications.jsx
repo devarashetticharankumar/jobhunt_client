@@ -5,8 +5,12 @@ import { API_URL } from "../data/apiPath";
 import { toast, ToastContainer } from "react-toastify";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { MdWorkOutline, MdOpenInNew } from "react-icons/md";
+import { MdWorkOutline, MdOpenInNew, MdLocationOn } from "react-icons/md";
+import { FaBuilding, FaCalendarAlt, FaStar } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
+import ProfileCard from "../components/dashboard/ProfileCard";
+import InArticleAd from "../components/InArticleAd";
+import SkeletonLoading from "../components/SkeletonLoading";
 
 const MyApplications = () => {
     const { user, isAuthenticated, loginWithRedirect } = useAuth0();
@@ -15,8 +19,16 @@ const MyApplications = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
+    // Mock user for ProfileCard if not fully loaded from Auth0
+    const mockUser = {
+        name: user?.name || "Job Seeker",
+        role: "Job Seeker",
+        location: "India",
+        photoUrl: user?.picture || ""
+    };
+
     useEffect(() => {
-        if (isLoading && isAuthenticated === false) {
+        if (!isLoading && isAuthenticated === false) {
             loginWithRedirect();
         } else if (user) {
             fetchApplications();
@@ -41,123 +53,178 @@ const MyApplications = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentApps = applications.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(applications.length / itemsPerPage);
 
     const nextPage = () => {
-        if (indexOfLastItem < applications.length) setCurrentPage(currentPage + 1);
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
     };
     const prevPage = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
     };
 
-    if (isLoading) {
-        return (
-            <div className="flex justify-center items-center h-screen bg-gray-50">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600"></div>
-            </div>
-        );
-    }
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'hired': return 'bg-green-50 text-green-700 border-green-100';
+            case 'rejected': return 'bg-red-50 text-red-700 border-red-100';
+            case 'external-click': return 'bg-yellow-50 text-yellow-700 border-yellow-100';
+            default: return 'bg-blue-50 text-blue-700 border-blue-100';
+        }
+    };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
+        <div className="min-h-screen bg-[#F8F9FA] font-sans pb-12">
             <Helmet>
                 <title>My Applications | JobNirvana</title>
+                <meta name="robots" content="noindex" />
             </Helmet>
             <ToastContainer />
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="max-w-6xl mx-auto"
-            >
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Applications</h1>
-                    <p className="text-gray-500 dark:text-gray-400 mt-1">Track the jobs you've applied to</p>
+            {/* Top Header Placeholder / Search context */}
+            <div className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+                <div className="max-w-[1240px] mx-auto px-4 py-4">
+                    <h1 className="text-xl font-bold text-[#091e42]">My Applications ({applications.length})</h1>
                 </div>
+            </div>
 
-                <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="bg-gray-50/80 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 text-sm uppercase tracking-wider">
-                                    <th className="px-6 py-4 font-semibold">No.</th>
-                                    <th className="px-6 py-4 font-semibold">Job Title</th>
-                                    <th className="px-6 py-4 font-semibold">Company</th>
-                                    <th className="px-6 py-4 font-semibold">Applied On</th>
-                                    <th className="px-6 py-4 font-semibold">Status</th>
-                                    <th className="px-6 py-4 font-semibold text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                                {currentApps.length > 0 ? (
-                                    currentApps.map((app, index) => (
-                                        <motion.tr
-                                            key={app._id}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: index * 0.05 }}
-                                            className="hover:bg-blue-50/50 dark:hover:bg-gray-700/50 transition-colors"
-                                        >
-                                            <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                                                {index + 1 + (currentPage - 1) * itemsPerPage}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className="font-semibold text-gray-800 dark:text-gray-200">{app.jobTitle}</div>
-                                            </td>
-                                            <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                                                {app.companyName}
-                                            </td>
-                                            <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                                                {new Date(app.appliedAt).toLocaleDateString()}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-3 py-1 rounded-full text-xs font-semibold
-                          ${app.status === 'external-click' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200' :
-                                                        app.status === 'hired' ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200' :
-                                                            app.status === 'rejected' ? 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200' :
-                                                                'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200'
-                                                    }`}>
-                                                    {app.status === 'external-click' ? 'Applied on Ext Site' : app.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <Link to={`/job/${app.jobId}`}>
-                                                    <button className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium">View Job</button>
-                                                </Link>
-                                                {app.applyUrl && (
-                                                    <a href={app.applyUrl} target="_blank" rel="noopener noreferrer" className="ml-4 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400" title="Visit Link">
-                                                        <MdOpenInNew className="inline text-lg" />
-                                                    </a>
-                                                )}
-                                            </td>
-                                        </motion.tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="6" className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
-                                            <div className="flex flex-col items-center justify-center">
-                                                <MdWorkOutline className="text-6xl text-gray-200 mb-4" />
-                                                <p className="text-lg">You haven't applied to any jobs yet.</p>
-                                                <Link to="/jobs">
-                                                    <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Browse Jobs</button>
-                                                </Link>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+            <div className="max-w-[1240px] mx-auto px-4 pt-8">
+                <div className="lg:grid lg:grid-cols-12 gap-6 items-start">
+
+                    {/* LEFT COLUMN (25%) */}
+                    <div className="hidden lg:block lg:col-span-3 sticky top-24">
+                        <ProfileCard user={mockUser} />
                     </div>
 
-                    {/* Pagination */}
-                    {applications.length > itemsPerPage && (
-                        <div className="p-6 border-t border-gray-100 dark:border-gray-700 flex justify-center gap-4 bg-gray-50/50 dark:bg-gray-800 transition-colors">
-                            <button onClick={prevPage} disabled={currentPage === 1} className={`px-4 py-2 rounded-lg font-medium transition ${currentPage === 1 ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-700 border hover:bg-gray-100 dark:hover:bg-gray-600 shadow-sm text-gray-700 dark:text-gray-200'}`}>Previous</button>
-                            <span className="flex items-center text-gray-600 dark:text-gray-400">Page {currentPage} of {Math.ceil(applications.length / itemsPerPage)}</span>
-                            <button onClick={nextPage} disabled={indexOfLastItem >= applications.length} className={`px-4 py-2 rounded-lg font-medium transition ${indexOfLastItem >= applications.length ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-white dark:bg-gray-700 border hover:bg-gray-100 dark:hover:bg-gray-600 shadow-sm text-gray-700 dark:text-gray-200'}`}>Next</button>
+                    {/* MAIN FEED (50%) */}
+                    <div className="col-span-12 lg:col-span-6 space-y-4">
+                        {isLoading ? (
+                            <div className="bg-white rounded-xl p-6 shadow-sm">
+                                <SkeletonLoading />
+                            </div>
+                        ) : currentApps.length > 0 ? (
+                            <>
+                                {currentApps.map((app, index) => (
+                                    <React.Fragment key={app._id}>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: index * 0.05 }}
+                                            className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow relative"
+                                        >
+                                            <div className="flex justify-between items-start mb-4">
+                                                <div className="flex-1">
+                                                    <Link to={`/job/${app.jobId}`} className="text-lg font-bold text-[#091e42] hover:text-blue-600 transition-colors">
+                                                        {app.jobTitle}
+                                                    </Link>
+                                                    <div className="flex items-center gap-2 text-sm font-medium text-gray-600 mt-1">
+                                                        <FaBuilding className="text-gray-400" />
+                                                        {app.companyName}
+                                                        <span className="flex items-center gap-0.5 text-xs text-orange-500 font-bold ml-1">
+                                                            <FaStar /> 4.0
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(app.status)}`}>
+                                                    {app.status === 'external-click' ? 'Applied on Ext Site' : app.status || 'Applied'}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-6">
+                                                <div className="flex items-center gap-1">
+                                                    <FaCalendarAlt className="text-gray-400" />
+                                                    Applied on {new Date(app.appliedAt).toLocaleDateString()}
+                                                </div>
+                                                <div className="hidden sm:block text-gray-300">|</div>
+                                                <div className="flex items-center gap-1">
+                                                    <MdLocationOn className="text-gray-400 text-sm" />
+                                                    Remote / On-site
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-4 border-t border-dashed border-gray-100">
+                                                <Link to={`/job/${app.jobId}`} className="text-blue-600 font-bold text-sm hover:underline">
+                                                    View Job Details
+                                                </Link>
+                                                {app.applyUrl && (
+                                                    <a href={app.applyUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-gray-500 hover:text-blue-600 text-sm font-medium">
+                                                        Visit Source <MdOpenInNew />
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Inject In-Feed Ad every 4 items */}
+                                        {(index + 1) % 4 === 0 && (
+                                            <div className="py-2">
+                                                <InArticleAd />
+                                            </div>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+
+                                {/* Pagination */}
+                                <div className="flex items-center justify-center gap-4 py-6">
+                                    <button
+                                        onClick={prevPage}
+                                        disabled={currentPage === 1}
+                                        className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                                    >
+                                        Prev
+                                    </button>
+                                    <span className="text-sm font-medium text-gray-600">
+                                        Page {currentPage} of {totalPages}
+                                    </span>
+                                    <button
+                                        onClick={nextPage}
+                                        disabled={currentPage >= totalPages}
+                                        className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="bg-white rounded-xl border border-dashed border-gray-300 p-12 text-center">
+                                <MdWorkOutline className="text-6xl text-gray-200 mx-auto mb-4" />
+                                <h3 className="text-lg font-bold text-gray-900 mb-2">No applications yet</h3>
+                                <p className="text-gray-500 mb-6">Start applying to jobs to track them here.</p>
+                                <Link to="/jobs" className="px-8 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                                    Browse Jobs
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* RIGHT COLUMN (25%) */}
+                    <div className="hidden lg:block lg:col-span-3 space-y-6 sticky top-24">
+                        {/* Sidebar Ad 1 */}
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">📈</div>
+                                <h4 className="font-bold text-gray-900 text-sm">Application Insights</h4>
+                            </div>
+                            <p className="text-xs text-gray-500 leading-relaxed">
+                                Keep your profile updated to increase your chances of getting noticed by recruiters by 40%.
+                            </p>
+                            <button className="w-full mt-4 py-2 border border-blue-600 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-50 transition">
+                                Update Profile
+                            </button>
                         </div>
-                    )}
+
+                        {/* Sticky Sidebar Ad */}
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 overflow-hidden">
+                            <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
+                            <InArticleAd />
+                        </div>
+                    </div>
+
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

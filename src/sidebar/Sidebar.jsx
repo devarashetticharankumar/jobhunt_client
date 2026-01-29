@@ -27,7 +27,7 @@
 // export default Sidebar;
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+
 import Location from "./Location";
 import Salary from "./Salary";
 import WorkExperience from "./WorkExperience";
@@ -38,24 +38,17 @@ import InArticleAd from "../components/InArticleAd";
 const Sidebar = ({ handleChange, handleClick, setJobs }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [openSections, setOpenSections] = useState({
-    location: false,
-    salary: false,
-    jobPostingData: false,
-    workExperience: false,
-    employmentType: false,
+    location: true,
+    salary: true,
+    jobPostingData: true,
+    workExperience: true,
+    employmentType: true,
   });
 
-  // Function to handle window resize
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
+  const handleResize = () => setIsMobile(window.innerWidth <= 768);
 
-  // Handle section toggle
   const toggleSection = (section) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   useEffect(() => {
@@ -63,72 +56,60 @@ const Sidebar = ({ handleChange, handleClick, setJobs }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const renderSection = (key, title, Component, props = {}) => (
+    <div className="py-5 border-b border-gray-200 last:border-0">
+      <div
+        className="flex items-center justify-between cursor-pointer mb-3"
+        onClick={() => toggleSection(key)}
+      >
+        <h4 className="font-bold text-gray-900 text-sm uppercaset tracking-wide">{title}</h4>
+        <span className={`text-gray-400 transform transition-transform duration-200 ${openSections[key] ? "rotate-180" : ""}`}>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </span>
+      </div>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${openSections[key] ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
+      >
+        <div className="text-sm text-gray-600 space-y-2">
+          <Component handleChange={handleChange} {...props} />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <motion.div
-      className={`space-y-5 ${isMobile ? "p-4" : "p-6 bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700"} rounded-xl text-left transition-colors`}
-      initial={{ opacity: 0, x: -60 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Filters</h3>
-        {!isMobile && <span className="text-xs text-blue-600 font-semibold cursor-pointer hover:underline" onClick={() => window.location.reload()}>Reset</span>}
+    <div className={`bg-white rounded-xl p-5 shadow-sm border border-gray-200 text-left ${isMobile ? 'mb-6' : ''}`}>
+      <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+        <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6H21M7 12H17M10 18H14" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          All Filters
+        </h3>
+        {!isMobile && (
+          <button
+            className="text-xs font-semibold text-blue-600 hover:underline transition-colors"
+            onClick={() => window.location.reload()}
+          >
+            Clear
+          </button>
+        )}
       </div>
 
-      {isMobile ? (
-        // Flex layout for mobile view
-        <div className="flex flex-col gap-3">
-          {Object.keys(openSections).map((section) => (
-            <div key={section} className="w-full">
-              <button
-                className="w-full p-3 text-left bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-medium rounded-lg flex justify-between items-center transition-colors"
-                onClick={() => toggleSection(section)}
-              >
-                {section === "jobPostingData" ? "Date Posted" : section.charAt(0).toUpperCase() + section.slice(1).replace(/([A-Z])/g, ' $1').trim()}
-                <span className={`transform transition-transform ${openSections[section] ? "rotate-180" : ""}`}>▼</span>
-              </button>
-              {openSections[section] && (
-                <div className="p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg mt-2 transition-colors">
-                  {section === "location" && (
-                    <Location handleChange={handleChange} setJobs={setJobs} />
-                  )}
-                  {section === "salary" && (
-                    <Salary
-                      handleChange={handleChange}
-                      handleClick={handleClick}
-                    />
-                  )}
-                  {section === "jobPostingData" && (
-                    <JobPostingData handleChange={handleChange} />
-                  )}
-                  {section === "workExperience" && (
-                    <WorkExperience handleChange={handleChange} />
-                  )}
-                  {section === "employmentType" && (
-                    <EmploymentType handleChange={handleChange} />
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        // Regular layout for desktop view
-        <div className="space-y-6 divide-y divide-gray-100 dark:divide-gray-700">
-          <div className="pt-2"><Location handleChange={handleChange} setJobs={setJobs} /></div>
-          <div className="pt-6"><Salary handleChange={handleChange} handleClick={handleClick} /></div>
-          <div className="pt-6"><JobPostingData handleChange={handleChange} /></div>
-          <div className="pt-6"><EmploymentType handleChange={handleChange} /></div>
-          <div className="pt-6"><WorkExperience handleChange={handleChange} /></div>
+      <div className="flex flex-col">
+        {renderSection("location", "Location", Location, { setJobs })}
+        {renderSection("salary", "Salary", Salary, { handleClick })}
+        {renderSection("workExperience", "Experience", WorkExperience)}
+        {renderSection("jobPostingData", "Mode of Hire", JobPostingData)}
+        {renderSection("employmentType", "Department", EmploymentType)}
+      </div>
 
-          {/* Sticky Ad for High Viewability */}
-          <div className="pt-6 sticky top-4">
-            <div className="text-xs text-center text-gray-400 mb-2">Advertisement</div>
-            <InArticleAd />
-          </div>
+      {/* Standard Ad Box */}
+      <div className="mt-6 pt-4 border-t border-gray-100">
+        <div className="bg-gray-50 rounded border border-dashed border-gray-300 min-h-[200px] flex flex-col items-center justify-center p-4">
+          <span className="text-xs text-gray-400 mb-2">Advertisement</span>
+          <InArticleAd />
         </div>
-      )}
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
