@@ -83,8 +83,7 @@ const ShareButton = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleShare = () => {
-    const shareText = `
-Hi Everyone,
+    const shareText = `Hi Everyone,
 
 🚀 We’re hiring for **${jobTitle}** at **${companyName}**, located in **${jobLocation}**!
 
@@ -94,10 +93,7 @@ If you or someone in your network is interested, please check out the details.
 
 Feel free to share this opportunity within your network.
 
-#hiring #jobopportunity #career #${jobTitle.replace(
-      /\s+/g,
-      ""
-    )} #${companyName.replace(/\s+/g, "")} #${jobLocation.replace(/\s+/g, "")}`;
+#hiring #jobopportunity #career #${jobTitle.replace(/\s+/g, "")} #${companyName.replace(/\s+/g, "")} #${jobLocation.replace(/\s+/g, "")}`;
 
     if (navigator.share) {
       setIsLoading(true);
@@ -135,9 +131,8 @@ Feel free to share this opportunity within your network.
         />
       )}
       <button
-        className={`p-3 bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 text-white rounded-full shadow-md transform transition-transform hover:scale-110 ${
-          isLoading ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`p-3 bg-blue-600 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 text-white rounded-full shadow-md transform transition-transform hover:scale-110 ${isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         onClick={handleShare}
         aria-label={`Share this job: ${jobTitle}`}
         title={`Share this job: ${jobTitle}`}

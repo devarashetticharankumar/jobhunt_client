@@ -119,19 +119,29 @@ const JobDetails = () => {
   }, [slug]);
 
   const handleShare = () => {
-    const shareText = `Check out this job: ${job?.jobTitle} at ${job?.companyName}`;
-    const shareUrl = window.location.href;
+    const jobUrl = window.location.href;
+    const shareText = `Hi Everyone,
+
+🚀 We’re hiring for **${job.jobTitle}** at **${job.companyName}**, located in **${job.jobLocation}**!
+
+📌 Job Details: ${jobUrl}
+
+If you or someone in your network is interested, please check out the details.
+
+Feel free to share this opportunity within your network.
+
+#hiring #jobopportunity #career #${job.jobTitle.replace(/\s+/g, "")} #${job.companyName.replace(/\s+/g, "")} #${job.jobLocation.replace(/\s+/g, "")}`;
 
     if (navigator.share) {
       navigator.share({
-        title: shareText,
+        title: `Check out this job: ${job.jobTitle}`,
         text: shareText,
-        url: shareUrl
+        url: jobUrl
       }).catch(console.error);
     } else {
-      navigator.clipboard.writeText(`${shareText} ${shareUrl}`)
-        .then(() => alert("Job link copied!"))
-        .catch(() => alert("Failed to copy link"));
+      navigator.clipboard.writeText(shareText)
+        .then(() => alert("Job details copied to clipboard!"))
+        .catch(() => alert("Failed to copy details"));
     }
   };
 

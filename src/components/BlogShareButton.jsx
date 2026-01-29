@@ -9,17 +9,20 @@ const BlogShareButton = ({ blogTitle }) => {
       <button
         className="p-3 bg-blue-600 hover:bg-blue-800 text-white rounded-full shadow-md transform transition-all hover:scale-110"
         onClick={() => {
+          const shareText = `Check out this interesting article: **${blogTitle}** on JobNirvana!\n\nRead more here: ${blogUrl}`;
           if (navigator.share) {
             navigator
               .share({
-                title: `Check out this blog: ${blogTitle}`,
-                text: "Found an interesting blog on JobNirvana!",
+                title: blogTitle,
+                text: shareText,
                 url: blogUrl,
               })
               .then(() => console.log("Shared successfully"))
               .catch((error) => console.error("Error sharing:", error));
           } else {
-            alert("Sharing not supported on this browser.");
+            navigator.clipboard.writeText(shareText)
+              .then(() => alert("Blog link copied to clipboard!"))
+              .catch(() => alert("Failed to copy link"));
           }
         }}
       >
