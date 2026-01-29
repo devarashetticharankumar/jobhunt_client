@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
 import { Helmet } from "react-helmet-async";
 import { FaStar, FaMapMarkerAlt, FaBriefcase, FaWallet } from "react-icons/fa";
-import { FiSave, FiShare2 } from "react-icons/fi";
+import { FiShare2, FiArrowRight } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
 import RelatedJobs from "../components/RelatedJobs";
 import InArticleAd from "../components/InArticleAd";
@@ -168,8 +168,8 @@ Feel free to share this opportunity within your network.
       {/* Main Container */}
       <div className="max-w-[1240px] mx-auto px-4 pt-6">
 
-        {/* Layout Grid */}
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        {/* Layout Grid (items-stretch is default, allowing sidebar to match main content height for stickiness) */}
+        <div className="flex flex-col lg:flex-row gap-6">
 
           {/* LEFT COLUMN (Main Content) */}
           <div className="w-full lg:w-[68%] space-y-6">
@@ -224,16 +224,15 @@ Feel free to share this opportunity within your network.
                   >
                     <FiShare2 /> Share
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-blue-600 text-blue-600 font-bold text-sm hover:bg-blue-50 transition-colors">
-                    <FiSave /> Save
-                  </button>
-                  {/* Apply button removed from here */}
+                  {/* Save button removed for monetization optimization */}
                 </div>
               </div>
             </div>
 
             {/* 2. JOB HIGHLIGHTS (If applies, else generic) */}
-            {/* This section mimics the blueish highlight box in Naukri if desired, currently plain white */}
+            <div className="my-2">
+              <InArticleAd />
+            </div>
 
             {/* 3. JOB DESCRIPTION */}
             <div className="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6 md:p-8">
@@ -252,19 +251,18 @@ Feel free to share this opportunity within your network.
                   }
 
                   const elements = [];
+                  const interval = 3; // Inject every 3 paragraphs
                   let buffer = "";
                   let pCount = 0;
 
                   paragraphs.forEach((part, index) => {
                     if (!part.trim()) return;
 
-                    // Check if it's the last part and didn't have a p tag originally (end of string)
-                    // But usually split results in empty last string if ends with delimiter.
-                    // We simply reconstruct.
+                    // Reconstruct paragraph
                     buffer += part + "</p>";
                     pCount++;
 
-                    if (pCount === 6) {
+                    if (pCount === interval) {
                       elements.push(<div key={`chunk-${index}`} dangerouslySetInnerHTML={{ __html: buffer }} />);
                       elements.push(
                         <div key={`ad-insert-${index}`} className="my-6">
@@ -320,7 +318,7 @@ Feel free to share this opportunity within your network.
                 <div className="flex flex-wrap gap-2">
                   {job.skills?.map((skill, i) => (
                     <span key={i} className="px-3 py-1.5 rounded-full border border-gray-300 text-gray-600 text-sm font-medium hover:border-blue-400 hover:text-blue-600 cursor-default bg-white">
-                      {skill.label || skill}
+                      {typeof skill === 'object' ? skill.label : skill}
                     </span>
                   ))}
                 </div>
@@ -328,7 +326,7 @@ Feel free to share this opportunity within your network.
             </div>
 
             <div className="my-4">
-              <InArticleAd />
+              <InFeedAd />
             </div>
 
             {/* Apply Section (Moved here) */}
@@ -340,9 +338,9 @@ Feel free to share this opportunity within your network.
               <div className="flex gap-4">
                 <button
                   onClick={applyLink}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-full text-sm transition-all shadow-md"
+                  className="text-gray-400 hover:text-blue-600 font-bold py-2 text-sm transition-all flex items-center gap-2"
                 >
-                  Apply on company site
+                  Apply on company site <FiArrowRight className="text-[10px]" />
                 </button>
               </div>
             </div>
@@ -476,7 +474,7 @@ Feel free to share this opportunity within your network.
             </div>
 
             {/* Ad Unit */}
-            <div className="sticky top-24">
+            <div className="sticky top-24 min-h-[250px] flex items-center justify-center">
               <GoogleAds />
             </div>
 

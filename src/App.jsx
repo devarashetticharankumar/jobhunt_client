@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import AdPopup from "./components/AdPopup";
 
 function App() {
   const location = useLocation();
@@ -69,6 +70,7 @@ function App() {
   return (
     <>
       <Navbar />
+      <AdPopup />
       <ScrollToTop />
       <div className="pt-24 min-h-screen">
         <Outlet />

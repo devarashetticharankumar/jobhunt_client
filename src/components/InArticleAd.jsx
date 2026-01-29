@@ -13,8 +13,12 @@ const InArticleAd = () => {
 
   return (
     <div
-      className="w-full overflow-hidden rounded-2xl my-4 flex justify-center bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 min-h-[120px] items-center"
+      className="w-full overflow-hidden rounded-2xl my-6 flex flex-col items-center bg-blue-50/20 border border-blue-100/50 p-4 min-h-[140px] shadow-sm"
     >
+      <span className="text-[10px] text-blue-600/60 uppercase font-black tracking-widest mb-4 flex items-center gap-2">
+        <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+        Recommended for you
+      </span>
       <ins
         className="adsbygoogle"
         style={{ display: "block", textAlign: "center", width: "100%" }}

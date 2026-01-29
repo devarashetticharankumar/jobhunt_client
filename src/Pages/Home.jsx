@@ -159,11 +159,26 @@ const Home = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  <JobWidget
-                    title={query ? `Results for "${query}"` : "Recommended for you"}
-                    count={jobs.length}
-                    jobs={jobs}
-                  />
+                  {/* Top Banner Ad */}
+                  <div className="mb-6">
+                    <InArticleAd />
+                  </div>
+
+                  {jobs.map((job, index) => (
+                    <div key={job._id || index}>
+                      <JobWidget
+                        title={index === 0 ? (query ? `Results for "${query}"` : "Recommended for you") : null}
+                        count={index === 0 ? jobs.length : null}
+                        jobs={[job]}
+                      />
+                      {/* Inject Ad every 3rd job (Safe Density) */}
+                      {(index + 1) % 3 === 0 && (
+                        <div className="my-6">
+                          <InFeedAd />
+                        </div>
+                      )}
+                    </div>
+                  ))}
 
                   {/* High Frequency Ad Injection */}
                   <div className="py-4">

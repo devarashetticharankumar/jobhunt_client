@@ -230,59 +230,66 @@ const HomePage = () => {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {jobs.map((job, idx) => (
-                <motion.div
-                  key={job._id || job.id}
-                  variants={itemVariants}
-                  className="group bg-white rounded-[32px] p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-50 hover:border-blue-100 flex flex-col"
-                >
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="w-16 h-16 rounded-2xl bg-gray-50 p-3 flex items-center justify-center overflow-hidden border border-gray-100 group-hover:scale-110 transition-transform duration-500">
-                      {job.companyLogo ? (
-                        <img src={job.companyLogo} alt={job.companyName} className="w-full h-full object-contain" />
-                      ) : (
-                        <FaRegBuilding className="text-gray-300 text-2xl" />
+                <React.Fragment key={job._id || job.id}>
+                  <motion.div
+                    variants={itemVariants}
+                    className="group bg-white rounded-[32px] p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-50 hover:border-blue-100 flex flex-col"
+                  >
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="w-16 h-16 rounded-2xl bg-gray-50 p-3 flex items-center justify-center overflow-hidden border border-gray-100 group-hover:scale-110 transition-transform duration-500">
+                        {job.companyLogo ? (
+                          <img src={job.companyLogo} alt={job.companyName} className="w-full h-full object-contain" />
+                        ) : (
+                          <FaRegBuilding className="text-gray-300 text-2xl" />
+                        )}
+                      </div>
+                      <span className="px-4 py-1.5 bg-green-50 text-green-600 text-[10px] font-extrabold rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> {job.employmentType}
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-extrabold text-[#091e42] group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug mb-2">
+                      {job.jobTitle}
+                    </h3>
+                    <p className="text-sm text-gray-400 font-bold mb-4 flex items-center gap-2">
+                      <FaGlobeAmericas className="text-xs" /> {job.companyName} • {job.jobLocation}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {(job.skills && job.skills.length > 0 ? job.skills : [])
+                        .slice(0, 3)
+                        .map((skill, i) => (
+                          <span key={i} className="px-3 py-1 bg-gray-50 text-gray-400 text-[9px] font-bold rounded-lg uppercase tracking-wider group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                            {typeof skill === 'object' ? skill.label : skill}
+                          </span>
+                        ))}
+                      {(!job.skills || job.skills.length === 0) && (
+                        ["Hiring", "Direct", "New"].map((tag, i) => (
+                          <span key={i} className="px-3 py-1 bg-gray-50 text-gray-400 text-[9px] font-bold rounded-lg uppercase tracking-wider group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+                            {tag}
+                          </span>
+                        ))
                       )}
                     </div>
-                    <span className="px-4 py-1.5 bg-green-50 text-green-600 text-[10px] font-extrabold rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
-                      <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> {job.employmentType}
-                    </span>
-                  </div>
 
-                  <h3 className="text-xl font-extrabold text-[#091e42] group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug mb-2">
-                    {job.jobTitle}
-                  </h3>
-                  <p className="text-sm text-gray-400 font-bold mb-4 flex items-center gap-2">
-                    <FaGlobeAmericas className="text-xs" /> {job.companyName} • {job.jobLocation}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {(job.skills && job.skills.length > 0 ? job.skills : [])
-                      .slice(0, 3)
-                      .map((skill, i) => (
-                        <span key={i} className="px-3 py-1 bg-gray-50 text-gray-400 text-[9px] font-bold rounded-lg uppercase tracking-wider group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                          {typeof skill === 'object' ? skill.label : skill}
-                        </span>
-                      ))}
-                    {(!job.skills || job.skills.length === 0) && (
-                      ["Hiring", "Direct", "New"].map((tag, i) => (
-                        <span key={i} className="px-3 py-1 bg-gray-50 text-gray-400 text-[9px] font-bold rounded-lg uppercase tracking-wider group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                          {tag}
-                        </span>
-                      ))
-                    )}
-                  </div>
-
-                  <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
-                    <div className="text-blue-600 font-black text-lg">
-                      ${job.minPrice}k - ${job.maxPrice}k<span className="text-xs text-gray-400 font-bold">/yr</span>
+                    <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between">
+                      <div className="text-blue-600 font-black text-lg">
+                        ${job.minPrice}k - ${job.maxPrice}k<span className="text-xs text-gray-400 font-bold">/yr</span>
+                      </div>
+                      <Link to={`/job/${job.slug || job._id}`}>
+                        <button className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                          <FaArrowRight className="text-xs" />
+                        </button>
+                      </Link>
                     </div>
-                    <Link to={`/job/${job.slug || job._id}`}>
-                      <button className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all shadow-sm">
-                        <FaArrowRight className="text-xs" />
-                      </button>
-                    </Link>
-                  </div>
-                </motion.div>
+                  </motion.div>
+                  {/* Inject Ad every 3rd job card (Safe Density) */}
+                  {(idx + 1) % 3 === 0 && (
+                    <div className="col-span-1">
+                      <InFeedAd />
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
 
               {/* In-Grid Ad Card */}

@@ -13,8 +13,7 @@ const GoogleAds = () => {
 
   return (
     <div
-      className="card-style flex items-center justify-center text-center
-    "
+      className="w-full min-h-[280px] bg-gray-50 border border-gray-100 rounded-xl flex items-center justify-center text-center overflow-hidden"
     >
       <ins
         className="adsbygoogle"

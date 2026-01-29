@@ -128,6 +128,11 @@ const BlogsList = () => {
 
           {/* MAIN FEED (50%) */}
           <div className="col-span-12 lg:col-span-6 space-y-6">
+            {/* Top Banner Ad */}
+            <div className="mb-6">
+              <InArticleAd />
+            </div>
+
             {isLoading ? (
               <div className="bg-white rounded-xl p-8 shadow-sm">
                 <SkeletonLoading />
