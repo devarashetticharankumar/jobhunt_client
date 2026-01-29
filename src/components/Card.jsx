@@ -90,14 +90,13 @@ const Card = ({ data }) => {
           </div>
         </div>
 
-        {/* Skills / Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
           {(skills && skills.length > 0 ? skills : extractSkillsFromTitle(jobTitle))
             .filter(s => s)
             .slice(0, 4)
             .map((skill, i) => (
               <span key={i} className="px-3 py-1 text-[10px] font-bold text-blue-600 bg-blue-50 rounded-lg uppercase tracking-wider">
-                {skill}
+                {typeof skill === 'object' ? skill.label : skill}
               </span>
             ))}
         </div>

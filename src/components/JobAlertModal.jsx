@@ -19,7 +19,7 @@ const JobAlertModal = ({ isOpen, onClose, jobTitle, skills }) => {
                 body: JSON.stringify({
                     email,
                     jobRole: jobTitle,
-                    skills: skills?.map(s => s.label) || []
+                    skills: skills?.map(s => typeof s === 'object' ? s.label : s) || []
                 })
             });
 

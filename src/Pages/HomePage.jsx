@@ -260,7 +260,7 @@ const HomePage = () => {
                       .slice(0, 3)
                       .map((skill, i) => (
                         <span key={i} className="px-3 py-1 bg-gray-50 text-gray-400 text-[9px] font-bold rounded-lg uppercase tracking-wider group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                          {skill}
+                          {typeof skill === 'object' ? skill.label : skill}
                         </span>
                       ))}
                     {(!job.skills || job.skills.length === 0) && (
