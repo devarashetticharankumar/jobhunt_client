@@ -161,8 +161,22 @@ Feel free to share this opportunity within your network.
     <div className="min-h-screen bg-[#F8F9FA] font-sans text-[#17171d] pb-10">
       <Helmet>
         <title>{job.jobTitle} - {job.companyName}</title>
-        <meta name="description" content={job.description.slice(0, 150)} />
+        <meta name="description" content={job.description.replace(/<[^>]*>?/gm, '').slice(0, 160)} />
         <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph / LinkedIn / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:title" content={`${job.jobTitle} at ${job.companyName}`} />
+        <meta property="og:description" content={`Apply for ${job.jobTitle} role at ${job.companyName}. Location: ${job.jobLocation}. Experience: ${job.experienceLevel || 'Not specified'}`} />
+        <meta property="og:image" content={job.companyLogo?.startsWith('http') ? job.companyLogo : `${window.location.origin}${job.companyLogo || "/logo.png"}`} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={window.location.href} />
+        <meta name="twitter:title" content={`${job.jobTitle} at ${job.companyName}`} />
+        <meta name="twitter:description" content={`Apply for ${job.jobTitle} at ${job.companyName}.`} />
+        <meta name="twitter:image" content={job.companyLogo?.startsWith('http') ? job.companyLogo : `${window.location.origin}${job.companyLogo || "/logo.png"}`} />
       </Helmet>
 
       {/* Main Container */}

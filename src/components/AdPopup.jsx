@@ -15,7 +15,7 @@ const AdPopup = () => {
         setIsVisible(true);
         sessionStorage.setItem('ad_popup_shown', 'true');
       }
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -43,7 +43,6 @@ const AdPopup = () => {
           </button>
 
           <div className="text-center mb-6">
-            <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-3 block">Exclusive Opportunity</span>
             <h3 className="text-2xl font-black text-[#091e42] leading-tight">Recommended For Your Career Growth</h3>
           </div>
 
@@ -58,10 +57,6 @@ const AdPopup = () => {
             >
               Continue to Site
             </button>
-            <p className="text-[10px] text-gray-400 text-center uppercase font-bold tracking-widest flex items-center justify-center gap-2">
-              <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-              JobNirvana Career Network
-            </p>
           </div>
         </motion.div>
       </motion.div>

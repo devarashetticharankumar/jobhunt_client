@@ -226,7 +226,6 @@ const SalaryPage = () => {
 
             {/* Sticky Sidebar Ad */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 overflow-hidden">
-              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
               <InArticleAd />
             </div>
           </div>

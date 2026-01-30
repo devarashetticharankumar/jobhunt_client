@@ -132,7 +132,6 @@ const Home = () => {
 
             {/* In-Feed Announcement Ad */}
             <div className="bg-white rounded-2xl p-2 border border-dashed border-gray-200 shadow-sm">
-              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Sponsored Feed</span>
               <InFeedAd />
             </div>
 
@@ -163,8 +162,8 @@ const Home = () => {
                         count={index === 0 ? jobs.length : null}
                         jobs={[job]}
                       />
-                      {/* Inject Ad every 3rd job (Safe Density) */}
-                      {(index + 1) % 3 === 0 && (
+                      {/* Increased Ad Density (Every 2nd job) */}
+                      {(index + 1) % 2 === 0 && (
                         <div className="my-6">
                           <InFeedAd />
                         </div>
@@ -220,7 +219,6 @@ const Home = () => {
 
             {/* Sticky Sidebar Ad */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 overflow-hidden">
-              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
               <InArticleAd />
             </div>
 

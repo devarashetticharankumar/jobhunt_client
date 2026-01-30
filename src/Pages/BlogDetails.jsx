@@ -150,7 +150,6 @@ const BlogDetails = () => {
                           {/* Inject Ad every 5 paragraphs */}
                           {(index + 1) % 5 === 0 && index < contentSegments.length - 1 && (
                             <div className="my-10 py-4 border-y border-gray-50 flex flex-col items-center">
-                              <span className="text-[10px] text-gray-300 uppercase font-bold tracking-widest mb-4">Recommended Content</span>
                               <InArticleAd />
                             </div>
                           )}
@@ -187,7 +186,6 @@ const BlogDetails = () => {
 
             {/* Sidebar Ad 1 (Sticky) */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 overflow-hidden">
-              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
               <InFeedAd />
             </div>
 
@@ -248,7 +246,6 @@ const BlogDetails = () => {
 
             {/* Sidebar Ad 2 */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 overflow-hidden">
-              <span className="text-[10px] text-gray-300 uppercase block mb-1 text-center font-bold tracking-widest">Advertisement</span>
               <InArticleAd />
             </div>
 
