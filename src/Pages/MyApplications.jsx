@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProfileCard from "../components/dashboard/ProfileCard";
 import InArticleAd from "../components/InArticleAd";
 import SkeletonLoading from "../components/SkeletonLoading";
+import Pagination from "../components/Pagination";
 
 const MyApplications = () => {
     const { user, isAuthenticated, loginWithRedirect } = useAuth0();
@@ -55,17 +56,9 @@ const MyApplications = () => {
     const currentApps = applications.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(applications.length / itemsPerPage);
 
-    const nextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    };
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const getStatusColor = (status) => {
@@ -168,25 +161,11 @@ const MyApplications = () => {
                                 ))}
 
                                 {/* Pagination */}
-                                <div className="flex items-center justify-center gap-4 py-6">
-                                    <button
-                                        onClick={prevPage}
-                                        disabled={currentPage === 1}
-                                        className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                                    >
-                                        Prev
-                                    </button>
-                                    <span className="text-sm font-medium text-gray-600">
-                                        Page {currentPage} of {totalPages}
-                                    </span>
-                                    <button
-                                        onClick={nextPage}
-                                        disabled={currentPage >= totalPages}
-                                        className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                                    >
-                                        Next
-                                    </button>
-                                </div>
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
                             </>
                         ) : (
                             <div className="bg-white rounded-xl border border-dashed border-gray-300 p-12 text-center">

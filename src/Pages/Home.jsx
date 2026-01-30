@@ -11,6 +11,7 @@ import { API_URL } from "../data/apiPath";
 import SkeletonLoading from "../components/SkeletonLoading";
 import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight, FaLightbulb, FaRocket } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import Pagination from "../components/Pagination";
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -67,18 +68,9 @@ const Home = () => {
     setCurrentPage(1);
   };
 
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -186,27 +178,11 @@ const Home = () => {
                   </div>
 
                   {/* Pagination */}
-                  {jobs.length > 0 && (
-                    <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                      <button
-                        onClick={prevPage}
-                        disabled={currentPage === 1}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 rounded-xl text-sm font-bold text-gray-600 disabled:opacity-30 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100"
-                      >
-                        <FaChevronLeft className="text-xs" /> Prev
-                      </button>
-                      <span className="text-xs font-extrabold text-gray-400 uppercase tracking-widest">
-                        Page <span className="text-[#091e42]">{currentPage}</span> / {totalPages}
-                      </span>
-                      <button
-                        onClick={nextPage}
-                        disabled={currentPage >= totalPages}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 rounded-xl text-sm font-bold text-gray-600 disabled:opacity-30 hover:bg-blue-50 hover:text-blue-600 transition-all border border-transparent hover:border-blue-100"
-                      >
-                        Next <FaChevronRight className="text-xs" />
-                      </button>
-                    </div>
-                  )}
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
                 </motion.div>
               </AnimatePresence>
             )}

@@ -9,6 +9,7 @@ import SkeletonLoading from "../components/SkeletonLoading";
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaSearch, FaRegClock, FaChevronRight } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Pagination from "../components/Pagination";
 
 const BlogsList = () => {
   const { user } = useAuth0();
@@ -189,34 +190,11 @@ const BlogsList = () => {
                 ))}
 
                 {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 py-8">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                    >
-                      Prev
-                    </button>
-                    {[...Array(totalPages)].map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`w-10 h-10 rounded-xl font-bold transition-all ${currentPage === i + 1 ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
-                          }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                    >
-                      Next
-                    </button>
-                  </div>
-                )}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
               </>
             ) : (
               <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-gray-200">

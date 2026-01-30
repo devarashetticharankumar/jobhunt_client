@@ -10,6 +10,7 @@ import SkeletonLoading from "../components/SkeletonLoading";
 import ProfileCard from "../components/dashboard/ProfileCard";
 import { FaStar, FaMapMarkerAlt, FaBriefcase, FaMoneyBillWave } from "react-icons/fa";
 import { useAuth0 } from "@auth0/auth0-react";
+import Pagination from "../components/Pagination";
 
 const SalaryPage = () => {
   const { user } = useAuth0();
@@ -55,7 +56,7 @@ const SalaryPage = () => {
   const currentJobs = filteredSalary.slice(indexOfFirstJob, indexOfLastJob);
   const totalPages = Math.ceil(filteredSalary.length / jobsPerPage);
 
-  const paginate = (pageNumber) => {
+  const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -192,27 +193,11 @@ const SalaryPage = () => {
                 ))}
 
                 {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-4 py-8">
-                    <button
-                      onClick={() => paginate(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                    >
-                      Prev
-                    </button>
-                    <span className="text-sm font-medium text-gray-600">
-                      Page {currentPage} of {totalPages}
-                    </span>
-                    <button
-                      onClick={() => paginate(currentPage + 1)}
-                      disabled={currentPage >= totalPages}
-                      className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                    >
-                      Next
-                    </button>
-                  </div>
-                )}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
               </>
             ) : (
               <div className="bg-white rounded-xl p-12 text-center border border-dashed border-gray-300">
