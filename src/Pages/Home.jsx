@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useAuth0 } from "@auth0/auth0-react";
 import ProfileCard from "../components/dashboard/ProfileCard";
 import DashboardBanner from "../components/dashboard/DashboardBanner";
 import JobWidget from "../components/dashboard/JobWidget";
+import Card from "../components/Card";
 import InArticleAd from "../components/InArticleAd";
 import InFeedAd from "../components/InFeedAd";
+import GoogleAds from "../components/GoogleAds";
 import { API_URL } from "../data/apiPath";
 import SkeletonLoading from "../components/SkeletonLoading";
 import { FaSearch, FaFilter, FaChevronLeft, FaChevronRight, FaLightbulb, FaRocket } from "react-icons/fa";
@@ -128,12 +130,12 @@ const Home = () => {
 
           {/* CENTER COLUMN (50%) - Jobs Feed */}
           <div className="col-span-12 lg:col-span-6 space-y-6">
-            <DashboardBanner />
-
-            {/* In-Feed Announcement Ad */}
-            <div className="bg-white rounded-2xl p-2 border border-dashed border-gray-200 shadow-sm">
+            {/* Above-the-Fold Ad (Ultra High Visibility) */}
+            <div className="bg-white rounded-2xl p-2 border border-dashed border-blue-100 shadow-sm mb-4">
               <InFeedAd />
             </div>
+
+            <DashboardBanner />
 
             {isLoading ? (
               <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-50">
@@ -155,20 +157,32 @@ const Home = () => {
                     <InArticleAd />
                   </div>
 
+                  {/* Header for recommended jobs */}
+                  <div className="flex items-center justify-between mb-2 px-1">
+                    <h2 className="text-lg font-bold text-[#091e42]">
+                      {query ? `Results for "${query}"` : "Recommended for you"}
+                    </h2>
+                    <span className="text-xs text-gray-500 font-bold">{jobs.length} jobs found</span>
+                  </div>
+
                   {jobs.map((job, index) => (
-                    <div key={job._id || index}>
-                      <JobWidget
-                        title={index === 0 ? (query ? `Results for "${query}"` : "Recommended for you") : null}
-                        count={index === 0 ? jobs.length : null}
-                        jobs={[job]}
-                      />
-                      {/* Increased Ad Density (Every 2nd job) */}
-                      {(index + 1) % 2 === 0 && (
+                    <React.Fragment key={job._id || index}>
+                      <Card data={job} />
+
+                      {/* High Frequency Mobile Ad Injection (Sidebar fallback) */}
+                      {(index + 1) === 1 && (
+                        <div className="lg:hidden my-4">
+                          <GoogleAds />
+                        </div>
+                      )}
+
+                      {/* Regular Ad Density (Every 3rd job) */}
+                      {(index + 1) % 3 === 0 && (
                         <div className="my-6">
                           <InFeedAd />
                         </div>
                       )}
-                    </div>
+                    </React.Fragment>
                   ))}
 
                   {/* High Frequency Ad Injection */}

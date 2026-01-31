@@ -114,6 +114,11 @@ const BlogDetails = () => {
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight drop-shadow-md">
                       {blog.title}
                     </h1>
+
+                    {/* Mobile-Only Sidebar Ad Fallback (Above-the-Fold) */}
+                    <div className="lg:hidden mt-4 bg-white/10 rounded-xl p-1 backdrop-blur-sm">
+                      <InFeedAd />
+                    </div>
                   </div>
                 </div>
 

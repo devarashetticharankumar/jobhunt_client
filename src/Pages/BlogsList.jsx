@@ -144,10 +144,15 @@ const BlogsList = () => {
                   <React.Fragment key={blog._id}>
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
+                      animate={{ opacity: 1, y: 0 }}
                       className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all group"
                     >
+                      {/* Mobile-Only Sidebar Ad Fallback */}
+                      {(index + 1) === 1 && (
+                        <div className="lg:hidden p-2 border-b border-gray-50 bg-blue-50/5">
+                          <InFeedAd />
+                        </div>
+                      )}
                       <Link to={`/blog/${blog.slug}`} className="flex flex-col md:flex-row h-full">
                         {blog.thumbnail && (
                           <div className="md:w-1/3 relative overflow-hidden h-48 md:h-auto">

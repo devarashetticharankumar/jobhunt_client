@@ -197,6 +197,11 @@ Feel free to share this opportunity within your network.
                 </div>
               )}
 
+              {/* Above-the-Fold Ad for Mobile/Desktop */}
+              <div className="mb-4 bg-blue-50/10 rounded-xl p-1 border border-dashed border-blue-100/30">
+                <InFeedAd />
+              </div>
+
               <h1 className="text-xl md:text-2xl font-bold text-[#091e42] mb-1">{job.jobTitle}</h1>
 
               <div className="flex items-center gap-2 mb-4 text-sm">
@@ -243,6 +248,11 @@ Feel free to share this opportunity within your network.
               </div>
             </div>
 
+            {/* Mobile-Only Sidebar Ad Fallback (Revenue Optimization) */}
+            <div className="lg:hidden my-2">
+              <GoogleAds />
+            </div>
+
             {/* 2. JOB HIGHLIGHTS (If applies, else generic) */}
             <div className="my-2">
               <InArticleAd />
@@ -260,7 +270,7 @@ Feel free to share this opportunity within your network.
                   // Filter empty strings and append closing tag back (except strictly empty/whitespace only chunks if any)
                   // Note: split consumes the delimiter.
 
-                  if (paragraphs.length <= 6) {
+                  if (paragraphs.length < 3) {
                     return <div dangerouslySetInnerHTML={{ __html: content }}></div>;
                   }
 
@@ -344,10 +354,10 @@ Feel free to share this opportunity within your network.
             </div>
 
             {/* Apply Section (Moved here) */}
-            <div className="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className=" flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
                 <h3 className="font-bold text-gray-900 text-lg mb-1">Interested in this job?</h3>
-                <p className="text-sm text-gray-500">Apply now to get noticed by recruiters.</p>
+
               </div>
               <div className="flex gap-4">
                 <button
@@ -357,6 +367,11 @@ Feel free to share this opportunity within your network.
                   Apply on company site <FiArrowRight className="text-[10px]" />
                 </button>
               </div>
+            </div>
+
+            {/* Post-Apply High Visibility Ad */}
+            <div className="my-6">
+              <InFeedAd />
             </div>
 
             {/* Similar Jobs Section */}

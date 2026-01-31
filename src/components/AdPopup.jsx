@@ -8,14 +8,13 @@ const AdPopup = () => {
   const [hasShown, setHasShown] = useState(false);
 
   useEffect(() => {
-    // Show after 15 seconds to target engaged users
     const timer = setTimeout(() => {
       const shown = sessionStorage.getItem('ad_popup_shown');
       if (!shown) {
         setIsVisible(true);
         sessionStorage.setItem('ad_popup_shown', 'true');
       }
-    }, 3000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -43,7 +42,7 @@ const AdPopup = () => {
           </button>
 
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-black text-[#091e42] leading-tight">Recommended For Your Career Growth</h3>
+            <h3 className="text-xl font-bold text-[#091e42] leading-tight">Recommended For You</h3>
           </div>
 
           <div className="rounded-2xl overflow-hidden border border-gray-50">
@@ -53,7 +52,7 @@ const AdPopup = () => {
           <div className="mt-8 flex flex-col gap-3">
             <button
               onClick={() => setIsVisible(false)}
-              className="w-full py-4 bg-[#091e42] text-white font-black rounded-2xl hover:bg-black transition-all shadow-lg"
+              className="w-full py-4 bg-[#091e42] text-white font-bold rounded-2xl hover:bg-black transition-all shadow-lg"
             >
               Continue to Site
             </button>
