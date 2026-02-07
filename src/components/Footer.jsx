@@ -93,6 +93,16 @@ const Footer = () => {
                 Privacy
               </Link>
             </li>
+            <li className="py-1">
+              <a
+                href="/rss.xml"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-blue-600 text-gray-400"
+              >
+                RSS Feed
+              </a>
+            </li>
           </ul>
         </div>
         <div className="mb-8 md:mb-0 ">
