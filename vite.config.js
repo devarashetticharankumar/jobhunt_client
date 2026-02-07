@@ -15,11 +15,6 @@ export default defineConfig({
         target: 'http://localhost:5001',
         changeOrigin: true,
         secure: false,
-      },
-      '/rss.xml': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-        secure: false,
       }
     }
   }
