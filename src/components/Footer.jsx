@@ -95,7 +95,7 @@ const Footer = () => {
             </li>
             <li className="py-1">
               <a
-                href="/rss.xml"
+                href="https://jobhunt-backend.onrender.com/rss.xml"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-600 text-gray-400"
