@@ -312,7 +312,6 @@ const CreateJob = () => {
                       padding: '4px',
                       borderColor: state.isFocused ? '#6366f1' : '#e5e7eb', // This needs dark mode check ideally, but staying simple
                       boxShadow: state.isFocused ? '0 0 0 4px rgba(99, 102, 241, 0.1)' : 'none',
-                      backgroundColor: 'var(--tw-bg-opacity, 1) #f9fafb', // This might need inline style or class
                       backgroundColor: 'transparent', // Let parent control it? difficult with library
                     }),
                     // React-Select styling is tricky with Tailwind classes.
