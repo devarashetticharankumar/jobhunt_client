@@ -14,15 +14,122 @@ import { Helmet } from "react-helmet-async"; // Importing React Helmet
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 // import { htmlToText } from "html-to-text";
 const CreateJob = () => {
-  const [selectedOptions, setSelectedOPtions] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState(null);
   const [jobDescription, setJobDescription] = useState(""); // State for Rich Text Editor
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
   const { getAccessTokenSilently, user } = useAuth0();
+
+  const [pasteData, setPasteData] = useState("");
+
+  const handleAutoFill = () => {
+    if (!pasteData.trim()) {
+      toast.info("Please paste some job data first.");
+      return;
+    }
+
+    const fieldMap = {
+      "Job Title": "jobTitle",
+      "Company Name": "companyName",
+      "Minimum Salary": "minPrice",
+      "Maximum Salary": "maxPrice",
+      "Salary Type": "salaryType",
+      "Job Location": "jobLocation",
+      "Posting Date": "postingDate",
+      "Experience Level": "experienceLevel",
+      "Required Skills": "skills",
+      "Company Logo URL": "companyLogo",
+      "Employment Type": "employmentType",
+      "Job Description": "description",
+      "Job Posted By (Email)": "postedBy",
+      "Application Link": "ApplyLink"
+    };
+
+    const lines = pasteData.split('\n').map(l => l.trim()).filter(l => l);
+    const result = {};
+    let currentKey = null;
+
+    lines.forEach(line => {
+      if (fieldMap[line]) {
+        currentKey = fieldMap[line];
+        if (currentKey === 'skills') result[currentKey] = [];
+        else result[currentKey] = "";
+      } else if (currentKey) {
+        if (currentKey === 'skills') {
+          result[currentKey].push({ value: line, label: line });
+        } else {
+          result[currentKey] = result[currentKey] ? result[currentKey] + "\n" + line : line;
+        }
+      }
+    });
+
+    // Populate Fields
+    let count = 0;
+    const normalizationMap = {
+      "Annual": "Yearly",
+      "Full-Time": "Full-time",
+      "Part-Time": "Part-time",
+      "Entry Level": "entry-level",
+      "Mid Level": "mid-level",
+      "Senior Level": "experienced"
+    };
+
+    Object.keys(result).forEach(key => {
+      let val = result[key];
+      if (key === 'skills') {
+        setSelectedOptions(val);
+        count++;
+      } else if (key === 'description') {
+        // Advanced Parsing for Description: Detect Headers and Bullet Points
+        const htmlDesc = val.split('\n')
+          .filter(line => line.trim())
+          .map(line => {
+            const trimmed = line.trim();
+            // Detect Bullet Points
+            if (trimmed.startsWith('-') || trimmed.startsWith('•') || /^\d+\./.test(trimmed)) {
+              return `<li>${trimmed.replace(/^[-•]|\d+\.\s*/, '').trim()}</li>`;
+            }
+            // Detect Headers (Ends with colon or short capitalized line)
+            if (trimmed.endsWith(':') || (trimmed.length < 50 && trimmed === trimmed.toUpperCase())) {
+              return `<h3><strong>${trimmed}</strong></h3>`;
+            }
+            // Default Paragraph
+            return `<p>${trimmed}</p>`;
+          })
+          .join('')
+          .replace(/(<li>.*?<\/li>)+/g, match => `<ul>${match}</ul>`); // Wrap consecutive <li> in <ul>
+
+        setJobDescription(htmlDesc);
+        count++;
+      } else if (key === 'postingDate') {
+        // Attempt to normalize date if it's 10-02-2026 -> 2026-02-10
+        if (val && typeof val === 'string' && val.includes('-')) {
+          const parts = val.split('-');
+          if (parts[2]?.length === 4) {
+            setValue(key, `${parts[2]}-${parts[1]}-${parts[0]}`);
+          } else {
+            setValue(key, val);
+          }
+        }
+        count++;
+      } else {
+        const normalizedVal = typeof val === 'string' ? (normalizationMap[val.trim()] || val.trim()) : val;
+        setValue(key, normalizedVal);
+        count++;
+      }
+    });
+
+    if (count > 0) {
+      toast.success(`Auto-filled ${count} fields! ✨`);
+    } else {
+      toast.error("Could not find recognizable headers in the pasted text.");
+    }
+  };
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
@@ -173,9 +280,44 @@ const CreateJob = () => {
         {/* Main Card */}
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors">
           <div className="p-8 md:p-12">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-8 border-b pb-4 border-gray-100 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 border-b pb-4 border-gray-100 dark:border-gray-700">
               Job Details
             </h2>
+
+            {/* Smart Paste Feature */}
+            <div className="mb-10 p-6 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-800/50">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                    <span className="flex items-center justify-center w-5 h-5 bg-indigo-600 text-white rounded-full text-[10px]">✨</span>
+                    Smart Auto-fill
+                  </h3>
+                  <p className="text-xs text-indigo-700/60 dark:text-indigo-400/60 mt-1">Paste your job details here to populate the entire form instantly.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAutoFill}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2 active:scale-95"
+                >
+                  Apply Auto-fill
+                </button>
+              </div>
+              <textarea
+                value={pasteData}
+                onChange={(e) => setPasteData(e.target.value)}
+                placeholder="Paste Job Title, Company, Description... etc here."
+                className="w-full h-32 p-4 text-xs font-mono bg-white dark:bg-gray-900 border border-indigo-100 dark:border-indigo-800 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none dark:text-gray-300"
+              />
+              <div className="mt-2 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setPasteData("")}
+                  className="text-[10px] text-gray-400 font-bold hover:text-red-500 transition-colors"
+                >
+                  Clear Clipboard
+                </button>
+              </div>
+            </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Row 1: Basic Info */}
@@ -299,8 +441,8 @@ const CreateJob = () => {
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Required Skills</label>
                 <CreatableSelect
-                  defaultValue={selectedOptions}
-                  onChange={setSelectedOPtions}
+                  value={selectedOptions}
+                  onChange={setSelectedOptions}
                   options={options}
                   isMulti
                   className="basic-multi-select"
