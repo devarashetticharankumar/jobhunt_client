@@ -12,6 +12,7 @@ import ShareButton from "../components/ShareButton";
 import GoogleAds from "../components/GoogleAds";
 import ResumeAnalyzerModal from "../components/ResumeAnalyzerModal";
 import JobAlertModal from "../components/JobAlertModal";
+import { getContentBlocks } from "../utils/contentUtils";
 
 // Helper component for Sidebar Job Items (mimicking 'Jobs you might be interested in')
 const SidebarJobItem = ({ job }) => (
@@ -21,7 +22,7 @@ const SidebarJobItem = ({ job }) => (
     </h4>
     <p className="text-gray-500 text-xs mb-2">{job.companyName}</p>
     <div className="flex items-center gap-3 text-xs text-gray-500">
-      <span className="flex items-center gap-1"><FaStar className="text-yellow-400" /> 4.1</span>
+      <span className="flex items-center gap-1"><FaStar className="text-yellow-400" /> {getOrganicStats(job._id).rating}</span>
       <span className="flex items-center gap-1"><FaMapMarkerAlt /> {job.jobLocation}</span>
     </div>
     <div className="mt-2 text-xs text-gray-400 text-right">
@@ -36,6 +37,15 @@ const calculateTimeAgo = (dateString) => {
   if (days === 0) return "Today";
   if (days === 1) return "1 day ago";
   return `${days} days ago`;
+};
+
+// Organic Data Generator for Production Polish
+const getOrganicStats = (id) => {
+  const seed = id ? id.toString().charCodeAt(id.toString().length - 1) : 5;
+  const rating = (3.5 + (seed % 15) / 10).toFixed(1);
+  const reviews = 100 + (seed * 12) % 900;
+  const applicants = 50 + (seed * 7) % 400;
+  return { rating, reviews, applicants };
 };
 
 const JobDetails = () => {
@@ -146,10 +156,40 @@ Feel free to share this opportunity within your network.
   };
 
   const applyLink = () => {
-    if (job?.ApplyLink) window.open(job.ApplyLink, "_blank");
+    if (job?.source || job?.originalUrl) {
+      const redirectUrl = `${import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:5001'}/jobs/redirect/${job._id}`;
+      window.open(redirectUrl, "_blank", "noopener,noreferrer");
+    } else if (job?.ApplyLink) {
+      window.open(job.ApplyLink, "_blank");
+    }
   };
 
   const canonicalUrl = `${window.location.origin}/job/${slug}`;
+
+  // JSON-LD for SEO
+  const jsonLd = {
+    "@context": "https://schema.org/",
+    "@type": "JobPosting",
+    "title": job?.jobTitle,
+    "description": job?.description || job?.shortDescription,
+    "datePosted": job?.createdAt,
+    "validThrough": job?.expiresAt,
+    "employmentType": job?.employmentType,
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": job?.companyName,
+      "logo": job?.companyLogo
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": job?.jobLocation,
+      }
+    }
+  };
+
+  const enrichment = job ? getContentBlocks(job) : null;
 
   if (isLoading) {
     return <div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
@@ -161,7 +201,7 @@ Feel free to share this opportunity within your network.
     <div className="min-h-screen bg-[#F8F9FA] font-sans text-[#17171d] pb-10">
       <Helmet>
         <title>{job.jobTitle} - {job.companyName}</title>
-        <meta name="description" content={job.description.replace(/<[^>]*>?/gm, '').slice(0, 160)} />
+        <meta name="description" content={job.description?.replace(/<[^>]*>?/gm, '').slice(0, 160) || job.shortDescription || ""} />
         <link rel="canonical" href={canonicalUrl} />
 
         {/* Open Graph / LinkedIn / Facebook */}
@@ -177,6 +217,11 @@ Feel free to share this opportunity within your network.
         <meta name="twitter:title" content={`${job.jobTitle} at ${job.companyName}`} />
         <meta name="twitter:description" content={`Apply for ${job.jobTitle} at ${job.companyName}.`} />
         <meta name="twitter:image" content={job.companyLogo?.startsWith('http') ? job.companyLogo : `${window.location.origin}${job.companyLogo || "/logo.png"}`} />
+
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
       </Helmet>
 
       {/* Main Container */}
@@ -208,8 +253,13 @@ Feel free to share this opportunity within your network.
                 <Link to={`/company/${encodeURIComponent(job.companyName)}`} className="font-semibold text-gray-700 hover:text-blue-600 hover:underline">
                   {job.companyName}
                 </Link>
-                <span className="flex items-center gap-1 text-orange-500 font-bold text-xs"><FaStar /> 4.1</span>
-                <span className="text-gray-400 text-xs">(423 Reviews)</span>
+                <span className="flex items-center gap-1 text-orange-500 font-bold text-xs"><FaStar /> {getOrganicStats(job._id).rating}</span>
+                <span className="text-gray-400 text-xs">({getOrganicStats(job._id).reviews} Reviews)</span>
+                {job.source && (
+                  <span className="ml-2 px-2 py-0.5 text-[9px] font-bold text-indigo-500 bg-indigo-50 rounded-full uppercase border border-indigo-100">
+                    Via {job.source}
+                  </span>
+                )}
               </div>
 
               <div className="flex flex-wrap items-center gap-4 md:gap-8 text-sm text-gray-500 mb-6">
@@ -233,7 +283,7 @@ Feel free to share this opportunity within your network.
                   <GoDotFill className="text-[6px] text-gray-300" />
                   <span>Openings: <b>1</b></span>
                   <GoDotFill className="text-[6px] text-gray-300" />
-                  <span>Applicants: <b>406</b></span>
+                  <span>Applicants: <b>{getOrganicStats(job._id).applicants}</b></span>
                 </div>
 
                 <div className="ml-auto flex gap-3">
@@ -258,53 +308,136 @@ Feel free to share this opportunity within your network.
               <InArticleAd />
             </div>
 
-            {/* 3. JOB DESCRIPTION */}
+            {/* 3. JOB DESCRIPTION / ABOUT THE ROLE */}
             <div className="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6 md:p-8">
-              <h2 className="text-lg font-bold text-[#091e42] mb-4">Job description</h2>
+              <h2 className="text-lg font-bold text-[#091e42] mb-4">
+                {job.source ? "Role & Requirements" : "Job description"}
+              </h2>
 
-              <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed mb-6">
-                {(() => {
-                  const content = job.description || "";
-                  // Split content by closing paragraph tags
-                  const paragraphs = content.split(/<\/p>/i);
-                  // Filter empty strings and append closing tag back (except strictly empty/whitespace only chunks if any)
-                  // Note: split consumes the delimiter.
+              <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed space-y-8">
+                {/* 1. UNIQUE SUMMARY */}
+                {job.source && (
+                  <div className="space-y-4">
+                    <p className="text-gray-700 font-medium text-base">
+                      Exploring your next career move? Join <strong>{job.companyName}</strong> as a <strong>{job.jobTitle}</strong> in {job.jobLocation}.
+                      This role offers an excellent opportunity to contribute to a professional ecosystem while developing your core competencies.
+                    </p>
 
-                  if (paragraphs.length < 3) {
-                    return <div dangerouslySetInnerHTML={{ __html: content }}></div>;
-                  }
+                    {enrichment && (
+                      <p className="text-gray-600">
+                        {enrichment.careerAdvice[0]} {enrichment.careerAdvice[1]} {enrichment.locationInsights}
+                      </p>
+                    )}
+                  </div>
+                )}
 
-                  const elements = [];
-                  const interval = 3; // Inject every 3 paragraphs
-                  let buffer = "";
-                  let pCount = 0;
+                {/* 2. TECHNICAL FOCUS */}
+                {job.skills && job.skills.length > 0 && (
+                  <div className="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100/50">
+                    <h3 className="text-indigo-900 font-bold text-base mb-3 uppercase tracking-wide flex items-center gap-2">
+                      <FaBriefcase className="text-indigo-500" /> Technical Requirements
+                    </h3>
+                    <p className="mb-4 text-indigo-800/80">
+                      Success in this position requires a strong grasp of modern industry standards.
+                      Candidates should be proficient in the following key areas:
+                    </p>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 list-none p-0">
+                      {job.skills.map((s, i) => (
+                        <li key={i} className="flex items-center gap-2 text-indigo-700 font-semibold bg-white/80 px-3 py-2 rounded-lg border border-indigo-100 shadow-sm">
+                          <GoDotFill className="text-[10px] text-indigo-400" /> {typeof s === 'object' ? s.label : s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                  paragraphs.forEach((part, index) => {
-                    if (!part.trim()) return;
+                {/* 3. INTERVIEW PREPARATION GUIDE (New Section for Bulking) */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                    💡 Interview Preparation Guide
+                  </h3>
+                  <p className="text-gray-600">
+                    To help you succeed in your application for the <strong>{job.jobTitle}</strong> position,
+                    our recruitment experts recommend focusing on the following preparation steps:
+                  </p>
+                  <ul className="space-y-3 list-none p-0">
+                    {enrichment?.interviewPrep.map((tip, i) => (
+                      <li key={i} className="flex items-start gap-3 text-gray-700">
+                        <span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-                    // Reconstruct paragraph
-                    buffer += part + "</p>";
-                    pCount++;
+                {/* 4. CAREER OUTLOOK & GROWTH */}
+                <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-4">
+                  <h3 className="text-gray-900 font-bold text-base">📈 Career Outlook</h3>
+                  <div className="text-gray-600 space-y-3">
+                    <p>{enrichment?.careerAdvice[2]}</p>
+                    <p>{enrichment?.careerAdvice[3]}</p>
+                    <p>Typically, professionals in these roles go on to take leadership positions or specialize in advanced technical architecture, especially within <strong>{job.companyName}</strong>'s industry segment.</p>
+                  </div>
+                </div>
 
-                    if (pCount === interval) {
-                      elements.push(<div key={`chunk-${index}`} dangerouslySetInnerHTML={{ __html: buffer }} />);
-                      elements.push(
-                        <div key={`ad-insert-${index}`} className="my-6">
-                          <InFeedAd />
-                        </div>
-                      );
-                      buffer = "";
-                      pCount = 0;
+                {/* Original/Direct Jobs - HTML Content */}
+                {!job.source && job.description && (
+                  (() => {
+                    const content = job.description || "";
+                    const paragraphs = content.split(/<\/p>/i);
+                    if (paragraphs.length < 3) {
+                      return <div dangerouslySetInnerHTML={{ __html: content }}></div>;
                     }
-                  });
+                    const elements = [];
+                    const interval = 3;
+                    let buffer = "";
+                    let pCount = 0;
+                    paragraphs.forEach((part, index) => {
+                      if (!part.trim()) return;
+                      buffer += part + "</p>";
+                      pCount++;
+                      if (pCount === interval) {
+                        elements.push(<div key={`chunk-${index}`} dangerouslySetInnerHTML={{ __html: buffer }} />);
+                        elements.push(<div key={`ad-insert-${index}`} className="my-6"><InFeedAd /></div>);
+                        buffer = "";
+                        pCount = 0;
+                      }
+                    });
+                    if (buffer) elements.push(<div key="chunk-final" dangerouslySetInnerHTML={{ __html: buffer }} />);
+                    return elements;
+                  })()
+                )}
 
-                  // Flush remaining buffer
-                  if (buffer) {
-                    elements.push(<div key="chunk-final" dangerouslySetInnerHTML={{ __html: buffer }} />);
-                  }
+                {job.shortDescription && !job.description && !job.source && (
+                  <p>{job.shortDescription}</p>
+                )}
 
-                  return elements;
-                })()}
+                {/* 5. APPLY SECTION (Simple Style) */}
+                <div className="pt-8 space-y-6 border-t border-gray-100">
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-gray-900">Ready to take the next step?</h3>
+                    <p className="text-gray-600 text-sm">
+                      Submit your application directly on the official <strong>{job.source || 'company'}</strong> portal for the fastest response.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-center md:justify-start">
+                      <InFeedAd />
+                    </div>
+
+                    <button
+                      onClick={applyLink}
+                      className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-blue-700 transition-all shadow-md active:scale-95 group"
+                    >
+                      Apply on Official Site <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    </button>
+
+                    <div className="flex justify-center md:justify-start pt-2">
+                      <InArticleAd />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Role & Industry Table */}
@@ -488,10 +621,10 @@ Feel free to share this opportunity within your network.
             <div className="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-5 border border-gray-100">
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-bold text-[#091e42] text-sm">Reviews</h3>
-                <a href="#" className="text-xs text-blue-600 font-bold">Read all 423 reviews</a>
+                <a href="#" className="text-xs text-blue-600 font-bold">Read all {getOrganicStats(job._id).reviews} reviews</a>
               </div>
               <div className="text-sm text-gray-600 mb-3">
-                {job.jobTitle} in {job.jobLocation}
+                {job.jobTitle} at {job.companyName}
               </div>
 
               {/* Fake Review Item */}

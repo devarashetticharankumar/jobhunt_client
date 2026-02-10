@@ -305,7 +305,8 @@ const ProfilePage = () => {
                     { label: "Post New Job", link: "/post-job", icon: <MdPostAdd />, color: "bg-blue-600", desc: "Create new listings" },
                     { label: "Create Blog Post", link: "/create-blog", icon: <MdOutlineArticle />, color: "bg-indigo-600", desc: "Write new articles" },
                     { label: "Manage Jobs", link: "/my-job", icon: <MdOutlineWorkOutline />, color: "bg-[#091e42]", desc: "Edit/Delete existing jobs" },
-                    { label: "Manage Blogs", link: "/my-blogs", icon: <MdSettings />, color: "bg-gray-800", desc: "Update existing blogs" }
+                    { label: "Manage Blogs", link: "/my-blogs", icon: <MdSettings />, color: "bg-gray-800", desc: "Update existing blogs" },
+                    { label: "Aggregator Hub", link: "/admin/aggregator", icon: <MdDashboard />, color: "bg-green-600", desc: "Manage Automated Feeds" }
                   ].map((action, i) => (
                     <button
                       key={i}

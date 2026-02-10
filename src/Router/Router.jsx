@@ -31,6 +31,7 @@ const HomePage = lazy(() => import("../Pages/HomePage"));
 const JobApplicantsPage = lazy(() => import("../Pages/JobApplicantsPage"));
 const CompanyPage = lazy(() => import("../Pages/CompanyPage"));
 const MyApplications = lazy(() => import("../Pages/MyApplications"));
+const AdminAggregator = lazy(() => import("../Pages/AdminAggregator"));
 
 const Loading = () => (
   <div className="flex items-center justify-center min-h-screen">
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
       {
         path: "/my-applications",
         element: <MyApplications />,
+      },
+      {
+        path: "/admin/aggregator",
+        element: <AdminAggregator />,
       },
     ],
   },
