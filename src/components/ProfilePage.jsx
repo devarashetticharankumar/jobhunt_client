@@ -5,15 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import {
   MdOutlineWorkOutline, MdOutlineArticle, MdLogout, MdEdit, MdSave, MdCancel,
-  MdPerson, MdEmail, MdDescription, MdAssignment, MdVerified, MdAnalytics, MdRocketLaunch
+  MdPerson, MdEmail, MdDescription, MdAssignment, MdVerified, MdAnalytics, MdRocketLaunch,
+  MdAddCircleOutline, MdPostAdd, MdSettings, MdDashboard
 } from "react-icons/md";
-import { FaCheckCircle, FaStar, FaLightbulb } from "react-icons/fa";
+import { FaCheckCircle, FaStar, FaLightbulb, FaTools } from "react-icons/fa";
 import InArticleAd from "../components/InArticleAd";
 import InFeedAd from "../components/InFeedAd";
 import SkeletonLoading from "./SkeletonLoading";
 
 const ProfilePage = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const isAdmin = user?.email === "jobhunt2580@gmail.com";
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -132,8 +134,8 @@ const ProfilePage = () => {
               <button
                 onClick={() => setEditMode(!editMode)}
                 className={`flex items-center gap-3 px-8 py-3.5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl transition-all active:scale-95 ${editMode
-                    ? "bg-red-500 text-white hover:bg-red-600"
-                    : "bg-white text-[#091e42] hover:bg-blue-50"
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-white text-[#091e42] hover:bg-blue-50"
                   }`}
               >
                 {editMode ? <><MdCancel /> Cancel</> : <><MdEdit /> Edit Profile</>}
@@ -276,6 +278,52 @@ const ProfilePage = () => {
                 </button>
               </div>
             </div>
+
+            {/* ADMIN CONTROL CENTER - ONLY FOR ADMIN */}
+            {isAdmin && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-[40px] p-10 shadow-xl border-2 border-blue-50 relative overflow-hidden mt-8"
+              >
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
+
+                <div className="flex items-center justify-between mb-8">
+                  <h3 className="text-2xl font-black text-[#091e42] flex items-center gap-3">
+                    <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-lg shadow-blue-200">
+                      <FaTools />
+                    </div>
+                    Admin Control Center
+                  </h3>
+                  <span className="px-4 py-1.5 bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-widest rounded-full">
+                    Authorized Access
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[
+                    { label: "Post New Job", link: "/post-job", icon: <MdPostAdd />, color: "bg-blue-600", desc: "Create new listings" },
+                    { label: "Create Blog Post", link: "/create-blog", icon: <MdOutlineArticle />, color: "bg-indigo-600", desc: "Write new articles" },
+                    { label: "Manage Jobs", link: "/my-job", icon: <MdOutlineWorkOutline />, color: "bg-[#091e42]", desc: "Edit/Delete existing jobs" },
+                    { label: "Manage Blogs", link: "/my-blogs", icon: <MdSettings />, color: "bg-gray-800", desc: "Update existing blogs" }
+                  ].map((action, i) => (
+                    <button
+                      key={i}
+                      onClick={() => navigate(action.link)}
+                      className="group flex items-center gap-5 p-5 bg-[#F8F9FA] hover:bg-white hover:shadow-2xl hover:shadow-gray-200 rounded-3xl transition-all border border-transparent hover:border-gray-100 text-left"
+                    >
+                      <div className={`w-14 h-14 ${action.color} text-white rounded-2xl flex items-center justify-center text-2xl shadow-lg transition-transform group-hover:scale-110`}>
+                        {action.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-black text-[#091e42] text-sm mb-0.5">{action.label}</h4>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{action.desc}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
           </div>
 
