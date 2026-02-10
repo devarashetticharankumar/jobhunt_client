@@ -130,12 +130,15 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t border-gray-300 mt-8 pt-4 flex items-center justify-center ">
+      <div className="border-t border-gray-300 mt-8 pt-4 flex flex-col items-center justify-center ">
         <p className="text-center text-gray-400">
           &copy; Copyright 2024. Powered By{" "}
           <span className="font-bold text-blue-600">
             <a href="/">JobNirvana</a>{" "}
           </span>
+        </p>
+        <p className="text-center text-gray-500 text-[10px] mt-2 max-w-2xl px-4 font-medium italic">
+          "We are not affiliated with any company listed. All trademarks belong to their respective owners. Applications are redirected to official sources."
         </p>
       </div>
     </footer >
