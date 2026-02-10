@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLoaderData, useParams } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
+import { useAuth0 } from "@auth0/auth0-react";
 import { API_URL } from "../data/apiPath";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -38,31 +39,37 @@ const UpdateJob = () => {
     reset,
     formState: { errors },
   } = useForm();
+  const { getAccessTokenSilently } = useAuth0();
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
     data.description = jobDescription;
 
-    fetch(`${API_URL}/jobs/update-job/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => {
+    const updateJob = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`${API_URL}/jobs/update-job/${id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
         if (result.acknowledged) {
           toast.success("Job updated successfully!");
         } else {
           toast.error(`${result.message}`);
         }
         reset();
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error updating job:", error);
         toast.error("An error occurred while updating the job.");
-      });
+      }
+    };
+
+    updateJob();
   };
 
   const options = [

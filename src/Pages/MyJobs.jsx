@@ -63,7 +63,13 @@ const MyJobs = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
     try {
-      const response = await fetch(`${API_URL}/jobs/job/${id}`, { method: "DELETE" });
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`${API_URL}/jobs/job/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       if (response.ok) {
         toast.success("Job deleted successfully!");
         setJobs(jobs.filter((job) => job._id !== id));

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { API_URL } from "../data/apiPath";
 import { Bounce, ToastContainer, toast } from "react-toastify";
@@ -21,23 +22,29 @@ const CreateJob = () => {
     reset,
     formState: { errors },
   } = useForm();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   const onSubmit = (data) => {
     data.skills = selectedOptions;
     data.description = jobDescription;
     // Attach the sanitized content to form data    console.log(data);
-    fetch(`${API_URL}/jobs/postjob`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
+    const postJob = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const response = await fetch(`${API_URL}/jobs/postjob`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
         console.log(result);
 
         if (result.acknowledged === true) {
           toast.success("Job posted successfully!", {
-            autoClose: 3000, // Toast will disappear after 3 seconds
+            autoClose: 3000,
           });
         } else {
           toast.error("Failed to post job. Please try again.", {
@@ -46,7 +53,13 @@ const CreateJob = () => {
         }
         reset();
         setJobDescription(""); // Reset rich text editor
-      });
+      } catch (error) {
+        console.error("Error posting job:", error);
+        toast.error("An error occurred. Please log in again.");
+      }
+    };
+
+    postJob();
   };
 
   const options = [
