@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MdClose, MdUploadFile, MdCheckCircle, MdSend } from "react-icons/md";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "react-toastify";
+import { API_URL } from "../data/apiPath";
 
 const EasyApplyModal = ({ isOpen, onClose, job }) => {
     const { user } = useAuth0();
@@ -31,7 +32,7 @@ const EasyApplyModal = ({ isOpen, onClose, job }) => {
         formData.append("resume", resume);
 
         try {
-            const response = await fetch("http://localhost:5001/applications/apply", {
+            const response = await fetch(`${API_URL}/applications/apply`, {
                 method: "POST",
                 body: formData,
             });

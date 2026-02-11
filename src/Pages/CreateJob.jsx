@@ -10,12 +10,18 @@ import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import the CSS file
 import { Helmet } from "react-helmet-async"; // Importing React Helmet
+import { formatJobDescription } from "../utils/formatUtils";
 
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 // import { htmlToText } from "html-to-text";
 const CreateJob = () => {
   const [selectedOptions, setSelectedOptions] = useState(null);
   const [jobDescription, setJobDescription] = useState(""); // State for Rich Text Editor
+  const [isBulkMode, setIsBulkMode] = useState(false);
+  const [bulkData, setBulkData] = useState("");
+  const [bulkFormat, setBulkFormat] = useState("json"); // "json" or "csv"
+  const [isUploading, setIsUploading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -26,6 +32,89 @@ const CreateJob = () => {
   const { getAccessTokenSilently, user } = useAuth0();
 
   const [pasteData, setPasteData] = useState("");
+
+  const handleBulkUpload = async () => {
+    if (!bulkData.trim()) {
+      toast.info(`Please paste ${bulkFormat.toUpperCase()} data first.`);
+      return;
+    }
+
+    try {
+      let parsedData;
+      if (bulkFormat === "json") {
+        parsedData = JSON.parse(bulkData);
+      } else {
+        // Simple but effective CSV parser
+        const csvToArray = (text) => {
+          let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
+          for (l of text) {
+            if ('"' === l) {
+              if (s && l === p) row[i] += l;
+              s = !s;
+            } else if (',' === l && s) l = row[++i] = '';
+            else if ('\n' === l && s) {
+              if ('\r' === p) row[i] = row[i].slice(0, -1);
+              row = ret[++r] = [l = row[i = 0] = ''];
+            } else row[i] += l;
+            p = l;
+          }
+          return ret;
+        };
+
+        const rows = csvToArray(bulkData.trim());
+        const headers = rows[0].map(h => h.trim());
+        parsedData = rows.slice(1).map(row => {
+          const obj = {};
+          headers.forEach((header, i) => {
+            if (header) {
+              let val = row[i]?.trim() || "";
+              // Auto-format description if present in CSV
+              if (header === 'description') val = formatJobDescription(val);
+              obj[header] = val;
+            }
+          });
+          return obj;
+        }).filter(item => Object.keys(item).length > 0 && item.jobTitle);
+      }
+
+      // If JSON, also ensure descriptions are formatted
+      if (bulkFormat === "json") {
+        parsedData = parsedData.map(job => ({
+          ...job,
+          description: formatJobDescription(job.description)
+        }));
+      }
+
+      if (!Array.isArray(parsedData) || parsedData.length === 0) {
+        toast.error("Data must be an array of job objects with 'jobTitle'.");
+        return;
+      }
+
+      setIsUploading(true);
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`${API_URL}/jobs/bulk-post`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(parsedData),
+      });
+
+      const result = await response.json();
+      if (result.acknowledged) {
+        toast.success(`Successfully posted ${result.insertedCount} jobs! 🚀`);
+        setBulkData("");
+      } else {
+        toast.error(result.message || "Bulk upload failed.");
+      }
+    } catch (err) {
+      console.error("Bulk upload error:", err);
+      toast.error(`Invalid ${bulkFormat.toUpperCase()} format. Please check your data.`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleAutoFill = () => {
     if (!pasteData.trim()) {
@@ -85,25 +174,7 @@ const CreateJob = () => {
         setSelectedOptions(val);
         count++;
       } else if (key === 'description') {
-        // Advanced Parsing for Description: Detect Headers and Bullet Points
-        const htmlDesc = val.split('\n')
-          .filter(line => line.trim())
-          .map(line => {
-            const trimmed = line.trim();
-            // Detect Bullet Points
-            if (trimmed.startsWith('-') || trimmed.startsWith('•') || /^\d+\./.test(trimmed)) {
-              return `<li>${trimmed.replace(/^[-•]|\d+\.\s*/, '').trim()}</li>`;
-            }
-            // Detect Headers (Ends with colon or short capitalized line)
-            if (trimmed.endsWith(':') || (trimmed.length < 50 && trimmed === trimmed.toUpperCase())) {
-              return `<h3><strong>${trimmed}</strong></h3>`;
-            }
-            // Default Paragraph
-            return `<p>${trimmed}</p>`;
-          })
-          .join('')
-          .replace(/(<li>.*?<\/li>)+/g, match => `<ul>${match}</ul>`); // Wrap consecutive <li> in <ul>
-
+        const htmlDesc = formatJobDescription(val);
         setJobDescription(htmlDesc);
         count++;
       } else if (key === 'postingDate') {
@@ -280,274 +351,365 @@ const CreateJob = () => {
         {/* Main Card */}
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors">
           <div className="p-8 md:p-12">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 border-b pb-4 border-gray-100 dark:border-gray-700">
-              Job Details
-            </h2>
-
-            {/* Smart Paste Feature */}
-            <div className="mb-10 p-6 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-800/50">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-2">
-                    <span className="flex items-center justify-center w-5 h-5 bg-indigo-600 text-white rounded-full text-[10px]">✨</span>
-                    Smart Auto-fill
-                  </h3>
-                  <p className="text-xs text-indigo-700/60 dark:text-indigo-400/60 mt-1">Paste your job details here to populate the entire form instantly.</p>
-                </div>
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-gray-100 dark:border-gray-700 gap-4">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+                Job Details
+              </h2>
+              <div className="flex items-center bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
                 <button
-                  type="button"
-                  onClick={handleAutoFill}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2 active:scale-95"
+                  onClick={() => setIsBulkMode(false)}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${!isBulkMode ? 'bg-white dark:bg-gray-600 text-indigo-600 dark:text-indigo-300 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
                 >
-                  Apply Auto-fill
+                  Single Post
                 </button>
-              </div>
-              <textarea
-                value={pasteData}
-                onChange={(e) => setPasteData(e.target.value)}
-                placeholder="Paste Job Title, Company, Description... etc here."
-                className="w-full h-32 p-4 text-xs font-mono bg-white dark:bg-gray-900 border border-indigo-100 dark:border-indigo-800 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none dark:text-gray-300"
-              />
-              <div className="mt-2 flex justify-end">
                 <button
-                  type="button"
-                  onClick={() => setPasteData("")}
-                  className="text-[10px] text-gray-400 font-bold hover:text-red-500 transition-colors"
+                  onClick={() => setIsBulkMode(true)}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${isBulkMode ? 'bg-white dark:bg-gray-600 text-indigo-600 dark:text-indigo-300 shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
                 >
-                  Clear Clipboard
+                  Bulk Upload
                 </button>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-              {/* Row 1: Basic Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Title</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Senior Full Stack Developer"
-                    {...register("jobTitle")}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Company Name</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Acme Corp"
-                    {...register("companyName")}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-              </div>
-
-              {/* Row 2: Salary */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Minimum Salary</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. $50k"
-                    {...register("minPrice")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Maximum Salary</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. $120k"
-                    {...register("maxPrice")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-              </div>
-
-              {/* Row 3: Salary Type & Location */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Salary Type</label>
-                  <div className="relative">
-                    <select
-                      {...register("salaryType")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
-                    >
-                      <option value="">Select frequency</option>
-                      <option value="Hourly">Hourly</option>
-                      <option value="Monthly">Monthly</option>
-                      <option value="Yearly">Yearly</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+            {!isBulkMode ? (
+              <React.Fragment>
+                {/* Smart Paste Feature */}
+                <div className="mb-10 p-6 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-800/50">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                        <span className="flex items-center justify-center w-5 h-5 bg-indigo-600 text-white rounded-full text-[10px]">✨</span>
+                        Smart Auto-fill
+                      </h3>
+                      <p className="text-xs text-indigo-700/60 dark:text-indigo-400/60 mt-1">Paste your job details here to populate the entire form instantly.</p>
                     </div>
+                    <button
+                      type="button"
+                      onClick={handleAutoFill}
+                      className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-2 active:scale-95"
+                    >
+                      Apply Auto-fill
+                    </button>
+                  </div>
+                  <textarea
+                    value={pasteData}
+                    onChange={(e) => setPasteData(e.target.value)}
+                    placeholder="Paste Job Title, Company, Description... etc here."
+                    className="w-full h-32 p-4 text-xs font-mono bg-white dark:bg-gray-900 border border-indigo-100 dark:border-indigo-800 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none dark:text-gray-300"
+                  />
+                  <div className="mt-2 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setPasteData("")}
+                      className="text-[10px] text-gray-400 font-bold hover:text-red-500 transition-colors"
+                    >
+                      Clear Clipboard
+                    </button>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Location</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. New York, Remote"
-                    {...register("jobLocation")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-              </div>
 
-              {/* Row 4: Date & Experience */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Posting Date</label>
-                  <input
-                    type="date"
-                    min={minDate}
-                    value={minDate}
-                    onChange={(e) => setMinDate(e.target.value)}
-                    {...register("postingDate")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Experience Level</label>
-                  <div className="relative">
-                    <select
-                      {...register("experienceLevel")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
-                    >
-                      <option value="">Select experience level</option>
-                      <option value="Any Experience">Any Experience</option>
-                      <option value="fresher">Fresher</option>
-                      <option value="1-2 years">1-2 years</option>
-                      <option value="3-4 years">3-4 years</option>
-                      <option value="Not Mention">Not Mention</option>
-                      <option value="above 5 years">5+ Years</option>
-                      <option value="entry-level">Entry-Level</option>
-                      <option value="mid-level">Mid-Level</option>
-                      <option value="experienced">Senior-Level</option>
-                      <option value="Intern">Internship</option>
-                      <option value="Work remotely">Remote</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                  {/* Row 1: Basic Info */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Title</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Senior Full Stack Developer"
+                        {...register("jobTitle")}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Company Name</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Acme Corp"
+                        {...register("companyName")}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Row 5: Skills */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Required Skills</label>
-                <CreatableSelect
-                  value={selectedOptions}
-                  onChange={setSelectedOptions}
-                  options={options}
-                  isMulti
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                  styles={{
-                    control: (base, state) => ({
-                      ...base,
-                      borderRadius: '0.75rem',
-                      padding: '4px',
-                      borderColor: state.isFocused ? '#6366f1' : '#e5e7eb', // This needs dark mode check ideally, but staying simple
-                      boxShadow: state.isFocused ? '0 0 0 4px rgba(99, 102, 241, 0.1)' : 'none',
-                      backgroundColor: 'transparent', // Let parent control it? difficult with library
-                    }),
-                    // React-Select styling is tricky with Tailwind classes.
-                    // Leaving inline styles as is but ensuring container looks okay.
-                  }}
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400">Note: Select coloring may not support dark mode fully yet.</p>
-              </div>
-
-              {/* Row 6: Logo & Employment Type */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Company Logo URL</label>
-                  <input
-                    type="url"
-                    placeholder="https://company.com/logo.png"
-                    {...register("companyLogo")}
-                    defaultValue="https://i.imgur.com/0qGt7qj.png"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Employment Type</label>
-                  <div className="relative">
-                    <select
-                      {...register("employmentType")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
-                    >
-                      <option value="">Select type</option>
-                      <option value="Full-time">Full-time</option>
-                      <option value="Part-time">Part-time</option>
-                      <option value="Internship">Internship</option>
-                      <option value="Temporary">Temporary</option>
-                      <option value="Freelance">Freelance</option>
-                      <option value="Contract">Contract</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                  {/* Row 2: Salary */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Minimum Salary</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. $50k"
+                        {...register("minPrice")}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Maximum Salary</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. $120k"
+                        {...register("maxPrice")}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
                     </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Row 7: Job Description */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Description</label>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
-                  <ReactQuill
-                    value={jobDescription}
-                    onChange={setJobDescription}
-                    modules={modules}
-                    formats={formats}
-                    placeholder="Describe the role, responsibilities, and requirements..."
-                    theme="snow"
-                    className="h-64 mb-12 border-none dark:text-white"
-                  />
-                  {/* ReactQuill CSS for dark mode is tricky, might need global override */}
-                </div>
-              </div>
+                  {/* Row 3: Salary Type & Location */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Salary Type</label>
+                      <div className="relative">
+                        <select
+                          {...register("salaryType")}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
+                        >
+                          <option value="">Select frequency</option>
+                          <option value="Hourly">Hourly</option>
+                          <option value="Monthly">Monthly</option>
+                          <option value="Yearly">Yearly</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                          <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Location</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. New York, Remote"
+                        {...register("jobLocation")}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
+                  </div>
 
-              {/* Row 8: Contact & Apply Link */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Posted By (Email)</label>
-                  <input
-                    type="email"
-                    placeholder="recruiter@company.com"
-                    {...register("postedBy")}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Application Link</label>
-                  <input
-                    type="url"
-                    placeholder="https://company.com/apply"
-                    {...register("ApplyLink")}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
-                  />
-                </div>
-              </div>
+                  {/* Row 4: Date & Experience */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Posting Date</label>
+                      <input
+                        type="date"
+                        min={minDate}
+                        value={minDate}
+                        onChange={(e) => setMinDate(e.target.value)}
+                        {...register("postingDate")}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
 
-              {/* Submit Button */}
-              <div className="pt-8">
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-indigo-500/30 transform hover:-translate-y-0.5 transition-all duration-200"
-                >
-                  Post Job Opening
-                </button>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Experience Level</label>
+                      <div className="relative">
+                        <select
+                          {...register("experienceLevel")}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
+                        >
+                          <option value="">Select experience level</option>
+                          <option value="Any Experience">Any Experience</option>
+                          <option value="fresher">Fresher</option>
+                          <option value="1-2 years">1-2 years</option>
+                          <option value="3-4 years">3-4 years</option>
+                          <option value="Not Mention">Not Mention</option>
+                          <option value="above 5 years">5+ Years</option>
+                          <option value="entry-level">Entry-Level</option>
+                          <option value="mid-level">Mid-Level</option>
+                          <option value="experienced">Senior-Level</option>
+                          <option value="Intern">Internship</option>
+                          <option value="Work remotely">Remote</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                          <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 5: Skills */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Required Skills</label>
+                    <CreatableSelect
+                      value={selectedOptions}
+                      onChange={setSelectedOptions}
+                      options={options}
+                      isMulti
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      styles={{
+                        control: (base, state) => ({
+                          ...base,
+                          borderRadius: '0.75rem',
+                          padding: '4px',
+                          borderColor: state.isFocused ? '#6366f1' : '#e5e7eb', // This needs dark mode check ideally, but staying simple
+                          boxShadow: state.isFocused ? '0 0 0 4px rgba(99, 102, 241, 0.1)' : 'none',
+                          backgroundColor: 'transparent', // Let parent control it? difficult with library
+                        }),
+                        // React-Select styling is tricky with Tailwind classes.
+                        // Leaving inline styles as is but ensuring container looks okay.
+                      }}
+                    />
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Note: Select coloring may not support dark mode fully yet.</p>
+                  </div>
+
+                  {/* Row 6: Logo & Employment Type */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Company Logo URL</label>
+                      <input
+                        type="url"
+                        placeholder="https://company.com/logo.png"
+                        {...register("companyLogo")}
+                        defaultValue="https://i.imgur.com/0qGt7qj.png"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Employment Type</label>
+                      <div className="relative">
+                        <select
+                          {...register("employmentType")}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800 appearance-none cursor-pointer"
+                        >
+                          <option value="">Select type</option>
+                          <option value="Full-time">Full-time</option>
+                          <option value="Part-time">Part-time</option>
+                          <option value="Internship">Internship</option>
+                          <option value="Temporary">Temporary</option>
+                          <option value="Freelance">Freelance</option>
+                          <option value="Contract">Contract</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                          <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 7: Job Description */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Description</label>
+                    <div className="bg-gray-50 dark:bg-gray-700 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all">
+                      <ReactQuill
+                        value={jobDescription}
+                        onChange={setJobDescription}
+                        modules={modules}
+                        formats={formats}
+                        placeholder="Describe the role, responsibilities, and requirements..."
+                        theme="snow"
+                        className="h-64 mb-12 border-none dark:text-white"
+                      />
+                      {/* ReactQuill CSS for dark mode is tricky, might need global override */}
+                    </div>
+                  </div>
+
+                  {/* Row 8: Contact & Apply Link */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Job Posted By (Email)</label>
+                      <input
+                        type="email"
+                        placeholder="recruiter@company.com"
+                        {...register("postedBy")}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 block">Application Link</label>
+                      <input
+                        type="url"
+                        placeholder="https://company.com/apply"
+                        {...register("ApplyLink")}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none bg-gray-50 dark:bg-gray-700 dark:text-white focus:bg-white dark:focus:bg-gray-800"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="pt-8">
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold text-lg rounded-xl shadow-lg shadow-indigo-500/30 transform hover:-translate-y-0.5 transition-all duration-200"
+                    >
+                      Post Job Opening
+                    </button>
+                  </div>
+                </form>
+              </React.Fragment>
+            ) : (
+              <div className="space-y-8 animate-in fade-in duration-500">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white">Bulk Data Import</h3>
+                  <div className="flex items-center bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
+                    <button
+                      onClick={() => setBulkFormat("json")}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${bulkFormat === "json" ? 'bg-white dark:bg-gray-600 text-indigo-600 shadow-sm' : 'text-gray-500'}`}
+                    >
+                      JSON
+                    </button>
+                    <button
+                      onClick={() => setBulkFormat("csv")}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${bulkFormat === "csv" ? 'bg-white dark:bg-gray-600 text-indigo-600 shadow-sm' : 'text-gray-500'}`}
+                    >
+                      CSV / Excel
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/50 p-6 rounded-2xl">
+                  <h3 className="text-amber-800 dark:text-amber-300 font-bold flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    How to use {bulkFormat.toUpperCase()} Upload
+                  </h3>
+                  <p className="text-sm text-amber-900/70 dark:text-amber-400/70 leading-relaxed">
+                    {bulkFormat === "json"
+                      ? "Paste an array of job objects. Ideal for system-to-system transfers."
+                      : "Paste comma-separated values. You can copy-paste directly from Excel/Sheets (ensure headers match)."}
+                  </p>
+                  <pre className="mt-4 p-4 bg-gray-900 text-gray-300 rounded-xl text-xs overflow-x-auto border border-gray-800">
+                    {bulkFormat === "json" ? `[
+  {
+    "jobTitle": "DevOps Engineer",
+    "companyName": "TechFlow",
+    "ApplyLink": "https://...",
+    "postedBy": "admin@example.com"
+  }
+]` : `jobTitle,companyName,ApplyLink,postedBy
+DevOps Engineer,TechFlow,https://...,admin@example.com
+Full Stack Dev,WebCorp,https://...,admin@example.com`}
+                  </pre>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 block">{bulkFormat.toUpperCase()} Data Input</label>
+                  <textarea
+                    value={bulkData}
+                    onChange={(e) => setBulkData(e.target.value)}
+                    placeholder={bulkFormat === "json" ? "Paste your JSON array here..." : "jobTitle,companyName,ApplyLink,postedBy..."}
+                    className="w-full h-80 p-6 text-sm font-mono bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all dark:text-gray-300"
+                  />
+                </div>
+
+                <div className="flex justify-end pt-4">
+                  <button
+                    onClick={handleBulkUpload}
+                    disabled={isUploading}
+                    className={`px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-indigo-600/20 transition-all flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed ${isUploading ? 'animate-pulse' : 'hover:scale-105 active:scale-95'}`}
+                  >
+                    {isUploading ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        Posting Jobs...
+                      </>
+                    ) : (
+                      <>🚀 Post Bulk Jobs</>
+                    )}
+                  </button>
+                </div>
               </div>
-            </form>
+            )}
           </div>
         </div>
       </motion.div>

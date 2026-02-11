@@ -49,7 +49,7 @@ const MyJobs = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   // Filter logic
   const filteredJobs = jobs.filter((job) =>
-    job.jobTitle.toLowerCase().includes(searchText.toLowerCase())
+    (job?.jobTitle || "").toLowerCase().includes(searchText.toLowerCase())
   );
   const currentJobs = filteredJobs.slice(indexOfFirstItem, indexOfLastItem);
 
