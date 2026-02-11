@@ -412,7 +412,19 @@ Feel free to share this opportunity within your network.
                   <p>{job.shortDescription}</p>
                 )}
 
-                {/* 5. APPLY SECTION (Simple Style) */}
+                {/* Skills */}
+                <div className="mt-8">
+                  <h3 className="text-base font-bold text-[#091e42] mb-3">Key Skills</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {job.skills?.map((skill, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-full border border-gray-300 text-gray-600 text-sm font-medium hover:border-blue-400 hover:text-blue-600 cursor-default bg-white">
+                        {typeof skill === 'object' ? skill.label : skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 5. APPLY SECTION (Moved Below Skills) */}
                 <div className="pt-8 space-y-6 border-t border-gray-100">
                   <div className="space-y-2">
                     <h3 className="text-xl font-bold text-gray-900">Ready to take the next step?</h3>
@@ -434,76 +446,13 @@ Feel free to share this opportunity within your network.
                     </button>
 
                     <div className="flex justify-center md:justify-start pt-2">
-                      <InArticleAd />
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Role & Industry Table */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mt-6 pt-6 border-t border-gray-100 text-sm">
-                <div className="space-y-1">
-                  <span className="block text-gray-400 text-xs uppercase tracking-wide">Role</span>
-                  <span className="font-semibold text-gray-800">{job.jobTitle}</span>
-                </div>
-                <div className="space-y-1">
-                  <span className="block text-gray-400 text-xs uppercase tracking-wide">Industry Type</span>
-                  <span className="font-semibold text-gray-800">IT Services & Consulting</span>
-                </div>
-                <div className="space-y-1">
-                  <span className="block text-gray-400 text-xs uppercase tracking-wide">Department</span>
-                  <span className="font-semibold text-gray-800">Engineering - Software & QA</span>
-                </div>
-                <div className="space-y-1">
-                  <span className="block text-gray-400 text-xs uppercase tracking-wide">Employment Type</span>
-                  <span className="font-semibold text-gray-800">{job.employmentType}</span>
-                </div>
-                <div className="space-y-1">
-                  <span className="block text-gray-400 text-xs uppercase tracking-wide">Role Category</span>
-                  <span className="font-semibold text-gray-800">Software Development</span>
-                </div>
-              </div>
-
-              {/* Ad between Table and Skills (Revenue Optimization) */}
-              <div className="my-6">
-                <InArticleAd />
-              </div>
-
-              {/* Skills */}
-              <div className="mt-8">
-                <h3 className="text-base font-bold text-[#091e42] mb-3">Key Skills</h3>
-                <div className="flex flex-wrap gap-2">
-                  {job.skills?.map((skill, i) => (
-                    <span key={i} className="px-3 py-1.5 rounded-full border border-gray-300 text-gray-600 text-sm font-medium hover:border-blue-400 hover:text-blue-600 cursor-default bg-white">
-                      {typeof skill === 'object' ? skill.label : skill}
-                    </span>
-                  ))}
                 </div>
               </div>
             </div>
 
             <div className="my-4">
-              <InFeedAd />
-            </div>
-
-            {/* Apply Section (Moved here) */}
-            <div className=" flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                <h3 className="font-bold text-gray-900 text-lg mb-1">Interested in this job?</h3>
-
-              </div>
-              <div className="flex gap-4">
-                <button
-                  onClick={applyLink}
-                  className="text-gray-400 hover:text-blue-600 font-bold py-2 text-sm transition-all flex items-center gap-2"
-                >
-                  Apply on company site <FiArrowRight className="text-[10px]" />
-                </button>
-              </div>
-            </div>
-
-            {/* Post-Apply High Visibility Ad */}
-            <div className="my-6">
               <InFeedAd />
             </div>
 
