@@ -243,7 +243,7 @@ Feel free to share this opportunity within your network.
               )}
 
               {/* Above-the-Fold Ad for Mobile/Desktop */}
-              <div className="mb-4 bg-blue-50/10 rounded-xl p-1 border border-dashed border-blue-100/30">
+              <div className="bg-blue-50/10 rounded-xl p-1 border border-dashed border-blue-100/30">
                 <InFeedAd />
               </div>
 
@@ -299,12 +299,12 @@ Feel free to share this opportunity within your network.
             </div>
 
             {/* Mobile-Only Sidebar Ad Fallback (Revenue Optimization) */}
-            <div className="lg:hidden my-2">
+            <div>
               <GoogleAds />
             </div>
 
             {/* 2. JOB HIGHLIGHTS (If applies, else generic) */}
-            <div className="my-2">
+            <div>
               <InArticleAd />
             </div>
 
@@ -398,7 +398,7 @@ Feel free to share this opportunity within your network.
                       pCount++;
                       if (pCount === interval) {
                         elements.push(<div key={`chunk-${index}`} dangerouslySetInnerHTML={{ __html: buffer }} />);
-                        elements.push(<div key={`ad-insert-${index}`} className="my-6"><InFeedAd /></div>);
+                        elements.push(<div key={`ad-insert-${index}`}><InFeedAd /></div>);
                         buffer = "";
                         pCount = 0;
                       }
@@ -440,19 +440,20 @@ Feel free to share this opportunity within your network.
 
                     <button
                       onClick={applyLink}
-                      className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold py-2.5 px-8 rounded-lg text-sm hover:bg-blue-700 transition-all shadow-md active:scale-95 group"
+                      className="inline-flex items-center gap-2 text-blue-600 font-bold text-sm hover:text-blue-800 hover:underline transition-all active:scale-95 group"
                     >
                       Apply on Official Site <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                     </button>
 
-                    <div className="flex justify-center md:justify-start pt-2">
+                    <div className="flex justify-center md:justify-start">
+                      <InFeedAd />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="my-4">
+            <div>
               <InFeedAd />
             </div>
 
@@ -480,7 +481,7 @@ Feel free to share this opportunity within your network.
               </div>
             )}
 
-            <div className="my-4">
+            <div>
               <InArticleAd />
             </div>
 

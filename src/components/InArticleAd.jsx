@@ -13,7 +13,7 @@ const InArticleAd = () => {
 
   return (
     <div
-      className="w-full overflow-hidden my-2 flex flex-col items-center min-h-[140px]"
+      className="w-full overflow-hidden flex flex-col items-center"
     >
       <span className="text-[7px] text-gray-400 font-bold self-end mb-1 mr-2 uppercase tracking-tight">
         SPONSORED

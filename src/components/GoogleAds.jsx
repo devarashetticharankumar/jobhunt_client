@@ -13,7 +13,7 @@ const GoogleAds = () => {
 
   return (
     <div
-      className="w-full min-h-[280px] flex flex-col items-center justify-center text-center overflow-hidden my-2"
+      className="w-full flex flex-col items-center justify-center text-center overflow-hidden"
     >
       <span className="text-[7px] text-gray-400 font-bold self-end mb-1 mr-2 uppercase tracking-tight">
         SPONSORED

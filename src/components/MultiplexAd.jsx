@@ -13,7 +13,7 @@ const MultiplexAd = () => {
   }, []);
 
   return (
-    <div className="multiplex-ad my-6">
+    <div className="multiplex-ad">
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}
