@@ -7,7 +7,8 @@ import { API_URL } from "../data/apiPath";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   FaSearch, FaBriefcase,
-  FaArrowRight, FaRegBuilding, FaGlobeAmericas, FaUsers, FaChartLine, FaCheckCircle, FaStar
+  FaArrowRight, FaRegBuilding, FaGlobeAmericas, FaUsers, FaChartLine, FaCheckCircle, FaStar,
+  FaMagic, FaChartPie, FaLightbulb
 } from "react-icons/fa";
 import { MdOutlineWorkOutline, MdOutlineArticle } from "react-icons/md";
 import InArticleAd from "../components/InArticleAd";
@@ -90,7 +91,7 @@ const HomePage = () => {
       </Helmet>
 
       {/* ULTRA-PREMIUM HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center pt-24 pb-32 overflow-hidden bg-white">
+      <section className="relative min-h-[90vh] flex items-center pt-18 pb-32 overflow-hidden bg-white">
         {/* Animated Background Elements */}
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-3xl opacity-60 -mr-96 -mt-96 animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-purple-50 to-blue-50 rounded-full blur-3xl opacity-40 -ml-64 -mb-64"></div>
@@ -196,8 +197,134 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* AD BLOCK 1: High Visibility */}
-      <div className="max-w-[1240px] mx-auto px-4 py-12">
+      {/* AI RESUME BUILDER PROMO SECTION */}
+      <section className="py-24 bg-gradient-to-b from-white to-[#F8F9FA] relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-50/50 rounded-full blur-[120px] -z-0"></div>
+
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            {/* Left Content */}
+            <div className="flex-1 text-center lg:text-left">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 border border-indigo-100"
+              >
+                <FaMagic className="text-xs" /> New: AI 2.0 Feature
+              </motion.div>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-5xl font-extrabold text-[#091e42] leading-[1.2] mb-6"
+              >
+                Build a resume that <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 text-6xl md:text-7xl">beats the ATS.</span>
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-lg text-gray-500 font-medium mb-10 max-w-xl mx-auto lg:mx-0"
+              >
+                Don't just apply. Stand out with AI-optimized summaries, professional action verbs, and real-time ATS scoring.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-white shadow-md rounded-xl flex items-center justify-center text-indigo-600 text-lg flex-shrink-0">
+                    <FaChartPie />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-bold text-[#091e42] text-sm mb-1">ATS Score Analysis</h4>
+                    <p className="text-xs text-gray-400">Real-time feedback on your score from 0-100.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-white shadow-md rounded-xl flex items-center justify-center text-purple-600 text-lg flex-shrink-0">
+                    <FaLightbulb />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-bold text-[#091e42] text-sm mb-1">Smart Enhancements</h4>
+                    <p className="text-xs text-gray-400">Upgrade weak verbs to professional action verbs.</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/resume-builder')}
+                className="px-10 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-200 flex items-center justify-center gap-3 mx-auto lg:mx-0 group"
+              >
+                Build My AI Resume <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </div>
+
+            {/* Right Visual (Interactive Card) */}
+            <div className="flex-1 w-full max-w-md mx-auto">
+              <motion.div
+                initial={{ opacity: 0, rotateY: 20 }}
+                whileInView={{ opacity: 1, rotateY: 0 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-[40px] p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] border border-gray-100 relative group"
+              >
+                {/* ATS Score Circle Simulation */}
+                <div className="flex flex-col items-center mb-8">
+                  <div className="relative w-32 h-32 flex items-center justify-center">
+                    <svg className="w-full h-full transform -rotate-90">
+                      <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-gray-50" />
+                      <circle cx="64" cy="64" r="58" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray={2 * Math.PI * 58} strokeDashoffset={2 * Math.PI * 58 * (1 - 0.85)} className="text-indigo-600" strokeLinecap="round" />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-3xl font-black text-[#091e42]">85</span>
+                      <span className="text-[10px] font-bold text-gray-400">SCORE</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 px-4 py-1.5 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-green-100">
+                    Highly Optimized
+                  </div>
+                </div>
+
+                {/* Action Verb Simulation */}
+                <div className="space-y-4">
+                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div className="text-[10px] text-gray-400 font-bold mb-2 flex items-center gap-1.5 uppercase">
+                      <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span> Original
+                    </div>
+                    <p className="text-xs text-gray-400 line-through">I worked on the team and helped with projects.</p>
+                  </div>
+                  <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-100 relative">
+                    <div className="absolute top-4 right-4 text-indigo-600">
+                      <FaMagic className="animate-bounce" />
+                    </div>
+                    <div className="text-[10px] text-indigo-600 font-bold mb-2 flex items-center gap-1.5 uppercase">
+                      <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full"></span> AI Enhanced
+                    </div>
+                    <p className="text-xs text-[#091e42] font-semibold">I <span className="text-indigo-600 font-black">Developed</span> the team and <span className="text-indigo-600 font-black">Managed</span> critical projects.</p>
+                  </div>
+                </div>
+
+                {/* Floating Element */}
+                <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 max-w-[140px] hidden sm:block group-hover:translate-y-[-5px] transition-transform">
+                  <p className="text-[10px] font-black text-gray-400 mb-1 tracking-widest uppercase">Summary</p>
+                  <p className="text-[11px] text-[#091e42] font-bold leading-tight">"Results-oriented Lead with 5+ years..."</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-[1240px] mx-auto px-4 py-1">
         <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm overflow-hidden">
           <span className="text-[10px] text-gray-300 uppercase block mb-2 text-center font-bold tracking-widest">JobNirvana Network Sponsor</span>
           <InArticleAd />
@@ -205,7 +332,7 @@ const HomePage = () => {
       </div>
 
       {/* LATEST JOBS (Modern Grid) */}
-      <section className="py-24">
+      <section className="py-12">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 px-4">
             <div>
@@ -306,10 +433,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* MID-PAGE AD INJECTION */}
-      <div className="container mx-auto px-6 max-w-7xl py-12">
-        <InFeedAd />
-      </div>
 
       {/* HOW IT WORKS (Modern Steps) */}
       <section className="py-24 bg-white relative overflow-hidden">
@@ -376,7 +499,7 @@ const HomePage = () => {
       </section>
 
       {/* FINAL CTA / NEWSLETTER */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-5 bg-white relative overflow-hidden">
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[64px] p-12 md:p-24 text-center text-white relative shadow-[0_40px_80px_-20px_rgba(59,130,246,0.3)]">
             <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">

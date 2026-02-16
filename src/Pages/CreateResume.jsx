@@ -858,7 +858,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion } from "framer-motion";
-import { FaUser, FaUserCircle, FaBriefcase, FaGraduationCap, FaWrench, FaCertificate, FaProjectDiagram, FaGlobe, FaUsers, FaSave, FaTrash, FaPlus, FaPhone, FaMapMarkerAlt, FaEnvelope, FaChevronLeft, FaChevronRight, FaPalette } from "react-icons/fa";
+import { FaUser, FaUserCircle, FaBriefcase, FaGraduationCap, FaWrench, FaCertificate, FaProjectDiagram, FaGlobe, FaUsers, FaSave, FaTrash, FaPlus, FaPhone, FaMapMarkerAlt, FaEnvelope, FaChevronLeft, FaChevronRight, FaPalette, FaMagic } from "react-icons/fa";
 import TemplateModern from "../components/resume-templates/TemplateModern";
 import TemplateProfessional from "../components/resume-templates/TemplateProfessional";
 import TemplateCreative from "../components/resume-templates/TemplateCreative";
@@ -1130,6 +1130,56 @@ const CreateResume = () => {
         [path]: (prevState[path] || []).filter((_, i) => i !== index),
       };
     });
+  };
+
+  const handleAIAction = async (action, data, index) => {
+    if (action === 'enhance' && (!data || data.trim() === '')) {
+      toast.error("Please enter some text in the description first!");
+      return;
+    }
+
+    try {
+      const token = await getAccessTokenSilently();
+      const endpoint = action === 'summary' ? '/ai-resume/generate-summary' : '/ai-resume/enhance-bullet';
+      const body = action === 'summary' ? data : { bullet: data };
+
+      const toastId = toast.loading(`${action === 'summary' ? 'Generating summary...' : 'Enhancing bullet...'}`);
+
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const result = await response.json();
+      console.log(`AI ${action} result:`, result);
+
+      if (response.ok) {
+        if (action === 'summary') {
+          setFormData(prev => ({ ...prev, professionalSummary: result.summary, aiGeneratedSummary: true }));
+          toast.update(toastId, { render: "Summary generated!", type: "success", isLoading: false, autoClose: 2000 });
+        } else {
+          if (formData.workExperience[index].description === result.enhancedBullet) {
+            toast.update(toastId, { render: "Already strong! No changes needed.", type: "info", isLoading: false, autoClose: 2000 });
+          } else {
+            setFormData(prev => {
+              const updatedExp = [...prev.workExperience];
+              updatedExp[index] = { ...updatedExp[index], description: result.enhancedBullet };
+              return { ...prev, workExperience: updatedExp };
+            });
+            toast.update(toastId, { render: "Bullet enhanced!", type: "success", isLoading: false, autoClose: 2000 });
+          }
+        }
+      } else {
+        toast.update(toastId, { render: result.message || "Action failed", type: "error", isLoading: false, autoClose: 2000 });
+      }
+    } catch (error) {
+      console.error(`AI ${action} error:`, error);
+      toast.error(`Failed to perform AI ${action}`);
+    }
   };
 
   const onSubmit = async (e) => {
@@ -1420,6 +1470,15 @@ const CreateResume = () => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-800">Professional Summary</h2>
                   </div>
+                  <div className="mb-4">
+                    <button
+                      type="button"
+                      onClick={() => handleAIAction('summary', formData)}
+                      className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all text-xs font-bold shadow-md shadow-indigo-100"
+                    >
+                      <FaMagic /> Generate Professional Summary
+                    </button>
+                  </div>
                   <textarea
                     name="professionalSummary"
                     placeholder="Write a compelling summary of your professional journey..."
@@ -1525,7 +1584,16 @@ const CreateResume = () => {
                       </div>
 
                       <div className="mb-4">
-                        <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Description</label>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider block">Description</label>
+                          <button
+                            type="button"
+                            onClick={() => handleAIAction('enhance', exp.description, index)}
+                            className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50 px-2 py-1 rounded-md"
+                          >
+                            <FaMagic size={10} /> Enhance with AI
+                          </button>
+                        </div>
                         <textarea
                           name="description"
                           placeholder="Describe your responsibilities and achievements..."

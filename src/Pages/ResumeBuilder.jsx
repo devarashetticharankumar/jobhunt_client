@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../data/apiPath";
-import { FaPlus, FaFileAlt, FaEdit, FaTrash, FaCheckCircle, FaLightbulb } from "react-icons/fa";
+import { FaPlus, FaFileAlt, FaEdit, FaTrash, FaCheckCircle, FaLightbulb, FaChevronRight } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion } from "framer-motion";
@@ -201,10 +201,15 @@ const ResumeBuilder = () => {
                           {getTemplateComponent(resume.template || "modern", resume)}
                         </div>
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div>
-                        <div className="absolute top-4 right-4">
+                        <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
                           <span className="px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold text-gray-600 shadow-sm border border-gray-100">
                             {resume.template || "Modern"}
                           </span>
+                          {resume.atsScore !== undefined && (
+                            <span className={`px-3 py-1 bg-white/90 backdrop-blur rounded-full text-[10px] font-bold shadow-sm border border-gray-100 ${resume.atsScore > 70 ? 'text-green-600' : resume.atsScore > 40 ? 'text-orange-600' : 'text-red-600'}`}>
+                              ATS: {resume.atsScore}
+                            </span>
+                          )}
                         </div>
                       </div>
 

@@ -6,8 +6,8 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { Document, Packer, Paragraph } from "docx";
 import { useAuth0 } from "@auth0/auth0-react";
-import { motion } from "framer-motion";
-import { FaDownload, FaFilePdf, FaFileWord, FaEdit, FaChevronLeft } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaDownload, FaFilePdf, FaFileWord, FaEdit, FaChevronLeft, FaChartLine, FaCheckCircle, FaExclamationTriangle, FaLightbulb, FaSearch, FaMagic } from "react-icons/fa";
 import TemplateModern from "../components/resume-templates/TemplateModern";
 import TemplateProfessional from "../components/resume-templates/TemplateProfessional";
 import TemplateCreative from "../components/resume-templates/TemplateCreative";
@@ -29,6 +29,10 @@ const ResumeDetail = () => {
   const { getAccessTokenSilently, isAuthenticated, isLoading: authLoading } = useAuth0();
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [atsData, setAtsData] = useState(null);
+  const [jobDescription, setJobDescription] = useState("");
+  const [showAnalysis, setShowAnalysis] = useState(false);
   const resumeRef = useRef();
 
   // Fetch the resume details from the backend
@@ -64,6 +68,49 @@ const ResumeDetail = () => {
       setLoading(false);
     }
   }, [id, isAuthenticated, authLoading]);
+
+  useEffect(() => {
+    if (resume && resume.atsScore !== undefined) {
+      setAtsData({
+        score: resume.atsScore,
+        breakdown: resume.atsBreakdown,
+        suggestions: [] // Backend stores breakdown but we can re-analyze for fresh suggestions
+      });
+      setShowAnalysis(true);
+    }
+  }, [resume]);
+
+  const analyzeATS = async () => {
+    setAnalyzing(true);
+    try {
+      const token = await getAccessTokenSilently();
+      const response = await fetch(`${API_URL}/ai-resume/ats-score`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          resumeId: id,
+          jobDescription
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setAtsData(result);
+        setShowAnalysis(true);
+        toast.success("Resume analysis complete!");
+      } else {
+        toast.error(result.message || "Analysis failed");
+      }
+    } catch (error) {
+      console.error("ATS analysis error:", error);
+      toast.error("Failed to analyze resume");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   if (loading) {
     return <div className="text-center">Loading...</div>;
@@ -218,6 +265,12 @@ const ResumeDetail = () => {
 
           <div className="flex items-center gap-3">
             <button
+              onClick={() => setShowAnalysis(!showAnalysis)}
+              className={`flex items-center gap-2 px-4 py-2 ${showAnalysis ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600'} rounded-xl transition-all font-semibold text-sm border border-indigo-100`}
+            >
+              <FaChartLine /> {showAnalysis ? 'Hide Analysis' : 'Show Analysis'}
+            </button>
+            <button
               onClick={downloadPDF}
               className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all font-semibold text-sm border border-red-100"
             >
@@ -238,6 +291,134 @@ const ResumeDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* ATS Analysis Section */}
+      <AnimatePresence>
+        {showAnalysis && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="max-w-4xl mx-auto px-4 mb-8 overflow-hidden"
+          >
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Score Circle */}
+                <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="relative w-32 h-32 flex items-center justify-center mb-4">
+                    <svg className="w-full h-full transform -rotate-90">
+                      <circle
+                        cx="64"
+                        cy="64"
+                        r="58"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="transparent"
+                        className="text-gray-200"
+                      />
+                      <circle
+                        cx="64"
+                        cy="64"
+                        r="58"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="transparent"
+                        strokeDasharray={364.4}
+                        strokeDashoffset={364.4 - (364.4 * (atsData?.score || 0)) / 100}
+                        className={`${(atsData?.score || 0) > 70 ? 'text-green-500' : (atsData?.score || 0) > 40 ? 'text-orange-500' : 'text-red-500'} transition-all duration-1000 ease-out`}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span className="absolute text-3xl font-black text-gray-800">{atsData?.score || 0}</span>
+                  </div>
+                  <h3 className="font-bold text-gray-800">ATS Score</h3>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Overall Strength</p>
+                </div>
+
+                {/* Score Breakdown */}
+                <div className="lg:col-span-2 space-y-4">
+                  <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                    <FaChartLine className="text-indigo-600" /> Optimization Breakdown
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.entries(atsData?.breakdown || {
+                      wordCount: 0,
+                      skillsCount: 0,
+                      actionVerbsCount: 0,
+                      measurableAchievements: 0,
+                      keywordMatch: 0
+                    }).map(([key, value]) => (
+                      <div key={key} className="space-y-1">
+                        <div className="flex justify-between text-[11px] font-bold uppercase tracking-wider text-gray-500">
+                          <span>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                          <span>{value}/20</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${(value / 20) * 100}%` }}
+                            className={`h-full ${value >= 15 ? 'bg-green-500' : value >= 8 ? 'bg-orange-400' : 'bg-red-400'}`}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Keyword Matcher Input */}
+              <div className="mt-8 pt-8 border-t border-gray-50">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex-1">
+                    <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                      <FaSearch className="text-blue-600" /> Optimize for Job Description
+                    </h4>
+                    <textarea
+                      placeholder="Paste the Job Description here to check for keyword matches and optimize your resume..."
+                      value={jobDescription}
+                      onChange={(e) => setJobDescription(e.target.value)}
+                      className="w-full h-32 p-4 bg-gray-50 rounded-xl border border-gray-100 text-sm focus:bg-white focus:border-blue-300 outline-none transition-all resize-none"
+                    />
+                    <button
+                      onClick={analyzeATS}
+                      disabled={analyzing}
+                      className="mt-3 w-full py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-black transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      {analyzing ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Analyzing...
+                        </>
+                      ) : (
+                        <>
+                          <FaMagic /> Analyze Matching & Score
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="md:w-1/3">
+                    <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                      <FaLightbulb className="text-orange-500" /> AI Suggestions
+                    </h4>
+                    <div className="space-y-3">
+                      {atsData?.suggestions?.length > 0 ? (
+                        atsData.suggestions.map((s, i) => (
+                          <div key={i} className="flex items-start gap-2 p-3 bg-blue-50/50 rounded-lg border border-blue-50 text-[11px] text-blue-700 font-medium leading-relaxed">
+                            <FaCheckCircle className="mt-0.5 shrink-0" /> {s}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">Hit analyze to see professional improvement suggestions.</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Resume Content (A4 Style) */}
       <motion.div
