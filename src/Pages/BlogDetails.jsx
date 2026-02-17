@@ -152,8 +152,8 @@ const BlogDetails = () => {
                       return contentSegments.map((segment, index) => (
                         <React.Fragment key={index}>
                           <div dangerouslySetInnerHTML={{ __html: `${segment}</p>` }} />
-                          {/* Inject Ad every 5 paragraphs */}
-                          {(index + 1) % 5 === 0 && index < contentSegments.length - 1 && (
+                          {/* Inject Ad every 3 paragraphs */}
+                          {(index + 1) % 3 === 0 && index < contentSegments.length - 1 && (
                             <div className="my-10 py-4 border-y border-gray-50 flex flex-col items-center">
                               <InArticleAd />
                             </div>

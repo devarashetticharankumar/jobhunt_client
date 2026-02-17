@@ -13,7 +13,7 @@ const InFeedAd = () => {
 
   return (
     <div
-      className="w-full overflow-hidden flex flex-col items-center"
+      className="w-full overflow-hidden flex flex-col items-center bg-gray-50/50 rounded-xl p-2 border border-gray-100/50"
     >
       <span className="text-[7px] text-gray-400 font-bold self-end mb-1 mr-2 uppercase tracking-tight">
         SPONSORED

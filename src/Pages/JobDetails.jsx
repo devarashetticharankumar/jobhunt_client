@@ -298,10 +298,6 @@ Feel free to share this opportunity within your network.
               </div>
             </div>
 
-            {/* Mobile-Only Sidebar Ad Fallback (Revenue Optimization) */}
-            <div>
-              <GoogleAds />
-            </div>
 
             {/* 2. JOB HIGHLIGHTS (If applies, else generic) */}
             <div>
@@ -351,6 +347,10 @@ Feel free to share this opportunity within your network.
                   </div>
                 )}
 
+                <div className="py-2">
+                  <InFeedAd />
+                </div>
+
                 {/* 3. INTERVIEW PREPARATION GUIDE (New Section for Bulking) */}
                 <div className="space-y-4 pt-4 border-t border-gray-100">
                   <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
@@ -370,6 +370,10 @@ Feel free to share this opportunity within your network.
                   </ul>
                 </div>
 
+                <div className="py-2">
+                  <InFeedAd />
+                </div>
+
                 {/* 4. CAREER OUTLOOK & GROWTH */}
                 <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-4">
                   <h3 className="text-gray-900 font-bold text-base">📈 Career Outlook</h3>
@@ -378,6 +382,10 @@ Feel free to share this opportunity within your network.
                     <p>{enrichment?.careerAdvice[3]}</p>
                     <p>Typically, professionals in these roles go on to take leadership positions or specialize in advanced technical architecture, especially within <strong>{job.companyName}</strong>'s industry segment.</p>
                   </div>
+                </div>
+
+                <div className="py-2">
+                  <InArticleAd />
                 </div>
 
                 {/* Original/Direct Jobs - HTML Content */}
@@ -433,19 +441,22 @@ Feel free to share this opportunity within your network.
                     </p>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="flex justify-center md:justify-start">
+                  <div className="bg-blue-50/50 rounded-2xl p-6 border border-blue-100/50 flex flex-col gap-6">
+                    <div className="flex justify-center">
                       <InFeedAd />
                     </div>
 
-                    <button
-                      onClick={applyLink}
-                      className="inline-flex items-center gap-2 text-blue-600 font-bold text-sm hover:text-blue-800 hover:underline transition-all active:scale-95 group"
-                    >
-                      Apply on Official Site <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                    </button>
+                    <div className="flex flex-col items-center gap-4">
+                      <button
+                        onClick={applyLink}
+                        className="w-full md:w-max px-12 py-4 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-2xl shadow-xl shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2 group"
+                      >
+                        Apply on Official Site <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                      </button>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Official Application Portal</p>
+                    </div>
 
-                    <div className="flex justify-center md:justify-start">
+                    <div className="flex justify-center">
                       <InFeedAd />
                     </div>
                   </div>
@@ -592,6 +603,25 @@ Feel free to share this opportunity within your network.
 
           </div>
 
+        </div>
+      </div>
+
+      {/* Sticky Mobile Footer (Revenue Optimization) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-t from-white via-white to-transparent pt-10">
+        <div className="bg-white rounded-2xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] border border-gray-100 p-4 flex items-center justify-between gap-4 animate-fade-in-up">
+          <div className="flex-1 min-w-0">
+            <h4 className="text-[10px] font-bold text-blue-600 uppercase mb-0.5 truncate">{job.companyName}</h4>
+            <p className="text-sm font-bold text-gray-900 truncate">{job.jobTitle}</p>
+          </div>
+          <button
+            onClick={applyLink}
+            className="px-8 py-3 bg-blue-600 text-white font-extrabold rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition-all text-sm whitespace-nowrap"
+          >
+            Apply Now
+          </button>
+        </div>
+        <div className="mt-2 flex justify-center bg-white rounded-lg overflow-hidden">
+          <GoogleAds />
         </div>
       </div>
 
