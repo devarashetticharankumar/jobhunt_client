@@ -12,6 +12,7 @@ import ShareButton from "../components/ShareButton";
 import GoogleAds from "../components/GoogleAds";
 import ResumeAnalyzerModal from "../components/ResumeAnalyzerModal";
 import JobAlertModal from "../components/JobAlertModal";
+import FixedBannerAd from "../components/FixedBannerAd";
 import { getContentBlocks } from "../utils/contentUtils";
 
 // Helper component for Sidebar Job Items (mimicking 'Jobs you might be interested in')
@@ -606,9 +607,8 @@ Feel free to share this opportunity within your network.
         </div>
       </div>
 
-      {/* Sticky Mobile Footer (Revenue Optimization) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-t from-white via-white to-transparent pt-10">
-        <div className="bg-white rounded-2xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] border border-gray-100 p-4 flex items-center justify-between gap-4 animate-fade-in-up">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-t from-white via-white to-transparent pt-10 pointer-events-none">
+        <div className="bg-white rounded-2xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] border border-gray-100 p-4 flex items-center justify-between gap-4 animate-fade-in-up pointer-events-auto">
           <div className="flex-1 min-w-0">
             <h4 className="text-[10px] font-bold text-blue-600 uppercase mb-0.5 truncate">{job.companyName}</h4>
             <p className="text-sm font-bold text-gray-900 truncate">{job.jobTitle}</p>
@@ -620,8 +620,8 @@ Feel free to share this opportunity within your network.
             Apply Now
           </button>
         </div>
-        <div className="mt-2 flex justify-center bg-white rounded-lg overflow-hidden">
-          <InFeedAd />
+        <div className="mt-1 flex justify-center bg-white rounded-lg overflow-hidden pointer-events-auto">
+          <FixedBannerAd />
         </div>
       </div>
 
