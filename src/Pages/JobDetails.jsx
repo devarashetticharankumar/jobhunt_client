@@ -621,7 +621,7 @@ Feel free to share this opportunity within your network.
           </button>
         </div>
         <div className="mt-2 flex justify-center bg-white rounded-lg overflow-hidden">
-          <GoogleAds />
+          <InFeedAd />
         </div>
       </div>
 
