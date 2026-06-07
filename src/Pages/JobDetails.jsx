@@ -242,10 +242,7 @@ Feel free to share this opportunity within your network.
                 </div>
               )}
 
-              {/* Above-the-Fold Ad for Mobile/Desktop */}
-              <div className="bg-blue-50/10 rounded-xl p-1 border border-dashed border-blue-100/30">
-                <InFeedAd />
-              </div>
+
 
               <h1 className="text-xl md:text-2xl font-bold text-[#091e42] mb-1">{job.jobTitle}</h1>
 
@@ -299,10 +296,7 @@ Feel free to share this opportunity within your network.
             </div>
 
 
-            {/* 2. JOB HIGHLIGHTS (If applies, else generic) */}
-            <div>
-              <InArticleAd />
-            </div>
+
 
             {/* 3. JOB DESCRIPTION / ABOUT THE ROLE */}
             <div className="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6 md:p-8">
@@ -347,9 +341,7 @@ Feel free to share this opportunity within your network.
                   </div>
                 )}
 
-                <div className="py-2">
-                  <InFeedAd />
-                </div>
+
 
                 {/* 3. INTERVIEW PREPARATION GUIDE (New Section for Bulking) */}
                 <div className="space-y-4 pt-4 border-t border-gray-100">
@@ -370,9 +362,7 @@ Feel free to share this opportunity within your network.
                   </ul>
                 </div>
 
-                <div className="py-2">
-                  <InFeedAd />
-                </div>
+
 
                 {/* 4. CAREER OUTLOOK & GROWTH */}
                 <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 space-y-4">
@@ -384,34 +374,46 @@ Feel free to share this opportunity within your network.
                   </div>
                 </div>
 
-                <div className="py-2">
-                  <InArticleAd />
-                </div>
+
 
                 {/* Original/Direct Jobs - HTML Content */}
                 {!job.source && job.description && (
                   (() => {
                     const content = job.description || "";
                     const paragraphs = content.split(/<\/p>/i);
-                    if (paragraphs.length < 3) {
+                    const cleanParagraphs = paragraphs.filter(p => p.trim());
+                    const totalParagraphs = cleanParagraphs.length;
+                    
+                    if (totalParagraphs < 4) {
                       return <div dangerouslySetInnerHTML={{ __html: content }}></div>;
                     }
+                    
+                    const maxPossibleAds = Math.min(totalParagraphs - 1, 6);
+                    const minAds = Math.min(3, maxPossibleAds);
+                    const numAds = minAds === maxPossibleAds ? minAds : Math.floor(Math.random() * (maxPossibleAds - minAds + 1)) + minAds;
+                    
+                    const availableIndices = Array.from({ length: totalParagraphs - 1 }, (_, i) => i + 1);
+                    const adIndices = new Set();
+                    while (adIndices.size < numAds && availableIndices.length > 0) {
+                      const randIndex = Math.floor(Math.random() * availableIndices.length);
+                      adIndices.add(availableIndices[randIndex]);
+                      availableIndices.splice(randIndex, 1);
+                    }
+                    
                     const elements = [];
-                    const interval = 3;
                     let buffer = "";
-                    let pCount = 0;
-                    paragraphs.forEach((part, index) => {
-                      if (!part.trim()) return;
+                    cleanParagraphs.forEach((part, index) => {
                       buffer += part + "</p>";
-                      pCount++;
-                      if (pCount === interval) {
+                      const pNum = index + 1;
+                      if (adIndices.has(pNum)) {
                         elements.push(<div key={`chunk-${index}`} dangerouslySetInnerHTML={{ __html: buffer }} />);
-                        elements.push(<div key={`ad-insert-${index}`}><InFeedAd /></div>);
+                        elements.push(<div key={`ad-insert-${index}`} className="p-0 m-0"><InFeedAd /></div>);
                         buffer = "";
-                        pCount = 0;
                       }
                     });
-                    if (buffer) elements.push(<div key="chunk-final" dangerouslySetInnerHTML={{ __html: buffer }} />);
+                    if (buffer) {
+                      elements.push(<div key="chunk-final" dangerouslySetInnerHTML={{ __html: buffer }} />);
+                    }
                     return elements;
                   })()
                 )}
@@ -441,30 +443,22 @@ Feel free to share this opportunity within your network.
                     </p>
                   </div>
 
-                  <div className="bg-blue-50/50 rounded-2xl p-6 border border-blue-100/50 flex flex-col gap-6">
-                    <div className="flex justify-center">
+                  <div className="flex flex-col items-start gap-2">
+                    <div className="p-0 m-0 w-full max-w-[400px]">
                       <InFeedAd />
                     </div>
-
-                    <div className="flex flex-col items-center gap-4">
-                      <button
-                        onClick={applyLink}
-                        className="w-full md:w-max px-12 py-4 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-2xl shadow-xl shadow-blue-200 transition-all active:scale-95 flex items-center justify-center gap-2 group"
-                      >
-                        Apply on Official Site <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                      </button>
-                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Official Application Portal</p>
-                    </div>
-
-                    <div className="flex justify-center">
-                      <InFeedAd />
-                    </div>
+                    <button
+                      onClick={applyLink}
+                      className="text-blue-600 hover:underline font-semibold text-sm transition-all mt-1"
+                    >
+                      Apply on Official Site
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div>
+            <div className="p-0 m-0">
               <InFeedAd />
             </div>
 
@@ -492,9 +486,7 @@ Feel free to share this opportunity within your network.
               </div>
             )}
 
-            <div>
-              <InArticleAd />
-            </div>
+
 
             {/* 5. ABOUT COMPANY */}
             <div className="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6 md:p-8">

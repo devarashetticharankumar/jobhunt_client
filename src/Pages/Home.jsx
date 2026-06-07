@@ -130,10 +130,7 @@ const Home = () => {
 
           {/* CENTER COLUMN (50%) - Jobs Feed */}
           <div className="col-span-12 lg:col-span-6 space-y-6">
-            {/* Above-the-Fold Ad (Ultra High Visibility) */}
-            <div className="bg-white rounded-2xl p-2 border border-dashed border-blue-100 shadow-sm mb-4">
-              <InFeedAd />
-            </div>
+
 
             <DashboardBanner />
 
