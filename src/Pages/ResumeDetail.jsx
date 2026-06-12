@@ -84,11 +84,13 @@ const ResumeDetail = () => {
     setAnalyzing(true);
     try {
       const token = await getAccessTokenSilently();
+      const apiKey = localStorage.getItem("gemini_api_key") || "";
       const response = await fetch(`${API_URL}/ai-resume/ats-score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          'x-gemini-api-key': apiKey,
         },
         body: JSON.stringify({
           resumeId: id,

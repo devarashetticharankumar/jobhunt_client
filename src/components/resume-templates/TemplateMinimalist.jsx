@@ -104,10 +104,22 @@ const TemplateMinimalist = ({ data }) => {
                             <div className="space-y-6">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx}>
-                                        <h3 className="font-bold text-gray-900 text-base mb-1">
-                                            {project.title}
-                                        </h3>
-                                        <p className="text-sm text-gray-600 mb-2">
+                                        <div className="flex justify-between items-baseline mb-2">
+                                            <h3 className="font-bold text-gray-900 text-base">
+                                                {project.title}
+                                                {project.projectLink && (
+                                                    <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-black hover:underline font-normal ml-2 lowercase">
+                                                        [link]
+                                                    </a>
+                                                )}
+                                            </h3>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="text-xs text-gray-400 font-medium">
+                                                    {project.startDate} – {project.endDate || "Present"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-gray-600 mb-2 whitespace-pre-line">
                                             {project.description}
                                         </p>
                                         {project.technologies?.length > 0 && (

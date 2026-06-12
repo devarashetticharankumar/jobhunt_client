@@ -58,8 +58,22 @@ const TemplateAcademic = ({ data }) => {
                         <div className="space-y-4">
                             {data.projects.map((project, idx) => (
                                 <div key={idx}>
-                                    <div className="font-bold text-base mb-1">{project.title}</div>
-                                    <p className="text-sm text-gray-800 leading-relaxed text-justify">
+                                    <div className="flex justify-between items-baseline mb-1">
+                                        <div className="font-bold text-base">
+                                            {project.title}
+                                            {project.projectLink && (
+                                                <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline font-normal ml-2">
+                                                    [Link]
+                                                </a>
+                                            )}
+                                        </div>
+                                        {(project.startDate || project.endDate) && (
+                                            <span className="text-xs text-gray-500 font-medium">
+                                                {project.startDate} — {project.endDate || "Present"}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-sm text-gray-800 leading-relaxed text-justify whitespace-pre-line">
                                         {project.description}
                                     </p>
                                     {project.technologies?.length > 0 && (

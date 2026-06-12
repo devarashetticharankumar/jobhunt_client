@@ -96,8 +96,22 @@ const TemplateCompact = ({ data }) => {
                             <div className="space-y-3">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx}>
-                                        <div className="font-bold text-xs">{project.title}</div>
-                                        <p className="text-[10px] leading-snug text-gray-600">{project.description}</p>
+                                        <div className="flex justify-between items-baseline font-bold text-xs">
+                                            <span>
+                                                {project.title}
+                                                {project.projectLink && (
+                                                    <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-600 hover:underline font-normal ml-1.5">
+                                                        [Link]
+                                                    </a>
+                                                )}
+                                            </span>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="text-gray-500 text-[9px] font-normal">
+                                                    {project.startDate}-{project.endDate || "Now"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-[10px] leading-snug text-gray-600 whitespace-pre-line">{project.description}</p>
                                     </div>
                                 ))}
                             </div>

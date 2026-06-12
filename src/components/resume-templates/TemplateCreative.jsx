@@ -164,10 +164,22 @@ const TemplateCreative = ({ data }) => {
                             <div className="grid grid-cols-1 gap-6">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx} className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                                        <h3 className="font-bold text-gray-900 text-sm mb-1">
-                                            {project.title}
-                                        </h3>
-                                        <p className="text-xs text-gray-600 mb-2 leading-relaxed">
+                                        <div className="flex justify-between items-baseline mb-1 flex-wrap gap-1">
+                                            <h3 className="font-bold text-gray-900 text-sm">
+                                                {project.title}
+                                                {project.projectLink && (
+                                                    <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-teal-600 hover:underline font-normal ml-2">
+                                                        [Link]
+                                                    </a>
+                                                )}
+                                            </h3>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="text-gray-400 italic font-medium text-xs">
+                                                    {project.startDate} – {project.endDate || "Present"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-gray-600 mb-2 leading-relaxed whitespace-pre-line">
                                             {project.description}
                                         </p>
                                         {project.technologies?.length > 0 && (

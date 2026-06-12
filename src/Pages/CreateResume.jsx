@@ -858,7 +858,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion } from "framer-motion";
-import { FaUser, FaUserCircle, FaBriefcase, FaGraduationCap, FaWrench, FaCertificate, FaProjectDiagram, FaGlobe, FaUsers, FaSave, FaTrash, FaPlus, FaPhone, FaMapMarkerAlt, FaEnvelope, FaChevronLeft, FaChevronRight, FaPalette, FaMagic } from "react-icons/fa";
+import { FaUser, FaUserCircle, FaBriefcase, FaGraduationCap, FaWrench, FaCertificate, FaProjectDiagram, FaGlobe, FaUsers, FaSave, FaTrash, FaPlus, FaPhone, FaMapMarkerAlt, FaEnvelope, FaChevronLeft, FaChevronRight, FaPalette, FaMagic, FaLinkedin, FaGithub, FaFileAlt } from "react-icons/fa";
 import TemplateModern from "../components/resume-templates/TemplateModern";
 import TemplateProfessional from "../components/resume-templates/TemplateProfessional";
 import TemplateCreative from "../components/resume-templates/TemplateCreative";
@@ -882,7 +882,12 @@ const CreateResume = () => {
   const { getAccessTokenSilently, isAuthenticated, loginWithRedirect, isLoading: authLoading } =
     useAuth0();
 
+  const [draftStatus, setDraftStatus] = useState("idle");
+  const [lastSavedTime, setLastSavedTime] = useState("");
+  const [isDraftLoaded, setIsDraftLoaded] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1.0);
+  const [isMobilePreviewOpen, setIsMobilePreviewOpen] = useState(false);
 
   const steps = [
     { title: "Personal Info", icon: <FaUser /> },
@@ -952,6 +957,83 @@ const CreateResume = () => {
       fetchResume();
     }
   }, [editId, isAuthenticated, getAccessTokenSilently]);
+
+  // Load draft if not editing
+  useEffect(() => {
+    if (!editId) {
+      const savedDraft = localStorage.getItem("resume_builder_draft");
+      if (savedDraft) {
+        try {
+          const parsed = JSON.parse(savedDraft);
+          if (parsed && typeof parsed === "object") {
+            setFormData(parsed);
+            toast.info("Restored draft from your last session!", {
+              position: "top-center",
+              autoClose: 4000
+            });
+            setDraftStatus("saved");
+            const now = new Date();
+            setLastSavedTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          }
+        } catch (e) {
+          console.error("Error loading resume draft:", e);
+        }
+      }
+    }
+    setIsDraftLoaded(true);
+  }, [editId]);
+
+  // Auto-save draft on data changes (debounced)
+  useEffect(() => {
+    if (!editId && isDraftLoaded) {
+      const hasData =
+        formData.personalInfo.firstName ||
+        formData.personalInfo.lastName ||
+        formData.personalInfo.email ||
+        formData.personalInfo.phone ||
+        formData.personalInfo.location ||
+        formData.wantedJobTitle ||
+        formData.professionalSummary ||
+        formData.workExperience?.length > 0 ||
+        formData.education?.length > 0 ||
+        formData.skills?.length > 0 ||
+        formData.projects?.length > 0 ||
+        formData.certifications?.length > 0 ||
+        formData.languages?.length > 0 ||
+        formData.references?.length > 0 ||
+        formData.internships?.length > 0;
+
+      if (hasData) {
+        setDraftStatus("saving");
+        const delayDebounce = setTimeout(() => {
+          try {
+            localStorage.setItem("resume_builder_draft", JSON.stringify(formData));
+            setDraftStatus("saved");
+            const now = new Date();
+            setLastSavedTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          } catch (e) {
+            console.error("Failed to save draft:", e);
+            setDraftStatus("error");
+          }
+        }, 800); // 800ms debounce to prevent constant disk writes
+
+        return () => clearTimeout(delayDebounce);
+      }
+    }
+  }, [formData, editId, isDraftLoaded]);
+
+  // Alert user if trying to reload/exit while saving is active
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (draftStatus === "saving") {
+        e.preventDefault();
+        e.returnValue = "Your draft is currently being saved. Are you sure you want to leave?";
+        return e.returnValue;
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [draftStatus]);
 
   const handleChange = (e, path, index, subPath) => {
     const { name, value } = e.target;
@@ -1142,6 +1224,7 @@ const CreateResume = () => {
       const token = await getAccessTokenSilently();
       const endpoint = action === 'summary' ? '/ai-resume/generate-summary' : '/ai-resume/enhance-bullet';
       const body = action === 'summary' ? data : { bullet: data };
+      const apiKey = localStorage.getItem("gemini_api_key") || "";
 
       const toastId = toast.loading(`${action === 'summary' ? 'Generating summary...' : 'Enhancing bullet...'}`);
 
@@ -1150,6 +1233,7 @@ const CreateResume = () => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
+          'x-gemini-api-key': apiKey,
         },
         body: JSON.stringify(body),
       });
@@ -1239,6 +1323,7 @@ const CreateResume = () => {
       const result = await response.json();
 
       if (response.ok) {
+        localStorage.removeItem("resume_builder_draft");
         toast.success(editId ? "Resume updated successfully!" : "Resume created successfully!");
         navigate("/resume-builder");
       } else {
@@ -1282,43 +1367,92 @@ const CreateResume = () => {
       <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 items-start">
         {/* Left Side - Editor Form (Wizard Style) */}
         <div className="w-full lg:w-1/2 xl:w-[48%] flex flex-col gap-6">
+          {/* Stepper Card */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200"
+            className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-3xl p-5 shadow-lg border border-gray-105 dark:border-slate-800 relative overflow-hidden"
           >
-            {/* Stepper Component */}
+            {/* Top Progress Bar */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 dark:bg-slate-800 rounded-t-3xl overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-500 ease-out"
+                style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+              ></div>
+            </div>
+
+            {/* Header / Info Row */}
+            <div className="flex justify-between items-center px-2 pt-2 pb-1 border-b border-gray-100 dark:border-slate-800 mb-2 mt-1">
+              <span className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
+                {editId ? "Editing Resume Mode" : "New Resume Creator"}
+              </span>
+              
+              {!editId && (
+                <div className="flex items-center gap-1.5 text-xs">
+                  {draftStatus === "saving" && (
+                    <span className="flex items-center gap-1.5 text-amber-500 font-semibold animate-pulse">
+                      <svg className="animate-spin h-3 w-3 text-amber-500" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Saving draft...
+                    </span>
+                  )}
+                  {draftStatus === "saved" && (
+                    <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-450 font-semibold bg-emerald-50 dark:bg-emerald-950/20 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-900/30">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      Draft saved {lastSavedTime && `at ${lastSavedTime}`}
+                    </span>
+                  )}
+                  {draftStatus === "error" && (
+                    <span className="text-red-500 font-semibold bg-red-50 dark:bg-red-950/20 px-2 py-0.5 rounded-lg border border-red-100 dark:border-red-900/30">
+                      Saving failed
+                    </span>
+                  )}
+                  {draftStatus === "idle" && (
+                    <span className="text-gray-400 dark:text-slate-500 italic">
+                      No draft saved yet
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Stepper Container */}
             <div className="flex justify-between items-center px-2 py-4 relative overflow-x-auto scrollbar-hide">
               {steps.map((step, index) => (
-                <div key={index} className="flex flex-col items-center z-10 min-w-[80px]">
+                <div key={index} className="flex flex-col items-center z-10 min-w-[80px] group">
                   <button
                     type="button"
                     onClick={() => setCurrentStep(index)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${currentStep === index
-                      ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-110"
+                    className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-305 relative ${currentStep === index
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-110 ring-4 ring-indigo-500/20 z-10"
                       : index < currentStep
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                        ? "bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-md shadow-emerald-500/10"
+                        : "bg-white dark:bg-slate-800 text-gray-400 dark:text-slate-500 border border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:hover:border-slate-650"
                       }`}
                   >
                     {index < currentStep ? (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
                       step.icon
                     )}
                   </button>
-                  <span className={`text-[10px] sm:text-xs font-bold mt-2 truncate w-full text-center ${currentStep === index ? "text-indigo-600" : "text-gray-400"
+                  <span className={`text-[10px] sm:text-xs font-bold mt-2.5 truncate w-full text-center transition-all ${currentStep === index ? "text-indigo-600 dark:text-indigo-400 font-extrabold" : "text-gray-400 dark:text-slate-500 group-hover:text-gray-600 dark:group-hover:text-slate-350"
                     }`}>
                     {step.title}
                   </span>
                 </div>
               ))}
-              {/* Progress Line */}
-              <div className="absolute top-9 left-10 right-10 h-[2px] bg-gray-100 -z-0">
+              
+              {/* Stepper Linking Progress Line */}
+              <div className="absolute top-10 left-12 right-12 h-[2px] bg-gray-150 dark:bg-slate-800 -z-0">
                 <div
-                  className="h-full bg-indigo-500 transition-all duration-500 ease-out"
+                  className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500 ease-out"
                   style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
                 ></div>
               </div>
@@ -1331,103 +1465,138 @@ const CreateResume = () => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
               >
-                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                     <FaUser className="text-lg" />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-800">Personal Information</h2>
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-white">Personal Information</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      placeholder="e.g. John"
-                      value={formData.personalInfo.firstName}
-                      onChange={(e) => handleChange(e, "personalInfo")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-gray-50 focus:bg-white"
-                      required
-                    />
+                    <label className="block text-sm font-semibold text-gray-750 dark:text-slate-300 mb-2">First Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                        <FaUser size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        name="firstName"
+                        placeholder="e.g. John"
+                        value={formData.personalInfo.firstName}
+                        onChange={(e) => handleChange(e, "personalInfo")}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                        required
+                      />
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      placeholder="e.g. Doe"
-                      value={formData.personalInfo.lastName}
-                      onChange={(e) => handleChange(e, "personalInfo")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-gray-50 focus:bg-white"
-                      required
-                    />
+                    <label className="block text-sm font-semibold text-gray-750 dark:text-slate-300 mb-2">Last Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                        <FaUser size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        name="lastName"
+                        placeholder="e.g. Doe"
+                        value={formData.personalInfo.lastName}
+                        onChange={(e) => handleChange(e, "personalInfo")}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="john@example.com"
-                      value={formData.personalInfo.email}
-                      onChange={(e) => handleChange(e, "personalInfo")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-gray-50 focus:bg-white"
-                      required
-                    />
+                    <label className="block text-sm font-semibold text-gray-750 dark:text-slate-300 mb-2">Email Address</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                        <FaEnvelope size={16} />
+                      </div>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="john@example.com"
+                        value={formData.personalInfo.email}
+                        onChange={(e) => handleChange(e, "personalInfo")}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                        required
+                      />
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="+1 (555) 000-0000"
-                      value={formData.personalInfo.phone}
-                      onChange={(e) => handleChange(e, "personalInfo")}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-gray-50 focus:bg-white"
-                    />
+                    <label className="block text-sm font-semibold text-gray-750 dark:text-slate-300 mb-2">Phone Number</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                        <FaPhone size={16} />
+                      </div>
+                      <input
+                        type="tel"
+                        name="phone"
+                        placeholder="+1 (555) 000-0000"
+                        value={formData.personalInfo.phone}
+                        onChange={(e) => handleChange(e, "personalInfo")}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="mt-6 border-t border-gray-100 pt-6">
-                  <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider mb-4">Location & Presence</h3>
+                <div className="mt-6 border-t border-gray-100 dark:border-slate-800 pt-6">
+                  <h3 className="text-sm font-bold text-gray-800 dark:text-slate-200 uppercase tracking-wider mb-4">Location & Presence</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="col-span-1 md:col-span-2">
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
-                      <input
-                        type="text"
-                        name="location"
-                        placeholder="City, Country"
-                        value={formData.personalInfo.location}
-                        onChange={(e) => handleChange(e, "personalInfo")}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none bg-gray-50 focus:bg-white transition-all"
-                      />
+                      <label className="block text-sm font-semibold text-gray-705 dark:text-slate-300 mb-2">Location</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                          <FaMapMarkerAlt size={16} />
+                        </div>
+                        <input
+                          type="text"
+                          name="location"
+                          placeholder="City, Country"
+                          value={formData.personalInfo.location}
+                          onChange={(e) => handleChange(e, "personalInfo")}
+                          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                        />
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">LinkedIn URL</label>
-                      <input
-                        type="url"
-                        name="linkedin"
-                        placeholder="https://linkedin.com/in/username"
-                        value={formData.personalInfo.socialLinks.linkedin}
-                        onChange={(e) => handleChange(e, "personalInfo", undefined, "socialLinks")}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none bg-gray-50 transition-all"
-                      />
+                      <label className="block text-sm font-semibold text-gray-705 dark:text-slate-300 mb-2">LinkedIn URL</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                          <FaLinkedin size={16} />
+                        </div>
+                        <input
+                          type="url"
+                          name="linkedin"
+                          placeholder="https://linkedin.com/in/username"
+                          value={formData.personalInfo.socialLinks.linkedin}
+                          onChange={(e) => handleChange(e, "personalInfo", undefined, "socialLinks")}
+                          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                        />
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">GitHub URL</label>
-                      <input
-                        type="url"
-                        name="github"
-                        placeholder="https://github.com/username"
-                        value={formData.personalInfo.socialLinks.github}
-                        onChange={(e) => handleChange(e, "personalInfo", undefined, "socialLinks")}
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none bg-gray-50 transition-all"
-                      />
+                      <label className="block text-sm font-semibold text-gray-750 dark:text-slate-300 mb-2">GitHub URL</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                          <FaGithub size={16} />
+                        </div>
+                        <input
+                          type="url"
+                          name="github"
+                          placeholder="https://github.com/username"
+                          value={formData.personalInfo.socialLinks.github}
+                          onChange={(e) => handleChange(e, "personalInfo", undefined, "socialLinks")}
+                          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1440,43 +1609,48 @@ const CreateResume = () => {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                    <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                       <FaBriefcase className="text-lg" />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-800">Target Job Title</h2>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">Target Job Title</h2>
                   </div>
-                  <input
-                    type="text"
-                    name="wantedJobTitle"
-                    placeholder="e.g. Senior Full Stack Developer"
-                    value={formData.wantedJobTitle}
-                    onChange={(e) => handleChange(e)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none bg-gray-50 font-semibold"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                      <FaBriefcase size={16} />
+                    </div>
+                    <input
+                      type="text"
+                      name="wantedJobTitle"
+                      placeholder="e.g. Senior Full Stack Developer"
+                      value={formData.wantedJobTitle}
+                      onChange={(e) => handleChange(e)}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800 font-semibold"
+                    />
+                  </div>
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                    <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                       <FaUserCircle className="text-lg" />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-800">Professional Summary</h2>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">Professional Summary</h2>
                   </div>
                   <div className="mb-4">
                     <button
                       type="button"
                       onClick={() => handleAIAction('summary', formData)}
-                      className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all text-xs font-bold shadow-md shadow-indigo-100"
+                      className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 hover:from-violet-750 hover:to-cyan-600 text-white rounded-xl hover:scale-[1.02] transition-all text-xs font-extrabold shadow-md shadow-indigo-550/20 active:scale-95"
                     >
-                      <FaMagic /> Generate Professional Summary
+                      <FaMagic className="animate-pulse" /> Generate Professional Summary
                     </button>
                   </div>
                   <textarea
@@ -1484,7 +1658,7 @@ const CreateResume = () => {
                     placeholder="Write a compelling summary of your professional journey..."
                     value={formData.professionalSummary}
                     onChange={(e) => handleChange(e)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none bg-gray-50 text-sm leading-relaxed"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none transition-all focus:bg-white dark:focus:bg-slate-800 text-sm leading-relaxed"
                     rows={8}
                   />
                 </motion.div>
@@ -1498,22 +1672,22 @@ const CreateResume = () => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
               >
-                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                  <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                  <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                     <FaBriefcase className="text-lg" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-800">Work Experience</h2>
-                    <p className="text-sm text-gray-500">Track your professional growth</p>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">Work Experience</h2>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">Track your professional growth</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleAddField("workExperience")}
-                    className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-semibold hover:bg-indigo-100 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-405 rounded-lg text-sm font-semibold hover:bg-indigo-100 dark:hover:bg-indigo-950/70 transition-colors flex items-center gap-2"
                   >
-                    <FaPlus size={12} /> Add
+                    <FaPlus size={12} /> Add Experience
                   </button>
                 </div>
 
@@ -1523,12 +1697,12 @@ const CreateResume = () => {
                       initial={{ opacity: 0, scale: 0.98 }}
                       animate={{ opacity: 1, scale: 1 }}
                       key={index}
-                      className="p-5 bg-gray-50 rounded-xl border border-gray-200 relative group transition-all hover:border-indigo-200 hover:shadow-sm"
+                      className="p-5 bg-gray-50 dark:bg-slate-800/40 rounded-xl border border-gray-200 dark:border-slate-800 relative group transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-500/50 hover:shadow-md hover:-translate-y-0.5"
                     >
                       <button
                         type="button"
                         onClick={() => handleRemoveField("workExperience", index)}
-                        className="absolute top-4 right-4 p-2 bg-white text-gray-400 hover:text-red-500 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10"
+                        className="absolute top-4 right-4 p-2 bg-white dark:bg-slate-750 text-gray-400 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-100 dark:border-slate-700"
                         title="Remove Entry"
                       >
                         <FaTrash size={14} />
@@ -1536,62 +1710,72 @@ const CreateResume = () => {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="col-span-2 md:col-span-1">
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Job Title</label>
-                          <input
-                            type="text"
-                            name="jobTitle"
-                            placeholder="e.g. Senior Developer"
-                            value={exp.jobTitle}
-                            onChange={(e) => handleChange(e, "workExperience", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none bg-white font-medium"
-                            required
-                          />
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Job Title</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                              <FaBriefcase size={14} />
+                            </div>
+                            <input
+                              type="text"
+                              name="jobTitle"
+                              placeholder="e.g. Senior Developer"
+                              value={exp.jobTitle}
+                              onChange={(e) => handleChange(e, "workExperience", index)}
+                              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-705 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                              required
+                            />
+                          </div>
                         </div>
                         <div className="col-span-2 md:col-span-1">
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Company</label>
-                          <input
-                            type="text"
-                            name="companyName"
-                            placeholder="e.g. Google"
-                            value={exp.companyName}
-                            onChange={(e) => handleChange(e, "workExperience", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none bg-white font-medium"
-                            required
-                          />
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Company</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                              <FaBriefcase size={14} />
+                            </div>
+                            <input
+                              type="text"
+                              name="companyName"
+                              placeholder="e.g. Google"
+                              value={exp.companyName}
+                              onChange={(e) => handleChange(e, "workExperience", index)}
+                              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-705 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                              required
+                            />
+                          </div>
                         </div>
 
                         <div>
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Start Date</label>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Start Date</label>
                           <input
                             type="date"
                             name="startDate"
                             value={exp.startDate}
                             onChange={(e) => handleChange(e, "workExperience", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-indigo-500 outline-none bg-white text-gray-600"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-705 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none bg-white dark:bg-slate-800 text-gray-650 dark:text-slate-300 transition-all"
                             required
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">End Date</label>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">End Date</label>
                           <input
                             type="date"
                             name="endDate"
                             value={exp.endDate}
                             onChange={(e) => handleChange(e, "workExperience", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-indigo-500 outline-none bg-white text-gray-600"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-705 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none bg-white dark:bg-slate-800 text-gray-650 dark:text-slate-300 transition-all"
                           />
                         </div>
                       </div>
 
                       <div className="mb-4">
-                        <div className="flex items-center justify-between mb-1">
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider block">Description</label>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider block">Description</label>
                           <button
                             type="button"
                             onClick={() => handleAIAction('enhance', exp.description, index)}
-                            className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50 px-2 py-1 rounded-md"
+                            className="flex items-center gap-1.5 text-[10px] font-extrabold bg-gradient-to-r from-violet-650 to-indigo-650 hover:from-violet-750 hover:to-indigo-750 text-white shadow-sm shadow-indigo-500/10 hover:shadow-indigo-500/30 hover:scale-[1.02] active:scale-95 duration-200 transition-all px-2.5 py-1.5 rounded-lg cursor-pointer"
                           >
-                            <FaMagic size={10} /> Enhance with AI
+                            <FaMagic size={10} className="animate-pulse" /> Enhance with AI
                           </button>
                         </div>
                         <textarea
@@ -1600,15 +1784,15 @@ const CreateResume = () => {
                           value={exp.description}
                           onChange={(e) => handleChange(e, "workExperience", index)}
                           rows={4}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none bg-white text-sm leading-relaxed resize-y"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-705 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm leading-relaxed resize-y transition-all"
                         />
                       </div>
                     </motion.div>
                   ))}
 
                   {(formData.workExperience || []).length === 0 && (
-                    <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                      <p className="text-gray-500 text-sm">No work experience added yet.</p>
+                    <div className="text-center py-8 bg-gray-50 dark:bg-slate-800/20 rounded-xl border border-dashed border-gray-300 dark:border-slate-700">
+                      <p className="text-gray-550 dark:text-slate-400 text-sm">No work experience added yet.</p>
                     </div>
                   )}
                 </div>
@@ -1620,22 +1804,22 @@ const CreateResume = () => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
               >
-                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                  <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                  <div className="w-10 h-10 rounded-full bg-purple-50 dark:bg-purple-950/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
                     <FaGraduationCap className="text-lg" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-800">Education</h2>
-                    <p className="text-sm text-gray-500">Academic background and qualifications</p>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">Education</h2>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">Academic background and qualifications</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleAddField("education")}
-                    className="px-4 py-2 bg-purple-50 text-purple-600 rounded-lg text-sm font-semibold hover:bg-purple-100 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-405 rounded-lg text-sm font-semibold hover:bg-purple-100 dark:hover:bg-purple-950/70 transition-colors flex items-center gap-2"
                   >
-                    <FaPlus size={12} /> Add
+                    <FaPlus size={12} /> Add Education
                   </button>
                 </div>
 
@@ -1645,12 +1829,12 @@ const CreateResume = () => {
                       initial={{ opacity: 0, scale: 0.98 }}
                       animate={{ opacity: 1, scale: 1 }}
                       key={index}
-                      className="p-5 bg-gray-50 rounded-xl border border-gray-200 relative group transition-all hover:border-purple-200 hover:shadow-sm"
+                      className="p-5 bg-gray-50 dark:bg-slate-800/40 rounded-xl border border-gray-200 dark:border-slate-800 relative group transition-all duration-300 hover:border-purple-400 dark:hover:border-purple-500/50 hover:shadow-md hover:-translate-y-0.5"
                     >
                       <button
                         type="button"
                         onClick={() => handleRemoveField("education", index)}
-                        className="absolute top-4 right-4 p-2 bg-white text-gray-400 hover:text-red-500 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10"
+                        className="absolute top-4 right-4 p-2 bg-white dark:bg-slate-750 text-gray-400 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-100 dark:border-slate-700"
                         title="Remove Entry"
                       >
                         <FaTrash size={14} />
@@ -1658,38 +1842,48 @@ const CreateResume = () => {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="col-span-2 md:col-span-1">
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Degree</label>
-                          <input
-                            type="text"
-                            name="degree"
-                            placeholder="e.g. Bachelor of Science in CS"
-                            value={edu.degree}
-                            onChange={(e) => handleChange(e, "education", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 outline-none bg-white font-medium"
-                            required
-                          />
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Degree</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                              <FaGraduationCap size={14} />
+                            </div>
+                            <input
+                              type="text"
+                              name="degree"
+                              placeholder="e.g. Bachelor of Science in CS"
+                              value={edu.degree}
+                              onChange={(e) => handleChange(e, "education", index)}
+                              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                              required
+                            />
+                          </div>
                         </div>
                         <div className="col-span-2 md:col-span-1">
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Institution</label>
-                          <input
-                            type="text"
-                            name="institutionName"
-                            placeholder="e.g. University of Technology"
-                            value={edu.institutionName}
-                            onChange={(e) => handleChange(e, "education", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 outline-none bg-white font-medium"
-                            required
-                          />
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Institution</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                              <FaGraduationCap size={14} />
+                            </div>
+                            <input
+                              type="text"
+                              name="institutionName"
+                              placeholder="e.g. University of Technology"
+                              value={edu.institutionName}
+                              onChange={(e) => handleChange(e, "education", index)}
+                              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                              required
+                            />
+                          </div>
                         </div>
 
                         <div>
-                          <label className="text-xs font-bold uppercase text-gray-500 tracking-wider mb-1 block">Graduation Date</label>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Graduation Date</label>
                           <input
                             type="date"
                             name="graduationDate"
                             value={edu.graduationDate}
                             onChange={(e) => handleChange(e, "education", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-purple-500 outline-none bg-white text-gray-600"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-500/20 outline-none bg-white dark:bg-slate-800 text-gray-650 dark:text-slate-300 transition-all"
                             required
                           />
                         </div>
@@ -1698,8 +1892,8 @@ const CreateResume = () => {
                   ))}
 
                   {(formData.education || []).length === 0 && (
-                    <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                      <p className="text-gray-500 text-sm">No education added yet.</p>
+                    <div className="text-center py-8 bg-gray-50 dark:bg-slate-805/20 rounded-xl border border-dashed border-gray-300 dark:border-slate-700">
+                      <p className="text-gray-550 dark:text-slate-400 text-sm">No education added yet.</p>
                     </div>
                   )}
                 </div>
@@ -1708,133 +1902,157 @@ const CreateResume = () => {
 
             {/* Step 4: Skills */}
             {currentStep === 4 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
-              >
-
-                {/* Skills */}
+              <div className="space-y-6">
+                {/* Skills Card */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-600">
+                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                    <div className="w-10 h-10 rounded-full bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
                       <FaWrench className="text-lg" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-xl font-bold text-gray-800">Skills</h2>
-                      <p className="text-sm text-gray-500">Technical and soft skills</p>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">Skills</h2>
+                      <p className="text-sm text-gray-500 dark:text-slate-400">Technical and soft skills</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleAddField("skills")}
-                      className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg text-sm font-semibold hover:bg-orange-100 transition-colors flex items-center gap-2"
+                      className="px-4 py-2 bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-405 rounded-lg text-sm font-semibold hover:bg-orange-100 dark:hover:bg-orange-950/70 transition-colors flex items-center gap-2"
                     >
-                      <FaPlus size={12} /> Add
+                      <FaPlus size={12} /> Add Skill
                     </button>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {(formData.skills || []).map((skill, index) => (
                       <div key={index} className="flex gap-2 items-center">
-                        <input
-                          type="text"
-                          name="skills"
-                          placeholder="e.g. React.js"
-                          value={skill}
-                          onChange={(e) => handleArrayChange(e, "skills", index)}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 outline-none bg-white font-medium"
-                        />
+                        <div className="relative flex-1">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                            <FaWrench size={14} />
+                          </div>
+                          <input
+                            type="text"
+                            name="skills"
+                            placeholder="e.g. React.js"
+                            value={skill}
+                            onChange={(e) => handleArrayChange(e, "skills", index)}
+                            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-500/20 outline-none bg-white dark:bg-slate-805 text-gray-905 dark:text-white font-medium transition-all"
+                          />
+                        </div>
                         <button
                           type="button"
                           onClick={() => handleRemoveField("skills", index)}
-                          className="p-2.5 bg-gray-50 text-gray-400 hover:text-red-500 rounded-lg transition-colors border border-gray-200 hover:border-red-200"
+                          className="p-2.5 bg-gray-50 dark:bg-slate-750 text-gray-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg transition-colors border border-gray-200 dark:border-slate-700 hover:border-red-200 dark:hover:border-red-500/20"
                         >
                           <FaTrash size={14} />
                         </button>
                       </div>
                     ))}
                     {(formData.skills || []).length === 0 && (
-                      <p className="text-gray-500 text-sm italic col-span-2">No skills listed.</p>
+                      <p className="text-gray-500 dark:text-slate-400 text-sm italic col-span-2 text-center py-4 bg-gray-50 dark:bg-slate-800/10 rounded-xl border border-dashed border-gray-200 dark:border-slate-800">
+                        No skills listed yet.
+                      </p>
                     )}
                   </div>
                 </motion.div>
 
-                {/* Certifications */}
+                {/* Certifications Card */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600">
+                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                    <div className="w-10 h-10 rounded-full bg-yellow-50 dark:bg-yellow-950/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400">
                       <FaCertificate className="text-lg" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-xl font-bold text-gray-800">Certifications</h2>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">Certifications</h2>
+                      <p className="text-sm text-gray-500 dark:text-slate-400">Professional credentials and licenses</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleAddField("certifications")}
-                      className="px-4 py-2 bg-yellow-50 text-yellow-600 rounded-lg text-sm font-semibold hover:bg-yellow-100 transition-colors flex items-center gap-2"
+                      className="px-4 py-2 bg-yellow-50 dark:bg-yellow-950/40 text-yellow-600 dark:text-yellow-405 rounded-lg text-sm font-semibold hover:bg-yellow-100 dark:hover:bg-yellow-950/70 transition-colors flex items-center gap-2"
                     >
-                      <FaPlus size={12} /> Add
+                      <FaPlus size={12} /> Add Certification
                     </button>
                   </div>
 
                   <div className="space-y-6">
                     {(formData.certifications || []).map((certi, index) => (
-                      <div key={index} className="p-4 bg-gray-50 rounded-xl border border-gray-200 relative group">
+                      <div
+                        key={index}
+                        className="p-5 bg-gray-50 dark:bg-slate-800/40 rounded-xl border border-gray-200 dark:border-slate-800 relative group transition-all duration-300 hover:border-yellow-400 dark:hover:border-yellow-500/50 hover:shadow-md hover:-translate-y-0.5"
+                      >
                         <button
                           type="button"
                           onClick={() => handleRemoveField("certifications", index)}
-                          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+                          className="absolute top-4 right-4 p-2 bg-white dark:bg-slate-755 text-gray-400 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-100 dark:border-slate-700"
                         >
-                          <FaTrash />
+                          <FaTrash size={14} />
                         </button>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            name="name"
-                            placeholder="Certification Name"
-                            value={certi.name}
-                            onChange={(e) => handleChange(e, "certifications", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white"
-                            required
-                          />
-                          <input
-                            type="text"
-                            name="organization"
-                            placeholder="Organization"
-                            value={certi.organization}
-                            onChange={(e) => handleChange(e, "certifications", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white"
-                            required
-                          />
-                          <input
-                            type="date"
-                            name="date"
-                            value={certi.date}
-                            onChange={(e) => handleChange(e, "certifications", index)}
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white text-gray-600"
-                            required
-                          />
+                          <div>
+                            <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Certification Name</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                                <FaCertificate size={14} />
+                              </div>
+                              <input
+                                type="text"
+                                name="name"
+                                placeholder="Certification Name"
+                                value={certi.name}
+                                onChange={(e) => handleChange(e, "certifications", index)}
+                                className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100 dark:focus:ring-yellow-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Organization</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                                <FaCertificate size={14} />
+                              </div>
+                              <input
+                                type="text"
+                                name="organization"
+                                placeholder="Organization"
+                                value={certi.organization}
+                                onChange={(e) => handleChange(e, "certifications", index)}
+                                className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100 dark:focus:ring-yellow-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Date Earned</label>
+                            <input
+                              type="date"
+                              name="date"
+                              value={certi.date}
+                              onChange={(e) => handleChange(e, "certifications", index)}
+                              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100 dark:focus:ring-yellow-500/20 outline-none bg-white dark:bg-slate-805 text-gray-650 dark:text-slate-300 transition-all"
+                              required
+                            />
+                          </div>
                         </div>
                       </div>
                     ))}
                     {(formData.certifications || []).length === 0 && (
-                      <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                        <p className="text-gray-500 text-sm">No certifications added yet.</p>
+                      <div className="text-center py-8 bg-gray-50 dark:bg-slate-800/20 rounded-xl border border-dashed border-gray-300 dark:border-slate-700">
+                        <p className="text-gray-550 dark:text-slate-400 text-sm">No certifications added yet.</p>
                       </div>
                     )}
                   </div>
                 </motion.div>
-              </motion.div>
+              </div>
             )}
 
             {/* Step 5: Projects */}
@@ -1842,100 +2060,150 @@ const CreateResume = () => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
               >
-                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                  <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-teal-600">
+                <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                  <div className="w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-950/30 flex items-center justify-center text-teal-600 dark:text-teal-405">
                     <FaProjectDiagram className="text-lg" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-800">Projects</h2>
-                    <p className="text-sm text-gray-500">Share your notable works</p>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white">Projects</h2>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">Share your notable works</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleAddField("projects")}
-                    className="px-4 py-2 bg-teal-50 text-teal-600 rounded-lg text-sm font-semibold hover:bg-teal-100 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-405 rounded-lg text-sm font-semibold hover:bg-teal-100 dark:hover:bg-teal-950/70 transition-colors flex items-center gap-2"
                   >
-                    <FaPlus size={12} /> Add
+                    <FaPlus size={12} /> Add Project
                   </button>
                 </div>
 
                 <div className="space-y-6">
                   {(formData.projects || []).map((project, index) => (
-                    <div key={index} className="p-5 bg-gray-50 rounded-xl border border-gray-200 relative group">
+                    <div
+                      key={index}
+                      className="p-5 bg-gray-50 dark:bg-slate-800/40 rounded-xl border border-gray-200 dark:border-slate-800 relative group transition-all duration-300 hover:border-teal-400 dark:hover:border-teal-505/50 hover:shadow-md hover:-translate-y-0.5"
+                    >
                       <button
                         type="button"
                         onClick={() => handleRemoveField("projects", index)}
-                        className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+                        className="absolute top-4 right-4 p-2 bg-white dark:bg-slate-750 text-gray-400 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-100 dark:border-slate-700"
+                        title="Remove Entry"
                       >
-                        <FaTrash />
+                        <FaTrash size={14} />
                       </button>
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <input
-                          type="text"
-                          name="title"
-                          placeholder="Project Title"
-                          value={project.title}
+                        <div>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Project Title</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                              <FaProjectDiagram size={14} />
+                            </div>
+                            <input
+                              type="text"
+                              name="title"
+                              placeholder="Project Title"
+                              value={project.title}
+                              onChange={(e) => handleChange(e, "projects", index)}
+                              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-bold transition-all"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Project Link (URL)</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                              <FaGlobe size={14} />
+                            </div>
+                            <input
+                              type="url"
+                              name="projectLink"
+                              placeholder="Project Link (URL)"
+                              value={project.projectLink}
+                              onChange={(e) => handleChange(e, "projects", index)}
+                              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-500/20 outline-none bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-medium transition-all"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Start Date</label>
+                          <input
+                            type="date"
+                            name="startDate"
+                            value={project.startDate}
+                            onChange={(e) => handleChange(e, "projects", index)}
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-500/20 outline-none bg-white dark:bg-slate-800 text-gray-650 dark:text-slate-300 transition-all"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">End Date</label>
+                          <input
+                            type="date"
+                            name="endDate"
+                            value={project.endDate}
+                            onChange={(e) => handleChange(e, "projects", index)}
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-500/20 outline-none bg-white dark:bg-slate-800 text-gray-650 dark:text-slate-300 transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Project Description</label>
+                        <textarea
+                          name="description"
+                          placeholder="Describe the project goals, achievements, and features..."
+                          value={project.description}
                           onChange={(e) => handleChange(e, "projects", index)}
-                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white font-bold"
-                          required
-                        />
-                        <input
-                          type="url"
-                          name="projectLink"
-                          placeholder="Project Link (URL)"
-                          value={project.projectLink}
-                          onChange={(e) => handleChange(e, "projects", index)}
-                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white text-blue-600"
-                        />
-                        <input
-                          type="date"
-                          name="startDate"
-                          value={project.startDate}
-                          onChange={(e) => handleChange(e, "projects", index)}
-                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white text-gray-600"
-                          required
-                        />
-                        <input
-                          type="date"
-                          name="endDate"
-                          value={project.endDate}
-                          onChange={(e) => handleChange(e, "projects", index)}
-                          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none bg-white text-gray-600"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm leading-relaxed resize-y transition-all"
+                          rows={3}
                         />
                       </div>
-                      <textarea
-                        name="description"
-                        placeholder="Project Description"
-                        value={project.description}
-                        onChange={(e) => handleChange(e, "projects", index)}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 outline-none bg-white text-sm mb-4"
-                        rows={3}
-                      />
 
                       {/* Tech Stack */}
-                      <div className="bg-white p-3 rounded-lg border border-gray-100">
-                        <label className="text-xs font-bold uppercase text-gray-400 mb-2 block">Technologies</label>
+                      <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-gray-200 dark:border-slate-800 transition-all">
+                        <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-2 block">Technologies Used</label>
                         <div className="flex flex-wrap gap-2">
                           {(project.technologies || []).map((tech, techIndex) => (
-                            <div key={techIndex} className="flex items-center bg-gray-50 rounded-md border border-gray-200 overflow-hidden">
+                            <div key={techIndex} className="flex items-center bg-gray-50 dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden pr-1 transition-all focus-within:border-teal-500">
                               <input
                                 type="text"
                                 value={tech}
                                 onChange={(e) => handleArrayChange(e, "projects", index, "technologies", techIndex)}
-                                className="w-24 px-2 py-1 bg-transparent text-sm outline-none"
-                                placeholder="Tech"
+                                className="w-24 px-2.5 py-1 bg-transparent text-sm text-gray-900 dark:text-white outline-none font-medium"
+                                placeholder="Tech Tag"
                               />
-                              <button type="button" onClick={() => handleRemoveField("projects", index, "technologies", techIndex)} className="px-2 text-gray-400 hover:text-red-500">×</button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveField("projects", index, "technologies", techIndex)}
+                                className="px-1 text-gray-400 hover:text-red-500 font-bold transition-colors text-sm"
+                              >
+                                ×
+                              </button>
                             </div>
                           ))}
-                          <button type="button" onClick={() => handleAddField("projects", index, "technologies")} className="text-sm text-blue-500 font-medium px-2">+ Add</button>
+                          <button
+                            type="button"
+                            onClick={() => handleAddField("projects", index, "technologies")}
+                            className="text-xs text-teal-600 dark:text-teal-400 hover:text-teal-800 font-extrabold px-3 py-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/30 hover:bg-teal-100 dark:hover:bg-teal-950/60 transition-all cursor-pointer flex items-center gap-1"
+                          >
+                            <FaPlus size={10} /> Add Tech
+                          </button>
                         </div>
                       </div>
                     </div>
                   ))}
-                </div>
+                  {(formData.projects || []).length === 0 && (
+                    <div className="text-center py-8 bg-gray-50 dark:bg-slate-800/20 rounded-xl border border-dashed border-gray-300 dark:border-slate-700">
+                      <p className="text-gray-550 dark:text-slate-400 text-sm">No projects added yet.</p>
+                    </div>
+                  )}                </div>
               </motion.div>
             )}
 
@@ -1946,35 +2214,54 @@ const CreateResume = () => {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                       <FaGlobe className="text-lg" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-xl font-bold text-gray-800">Languages</h2>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">Languages</h2>
+                      <p className="text-sm text-gray-500 dark:text-slate-400">Languages you can speak and write</p>
                     </div>
-                    <button type="button" onClick={() => handleAddField("languages")} className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors flex items-center gap-2">
-                      <FaPlus size={12} /> Add
+                    <button
+                      type="button"
+                      onClick={() => handleAddField("languages")}
+                      className="px-4 py-2 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-405 rounded-lg text-sm font-semibold hover:bg-blue-105 dark:hover:bg-blue-950/70 transition-colors flex items-center gap-2"
+                    >
+                      <FaPlus size={12} /> Add Language
                     </button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {(formData.languages || []).map((language, index) => (
                       <div key={index} className="flex gap-2 items-center">
-                        <input
-                          type="text"
-                          name="languages"
-                          placeholder="e.g. English"
-                          value={language}
-                          onChange={(e) => handleArrayChange(e, "languages", index)}
-                          className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 outline-none bg-white font-medium"
-                        />
-                        <button type="button" onClick={() => handleRemoveField("languages", index)} className="p-2.5 text-gray-400 hover:text-red-500">
+                        <div className="relative flex-1">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                            <FaGlobe size={14} />
+                          </div>
+                          <input
+                            type="text"
+                            name="languages"
+                            placeholder="e.g. English"
+                            value={language}
+                            onChange={(e) => handleArrayChange(e, "languages", index)}
+                            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveField("languages", index)}
+                          className="p-2.5 bg-gray-50 dark:bg-slate-750 text-gray-400 hover:text-red-500 dark:hover:text-red-405 rounded-lg transition-colors border border-gray-200 dark:border-slate-700 hover:border-red-200 dark:hover:border-red-500/20"
+                        >
                           <FaTrash size={14} />
                         </button>
                       </div>
                     ))}
+                    {(formData.languages || []).length === 0 && (
+                      <p className="text-gray-500 dark:text-slate-400 text-sm italic col-span-2 text-center py-4 bg-gray-50 dark:bg-slate-800/10 rounded-xl border border-dashed border-gray-200 dark:border-slate-800">
+                        No languages listed yet.
+                      </p>
+                    )}
                   </div>
                 </motion.div>
 
@@ -1983,32 +2270,94 @@ const CreateResume = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
-                    <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                  <div className="flex items-center gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-4">
+                    <div className="w-10 h-10 rounded-full bg-green-50 dark:bg-green-950/30 flex items-center justify-center text-green-600 dark:text-green-400">
                       <FaUsers className="text-lg" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-xl font-bold text-gray-800">References</h2>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-white">References</h2>
+                      <p className="text-sm text-gray-500 dark:text-slate-400">Professional or academic references</p>
                     </div>
-                    <button type="button" onClick={() => handleAddField("references")} className="px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm font-semibold hover:bg-green-100 transition-colors flex items-center gap-2">
-                      <FaPlus size={12} /> Add
+                    <button
+                      type="button"
+                      onClick={() => handleAddField("references")}
+                      className="px-4 py-2 bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-405 rounded-lg text-sm font-semibold hover:bg-green-100 dark:hover:bg-green-950/70 transition-colors flex items-center gap-2"
+                    >
+                      <FaPlus size={12} /> Add Reference
                     </button>
                   </div>
                   <div className="space-y-4">
                     {(formData.references || []).map((ref, index) => (
-                      <div key={index} className="p-4 bg-gray-50 rounded-xl border border-gray-200 relative">
-                        <button type="button" onClick={() => handleRemoveField("references", index)} className="absolute top-4 right-4 text-gray-400 hover:text-red-500">
+                      <div
+                        key={index}
+                        className="p-5 bg-gray-50 dark:bg-slate-800/40 rounded-xl border border-gray-200 dark:border-slate-800 relative group transition-all duration-300 hover:border-green-400 dark:hover:border-green-500/50 hover:shadow-md hover:-translate-y-0.5"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveField("references", index)}
+                          className="absolute top-4 right-4 p-2 bg-white dark:bg-slate-755 text-gray-400 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-100 dark:border-slate-700"
+                        >
                           <FaTrash size={14} />
                         </button>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <input type="text" name="name" placeholder="Name" value={ref.name} onChange={(e) => handleChange(e, "references", index)} className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none" />
-                          <input type="text" name="relationship" placeholder="Relationship" value={ref.relationship} onChange={(e) => handleChange(e, "references", index)} className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none" />
-                          <input type="text" name="contact" placeholder="Contact" value={ref.contact} onChange={(e) => handleChange(e, "references", index)} className="w-full px-4 py-2.5 rounded-lg border border-gray-200 outline-none col-span-2" />
+                          <div>
+                            <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Name</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                                <FaUser size={14} />
+                              </div>
+                              <input
+                                type="text"
+                                name="name"
+                                placeholder="Reference Name"
+                                value={ref.name}
+                                onChange={(e) => handleChange(e, "references", index)}
+                                className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-green-500 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Relationship</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                                <FaUsers size={14} />
+                              </div>
+                              <input
+                                type="text"
+                                name="relationship"
+                                placeholder="Relationship"
+                                value={ref.relationship}
+                                onChange={(e) => handleChange(e, "references", index)}
+                                className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-green-500 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white font-medium transition-all"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-span-2">
+                            <label className="text-xs font-bold uppercase text-gray-500 dark:text-slate-400 tracking-wider mb-1 block">Contact Details</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+                                <FaPhone size={14} />
+                              </div>
+                              <input
+                                type="text"
+                                name="contact"
+                                placeholder="Phone, Email or Organization info"
+                                value={ref.contact}
+                                onChange={(e) => handleChange(e, "references", index)}
+                                className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-slate-750 focus:border-green-500 focus:ring-2 focus:ring-green-100 dark:focus:ring-green-500/20 outline-none bg-white dark:bg-slate-805 text-gray-905 dark:text-white font-medium transition-all"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
+                    {(formData.references || []).length === 0 && (
+                      <div className="text-center py-8 bg-gray-50 dark:bg-slate-800/20 rounded-xl border border-dashed border-gray-300 dark:border-slate-700">
+                        <p className="text-gray-550 dark:text-slate-400 text-sm">No references added yet.</p>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
 
@@ -2017,15 +2366,15 @@ const CreateResume = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200"
+                  className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800"
                 >
-                  <h2 className="text-xl font-bold text-gray-800 mb-4">Acknowledgment</h2>
+                  <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Acknowledgment</h2>
                   <textarea
                     name="acknowledgment"
                     placeholder="I hereby declare that the info provided is true..."
                     value={formData.acknowledgment}
                     onChange={(e) => handleChange(e)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-indigo-500 outline-none bg-white text-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-750 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm transition-all"
                     rows={4}
                   />
                 </motion.div>
@@ -2033,23 +2382,42 @@ const CreateResume = () => {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mt-8">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
-                disabled={currentStep === 0}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${currentStep === 0 ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-                  }`}
-              >
-                <FaChevronLeft size={14} /> Previous
-              </button>
+            <div className="flex justify-between items-center bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-855 mt-8 gap-4">
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
+                  disabled={currentStep === 0}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 border ${currentStep === 0
+                    ? "bg-gray-100 dark:bg-slate-800 text-gray-400 dark:text-slate-650 border-gray-200 dark:border-slate-750 cursor-not-allowed opacity-50"
+                    : "bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-750 hover:border-gray-300 active:scale-95 shadow-sm"
+                    }`}
+                >
+                  <FaChevronLeft size={14} /> Previous
+                </button>
+
+                {(!editId && localStorage.getItem("resume_builder_draft")) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to discard your draft and start fresh?")) {
+                        localStorage.removeItem("resume_builder_draft");
+                        window.location.reload();
+                      }
+                    }}
+                    className="px-4 py-2.5 text-xs font-black text-red-500 hover:text-red-700 dark:hover:text-red-400 bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-950/40 rounded-xl transition-all"
+                  >
+                    Discard Draft
+                  </button>
+                )}
+              </div>
 
               {currentStep === steps.length - 1 ? (
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 hover:shadow-xl transition-all"
+                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-black shadow-lg shadow-indigo-200 dark:shadow-none hover:shadow-xl hover:from-blue-700 hover:to-indigo-700 transition-all cursor-pointer"
                 >
                   <FaSave size={14} /> Finalize & Save
                 </motion.button>
@@ -2057,7 +2425,7 @@ const CreateResume = () => {
                 <button
                   type="button"
                   onClick={() => setCurrentStep(prev => Math.min(steps.length - 1, prev + 1))}
-                  className="flex items-center gap-2 px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 hover:shadow-indigo-200 transition-all"
+                  className="flex items-center gap-2 px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-150 hover:shadow-indigo-200 transition-all duration-300 active:scale-95"
                 >
                   Next <FaChevronRight size={14} />
                 </button>
@@ -2066,42 +2434,85 @@ const CreateResume = () => {
           </form>
         </div>
 
-        {/* Resume Preview Section */}
-        {/* Right Column (Preview) */}
+        {/* Resume Preview Section (Desktop) */}
         <div className="w-full lg:w-1/2 min-h-screen sticky top-28 hidden lg:block h-[calc(100vh-140px)]">
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 h-full flex flex-col">
-            <div className="bg-gray-50 border-b border-gray-200 p-4 flex justify-between items-center">
-              <h3 className="font-bold text-gray-700 flex items-center gap-2">
-                <FaPalette className="text-gray-400" /> Template:
-                <div className="flex bg-gray-200 rounded-lg p-1 ml-2 flex-wrap gap-1">
-                  {[
-                    "modern", "professional", "creative", "minimalist", "executive", "simple",
-                    "academic", "tech", "designer", "compact", "bold", "corporate",
-                    "elegant", "startup", "classic"
-                  ].map((t) => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, template: t })}
-                      className={`px-3 py-1 text-xs font-bold uppercase rounded-md transition-all ${formData.template === t
-                        ? "bg-white text-indigo-600 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700"
-                        }`}
-                    >
-                      {t}
-                    </button>
-                  ))}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-gray-150 dark:border-slate-800 h-full flex flex-col">
+            
+            {/* Control Bar */}
+            <div className="bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div className="flex items-center gap-2">
+                  <FaPalette className="text-indigo-500 text-lg" />
+                  <span className="font-extrabold text-slate-700 dark:text-slate-200 text-sm">Theme:</span>
                 </div>
-              </h3>
-              <div className="flex gap-1.5">
-                <span className="w-3 h-3 rounded-full bg-red-400"></span>
-                <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
-                <span className="w-3 h-3 rounded-full bg-green-400"></span>
+                <div className="relative">
+                  <select
+                    value={formData.template || "modern"}
+                    onChange={(e) => setFormData({ ...formData, template: e.target.value })}
+                    className="pl-3 pr-10 py-2 text-xs font-bold uppercase rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all cursor-pointer appearance-none shadow-sm"
+                  >
+                    {[
+                      "modern", "professional", "creative", "minimalist", "executive", "simple",
+                      "academic", "tech", "designer", "compact", "bold", "corporate",
+                      "elegant", "startup", "classic"
+                    ].map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fillRule="evenodd"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Document Zoom & Print Controls */}
+              <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
+                <div className="flex items-center bg-gray-100 dark:bg-slate-750 p-1 rounded-xl border border-gray-200 dark:border-slate-650">
+                  <button
+                    type="button"
+                    onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.1))}
+                    title="Zoom Out"
+                    className="w-8 h-8 flex items-center justify-center hover:bg-white dark:hover:bg-slate-650 rounded-lg text-slate-600 dark:text-slate-300 font-bold transition-all text-sm animate-none"
+                  >
+                    -
+                  </button>
+                  <span className="px-3.5 text-xs font-mono font-bold text-slate-700 dark:text-slate-200">
+                    {Math.round(zoomLevel * 100)}%
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setZoomLevel(prev => Math.min(1.5, prev + 0.1))}
+                    title="Zoom In"
+                    className="w-8 h-8 flex items-center justify-center hover:bg-white dark:hover:bg-slate-650 rounded-lg text-slate-600 dark:text-slate-300 font-bold transition-all text-sm animate-none"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setZoomLevel(1.0)}
+                  title="Reset Zoom"
+                  className="px-3.5 py-2 bg-white dark:bg-slate-700 text-xs font-bold rounded-xl border border-gray-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-650 transition-all shadow-sm"
+                >
+                  Reset
+                </button>
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md shadow-indigo-200 hover:shadow-lg transition-all duration-200"
+                >
+                  Print
+                </button>
               </div>
             </div>
 
-            <div className="overflow-y-auto custom-scrollbar flex-1 bg-gray-100 p-8">
-              <div id="resume-preview-content" className="mx-auto w-full max-w-[210mm] transition-all duration-300">
+            {/* Preview Sheet Canvas */}
+            <div className="overflow-auto flex-1 bg-slate-100 dark:bg-slate-950 p-8 flex justify-center items-start scrollbar-hide">
+              <div 
+                id="resume-preview-content" 
+                className="w-full max-w-[210mm] transition-all duration-300 origin-top shadow-2xl bg-white text-black rounded-lg"
+                style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center' }}
+              >
                 {(!formData.template || formData.template === "modern") && <TemplateModern data={formData} />}
                 {formData.template === "professional" && <TemplateProfessional data={formData} />}
                 {formData.template === "creative" && <TemplateCreative data={formData} />}
@@ -2122,7 +2533,105 @@ const CreateResume = () => {
           </div>
         </div>
       </div>
-    </div >
+
+      {/* Floating Mobile Preview Toggle (Visible on mobile screens) */}
+      <div className="fixed bottom-6 right-6 z-40 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setIsMobilePreviewOpen(true)}
+          className="flex items-center gap-2 px-5 py-4 bg-gradient-to-r from-blue-600 to-indigo-650 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full font-extrabold shadow-2xl hover:scale-105 active:scale-95 transition-all text-xs tracking-wider uppercase border border-indigo-500/20"
+        >
+          <FaFileAlt className="text-sm" /> View Live CV
+        </button>
+      </div>
+
+      {/* Slide-Up Mobile Preview Drawer */}
+      {isMobilePreviewOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden flex flex-col justify-end transition-opacity duration-300">
+          {/* Backdrop Closer */}
+          <div className="absolute inset-0 -z-10" onClick={() => setIsMobilePreviewOpen(false)} />
+
+          <div className="bg-white dark:bg-slate-900 rounded-t-[2.5rem] w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300 border-t border-white/10">
+            {/* Drawer Header */}
+            <div className="bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-6 py-4 flex justify-between items-center">
+              <div className="flex items-center gap-2.5">
+                <FaPalette className="text-indigo-500 text-lg animate-spin" style={{ animationDuration: '6s' }} />
+                <span className="font-extrabold text-[#091e42] dark:text-slate-100 text-sm">Live Resume View</span>
+              </div>
+              <div className="flex items-center gap-4">
+                {/* Mobile Zoom Controls */}
+                <div className="flex items-center bg-gray-250 dark:bg-slate-705 p-0.5 rounded-lg border border-gray-200 dark:border-slate-650">
+                  <button 
+                    type="button"
+                    onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.1))}
+                    className="w-7 h-7 flex items-center justify-center hover:bg-white dark:hover:bg-slate-600 rounded text-slate-600 dark:text-slate-300 font-bold transition-all text-xs animate-none"
+                  >-</button>
+                  <span className="px-2.5 text-[10px] font-bold dark:text-white font-mono">{Math.round(zoomLevel * 100)}%</span>
+                  <button 
+                    type="button"
+                    onClick={() => setZoomLevel(prev => Math.min(1.5, prev + 0.1))}
+                    className="w-7 h-7 flex items-center justify-center hover:bg-white dark:hover:bg-slate-650 rounded text-slate-600 dark:text-slate-300 font-bold transition-all text-xs animate-none"
+                  >+</button>
+                </div>
+                
+                <button
+                  type="button"
+                  onClick={() => setIsMobilePreviewOpen(false)}
+                  className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-slate-700 hover:bg-red-50 hover:text-red-500 text-slate-500 rounded-full font-bold text-sm transition-all"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+            
+            {/* Horizontal Scrollable Template Selector */}
+            <div className="p-3.5 bg-gray-150 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex gap-2.5 overflow-x-auto scrollbar-hide">
+              {[
+                "modern", "professional", "creative", "minimalist", "executive", "simple",
+                "academic", "tech", "designer", "compact", "bold", "corporate",
+                "elegant", "startup", "classic"
+              ].map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setFormData({ ...formData, template: t })}
+                  className={`px-3.5 py-2 text-xs font-bold uppercase rounded-xl transition-all shrink-0 ${formData.template === t
+                    ? "bg-indigo-650 text-white shadow-md shadow-indigo-300/50"
+                    : "bg-white dark:bg-slate-700 text-gray-500 dark:text-slate-300 hover:text-gray-750 border border-gray-200 dark:border-slate-650"
+                    }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            
+            {/* Scaled Preview Area */}
+            <div className="overflow-auto flex-1 bg-slate-100 dark:bg-slate-950 p-6 flex justify-center items-start scrollbar-hide">
+              <div 
+                className="w-full max-w-[210mm] transition-all duration-300 origin-top shadow-2xl bg-white text-black rounded-lg"
+                style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center' }}
+              >
+                {(!formData.template || formData.template === "modern") && <TemplateModern data={formData} />}
+                {formData.template === "professional" && <TemplateProfessional data={formData} />}
+                {formData.template === "creative" && <TemplateCreative data={formData} />}
+                {formData.template === "minimalist" && <TemplateMinimalist data={formData} />}
+                {formData.template === "executive" && <TemplateExecutive data={formData} />}
+                {formData.template === "simple" && <TemplateSimple data={formData} />}
+                {formData.template === "academic" && <TemplateAcademic data={formData} />}
+                {formData.template === "tech" && <TemplateTech data={formData} />}
+                {formData.template === "designer" && <TemplateDesigner data={formData} />}
+                {formData.template === "compact" && <TemplateCompact data={formData} />}
+                {formData.template === "bold" && <TemplateBold data={formData} />}
+                {formData.template === "corporate" && <TemplateCorporate data={formData} />}
+                {formData.template === "elegant" && <TemplateElegant data={formData} />}
+                {formData.template === "startup" && <TemplateStartup data={formData} />}
+                {formData.template === "classic" && <TemplateClassic data={formData} />}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

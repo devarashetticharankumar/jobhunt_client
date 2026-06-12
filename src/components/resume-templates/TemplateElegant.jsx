@@ -133,8 +133,20 @@ const TemplateElegant = ({ data }) => {
                             <div className="space-y-6">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx} className="text-center">
-                                        <div className="font-bold text-sm text-gray-900 mb-1">{project.title}</div>
-                                        <p className="text-xs leading-relaxed text-gray-600">
+                                        <div className="font-bold text-sm text-gray-900 mb-0.5">
+                                            {project.title}
+                                            {project.projectLink && (
+                                                <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-[#d4af37] hover:underline font-normal ml-2 lowercase">
+                                                    [link]
+                                                </a>
+                                            )}
+                                        </div>
+                                        {(project.startDate || project.endDate) && (
+                                            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">
+                                                {project.startDate} – {project.endDate || "Present"}
+                                            </div>
+                                        )}
+                                        <p className="text-xs leading-relaxed text-gray-600 whitespace-pre-line">
                                             {project.description}
                                         </p>
                                     </div>

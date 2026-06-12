@@ -141,11 +141,18 @@ const TemplateTech = ({ data }) => {
                                 <div className="space-y-6">
                                     {data.projects.map((project, idx) => (
                                         <div key={idx} className="bg-gray-50 p-4 rounded border border-gray-200">
-                                            <h3 className="font-bold text-base mb-1 flex justify-between">
-                                                {project.title}
-                                                {project.projectLink && <a href={project.projectLink} target="_blank" className="text-xs text-blue-500 hover:underline font-normal font-sans">View Project</a>}
+                                            <h3 className="font-bold text-base mb-1 flex justify-between items-baseline flex-wrap gap-2">
+                                                <span>
+                                                    {project.title}
+                                                    {project.projectLink && <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 hover:underline font-normal font-sans ml-2">View Project</a>}
+                                                </span>
+                                                {(project.startDate || project.endDate) && (
+                                                    <span className="text-xs text-gray-500 font-sans font-normal">
+                                                        {project.startDate} - {project.endDate || "Present"}
+                                                    </span>
+                                                )}
                                             </h3>
-                                            <p className="text-sm text-gray-600 mb-2 font-sans">{project.description}</p>
+                                            <p className="text-sm text-gray-600 mb-2 font-sans whitespace-pre-line">{project.description}</p>
                                             {project.technologies?.length > 0 && (
                                                 <div className="text-xs text-green-600 flex gap-2 font-bold">
                                                     {project.technologies.join(" :: ")}

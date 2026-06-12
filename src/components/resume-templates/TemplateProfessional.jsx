@@ -152,10 +152,22 @@ const TemplateProfessional = ({ data }) => {
                             <div className="space-y-4">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx}>
-                                        <h3 className="font-bold text-[14px] mb-1">
-                                            {project.title}
-                                        </h3>
-                                        <p className="text-[13px] leading-relaxed mb-1">
+                                        <div className="flex justify-between items-baseline mb-1">
+                                            <h3 className="font-bold text-[14px]">
+                                                {project.title}
+                                                {project.projectLink && (
+                                                    <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:underline font-normal ml-2">
+                                                        [Link]
+                                                    </a>
+                                                )}
+                                            </h3>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="text-[12px] text-gray-600 font-semibold">
+                                                    {project.startDate} — {project.endDate || "Present"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-[13px] leading-relaxed mb-1 whitespace-pre-line">
                                             {project.description}
                                         </p>
                                         {project.technologies?.length > 0 && (

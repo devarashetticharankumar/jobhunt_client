@@ -28,7 +28,7 @@ const TemplateClassic = ({ data }) => {
                 {data.professionalSummary && (
                     <section>
                         <h2 className="text-sm font-bold uppercase border-b border-black mb-2">Summary</h2>
-                        <p className="text-sm text-justify leading-snug">
+                        <p className="text-sm text-justify leading-snug whitespace-pre-line">
                             {data.professionalSummary}
                         </p>
                     </section>
@@ -117,8 +117,22 @@ const TemplateClassic = ({ data }) => {
                         <div className="space-y-3">
                             {data.projects.map((project, idx) => (
                                 <div key={idx}>
-                                    <h3 className="font-bold text-sm mb-0.5">{project.title}</h3>
-                                    <p className="text-sm leading-snug">
+                                    <div className="flex justify-between items-baseline mb-0.5">
+                                        <h3 className="font-bold text-sm">
+                                            {project.title}
+                                            {project.projectLink && (
+                                                <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs underline ml-2 font-normal">
+                                                    [Link]
+                                                </a>
+                                            )}
+                                        </h3>
+                                        {(project.startDate || project.endDate) && (
+                                            <span className="text-xs">
+                                                {project.startDate} — {project.endDate || "Present"}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-sm leading-snug whitespace-pre-line">
                                         {project.description}
                                     </p>
                                 </div>

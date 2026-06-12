@@ -145,8 +145,22 @@ const TemplateDesigner = ({ data }) => {
                                 <div className="grid grid-cols-2 gap-6">
                                     {data.projects.map((project, idx) => (
                                         <div key={idx} className="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow">
-                                            <h3 className="font-bold text-gray-900 mb-2">{project.title}</h3>
-                                            <p className="text-xs text-gray-500 mb-3 line-clamp-3">{project.description}</p>
+                                            <div className="flex justify-between items-start mb-2 flex-wrap gap-1">
+                                                <h3 className="font-bold text-gray-900 text-sm">
+                                                    {project.title}
+                                                    {project.projectLink && (
+                                                        <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-purple-600 hover:underline font-normal ml-2">
+                                                            [Link]
+                                                        </a>
+                                                    )}
+                                                </h3>
+                                                {(project.startDate || project.endDate) && (
+                                                    <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
+                                                        {project.startDate} - {project.endDate || "Present"}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="text-xs text-gray-500 mb-3 line-clamp-3 whitespace-pre-line">{project.description}</p>
                                             {project.technologies?.length > 0 && (
                                                 <div className="flex flex-wrap gap-1">
                                                     {project.technologies.slice(0, 3).map((t, i) => (

@@ -1,0 +1,2 @@
+const n=i=>!i||typeof i!="string"?"":/<(p|h[1-6]|ul|li|div|br|strong) ?\/?>/i.test(i)?i:i.split(`
+`).map(r=>r.trim()).filter(r=>r).map(r=>{const t=r.trim();return t.startsWith("-")||t.startsWith("•")||/^\d+\./.test(t)?`<li>${t.replace(/^[-•]|\d+\.\s*/,"").trim()}</li>`:t.endsWith(":")||t.length<50&&t===t.toUpperCase()?`<h3><strong>${t}</strong></h3>`:`<p>${t}</p>`}).join("").replace(/(<li>.*?<\/li>)+/g,r=>`<ul>${r}</ul>`),l=n;export{n as a,l as f};

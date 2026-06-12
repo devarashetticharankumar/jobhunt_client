@@ -60,8 +60,22 @@ const TemplateBold = ({ data }) => {
                             <div className="grid grid-cols-1 gap-8">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx} className="border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                                        <h3 className="text-xl font-black uppercase mb-2">{project.title}</h3>
-                                        <p className="font-medium mb-4">{project.description}</p>
+                                        <div className="flex justify-between items-start flex-wrap gap-2 mb-2">
+                                            <h3 className="text-xl font-black uppercase">{project.title}</h3>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="bg-black text-white text-xs font-bold px-2 py-0.5 uppercase">
+                                                    {project.startDate} - {project.endDate || "Present"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {project.projectLink && (
+                                            <div className="mb-2">
+                                                <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-sm font-bold underline uppercase text-blue-600 hover:text-blue-800">
+                                                    Link
+                                                </a>
+                                            </div>
+                                        )}
+                                        <p className="font-medium mb-4 whitespace-pre-line">{project.description}</p>
                                         {project.technologies?.length > 0 && (
                                             <div className="flex flex-wrap gap-2">
                                                 {project.technologies.slice(0, 3).map((t, i) => (

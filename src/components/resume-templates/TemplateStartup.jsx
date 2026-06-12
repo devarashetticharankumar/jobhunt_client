@@ -37,7 +37,7 @@ const TemplateStartup = ({ data }) => {
                             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 <span className="w-8 h-1 bg-indigo-500 rounded"></span> About
                             </h2>
-                            <p className="text-lg leading-relaxed text-gray-600 font-light">
+                            <p className="text-lg leading-relaxed text-gray-600 font-light whitespace-pre-line">
                                 {data.professionalSummary}
                             </p>
                         </section>
@@ -78,8 +78,22 @@ const TemplateStartup = ({ data }) => {
                             <div className="grid grid-cols-1 gap-6">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx} className="bg-gray-50 p-5 rounded-xl border border-gray-100 hover:shadow-md transition-shadow">
-                                        <h3 className="font-bold text-lg text-gray-900 mb-2">{project.title}</h3>
-                                        <p className="text-sm text-gray-600 mb-3">{project.description}</p>
+                                        <div className="flex justify-between items-baseline mb-2">
+                                            <h3 className="font-bold text-lg text-gray-900">
+                                                {project.title}
+                                                {project.projectLink && (
+                                                    <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-600 hover:underline font-normal ml-2">
+                                                        [Link]
+                                                    </a>
+                                                )}
+                                            </h3>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="text-xs font-bold uppercase text-gray-400 tracking-wide">
+                                                    {project.startDate} - {project.endDate || "Present"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-gray-600 mb-3 whitespace-pre-line">{project.description}</p>
                                         {project.technologies?.length > 0 && (
                                             <div className="flex flex-wrap gap-2">
                                                 {project.technologies.slice(0, 4).map((t, i) => (

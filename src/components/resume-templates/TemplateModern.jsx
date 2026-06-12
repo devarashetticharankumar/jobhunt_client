@@ -181,10 +181,22 @@ const TemplateModern = ({ data }) => {
                         <div className="space-y-5">
                             {data.projects.map((project, idx) => (
                                 <div key={idx}>
-                                    <h3 className="font-bold text-gray-900 text-[15px] mb-1">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-[13px] text-gray-600 leading-relaxed mb-2">
+                                    <div className="flex justify-between items-baseline mb-1">
+                                        <h3 className="font-bold text-gray-900 text-[15px]">
+                                            {project.title}
+                                            {project.projectLink && (
+                                                <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-550 hover:underline font-normal ml-2">
+                                                    [Link]
+                                                </a>
+                                            )}
+                                        </h3>
+                                        {(project.startDate || project.endDate) && (
+                                            <span className="text-xs font-semibold text-gray-555 uppercase">
+                                                {project.startDate} — {project.endDate || "Present"}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-[13px] text-gray-600 leading-relaxed mb-2 whitespace-pre-line">
                                         {project.description}
                                     </p>
                                     {project.technologies?.length > 0 && (

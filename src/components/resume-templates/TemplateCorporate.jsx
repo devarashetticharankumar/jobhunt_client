@@ -66,8 +66,22 @@ const TemplateCorporate = ({ data }) => {
                             <div className="space-y-4">
                                 {data.projects.map((project, idx) => (
                                     <div key={idx}>
-                                        <h3 className="font-bold text-sm text-gray-900 mb-1">{project.title}</h3>
-                                        <p className="text-sm text-gray-700 leading-relaxed mb-1">{project.description}</p>
+                                        <div className="flex justify-between items-baseline mb-1">
+                                            <h3 className="font-bold text-sm text-gray-900">
+                                                {project.title}
+                                                {project.projectLink && (
+                                                    <a href={project.projectLink} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline font-normal ml-2">
+                                                        [Link]
+                                                    </a>
+                                                )}
+                                            </h3>
+                                            {(project.startDate || project.endDate) && (
+                                                <span className="text-xs font-semibold text-gray-550">
+                                                    {project.startDate} - {project.endDate || "Present"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <p className="text-sm text-gray-700 leading-relaxed mb-1 whitespace-pre-line">{project.description}</p>
                                     </div>
                                 ))}
                             </div>
